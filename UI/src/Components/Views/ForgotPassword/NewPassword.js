@@ -43,7 +43,7 @@ export default function NewPassord(){
         color="primary"
         className={classes.submit}
       >
-        SignUp
+        Save Password
       </Button>
       
       

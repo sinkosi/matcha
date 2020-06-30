@@ -14,7 +14,7 @@ function App() {
   return (
     <Fragment>
       <CssBaseline />
-      <Header />
+      
       <BrowserRouter>
         <Switch>
           <Route component={Home} exact path="/" />

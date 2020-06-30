@@ -31,7 +31,7 @@ export default function OTP(){
               color="primary"
               className={classes.submit}
             >
-              SignUp
+              Verify
             </Button>
             
             

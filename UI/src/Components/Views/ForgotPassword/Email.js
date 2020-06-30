@@ -33,7 +33,7 @@ export default function Email(){
               color="primary"
               className={classes.submit}
             >
-              SignUp
+              Next >
             </Button>
             
             
