@@ -5,8 +5,8 @@ const useStyles = makeStyles((theme) => ({
       height: '100vh',
     },
     image: {
-      backgroundImage: 'url(https://image.shutterstock.com/image-vector/cdn-content-delivery-network-distribution-260nw-456753880.jpg)',
-      // backgroundImage: 'url(https://source.unsplash.com/random)',
+      // backgroundImage: 'url(https://image.shutterstock.com/image-vector/cdn-content-delivery-network-distribution-260nw-456753880.jpg)',
+      backgroundImage: 'url(https://source.unsplash.com/random)',
       backgroundRepeat: 'no-repeat',
       backgroundColor:
         theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],

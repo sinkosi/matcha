@@ -7,9 +7,9 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyles from '../Styles/formStyle'
 import Copyright from '../Copyright';
-import Email from './ForgotPassord/Email';
-import OTP from './ForgotPassord/OTP';
-import NewPassword from './ForgotPassord/NewPassword'
+import Email from './ForgotPassword/Email';
+import OTP from './ForgotPassword/OTP';
+import NewPassword from './ForgotPassword/NewPassword'
 
 
 
@@ -54,9 +54,6 @@ export default function ForgotPassword() {
             : formPage === 2 ? <NewPassword />
             : <Fragment></Fragment>
         }
-          
-          
-
 
           <Copyright />
         </div>

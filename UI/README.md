@@ -1,5 +1,11 @@
 This is the readme with instruction on how to setup and get started with the frontend
 
+first make sure you have nodejs and npm installed
+
+run npm install
+npm build
+npm start
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

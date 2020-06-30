@@ -1,14 +1,16 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
+import Button from '@material-ui/core/Button';
 import useStyles from '../../Styles/formStyle';
 
-export default function OTP(){
-    const classes = useStyles();
+export default function Email(){
+  const classes = useStyles();
     return (
-        <form method="POST" className={classes.form} noValidate>
+      <React.Fragment>
+
+      <form method="POST" className={classes.form} noValidate>
             
             <Typography component="h1" variant="h5">
                 Email
@@ -18,10 +20,10 @@ export default function OTP(){
               margin="normal"
               required
               fullWidth
-              id="otp"
-              label="Enter OTP"
-              name="otp"
-              autoComplete="otp"
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
               autoFocus
             />
             <Button
@@ -35,10 +37,15 @@ export default function OTP(){
             </Button>
             
             
-                <Link href="#" variant="body2">
+                <Link href="/signin" variant="body2">
                   {"Back to sign in page"}
                 </Link>
             
           </form>
+
+
+        
+            
+        </React.Fragment>
     );
 }

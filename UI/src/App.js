@@ -1,10 +1,12 @@
 import React, { Fragment } from 'react';
+import {BrowserRouter} from 'react-router-dom'
+import {Route, Switch} from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline';
-// import ForgotPassword from './Components/Views/ForgotPassword'
 import Header from './Components/Header'
 import Home from './Components/Home';
 import SignIn from './Components/Views/SignIn';
-// import Signup from './Components/Views/Signup';
+import SignUp from './Components/Views/SignUp';
+import ForgotPassword from './Components/Views/ForgotPassword'
 import CompleteProfile from './Components/Views/CompleteProfile'
 
 
@@ -13,7 +15,15 @@ function App() {
     <Fragment>
       <CssBaseline />
       <Header />
-      <CompleteProfile />
+      <BrowserRouter>
+        <Switch>
+          <Route component={Home} exact path="/" />
+          <Route component={SignIn} exact path="/signin" />
+          <Route component={SignUp} exact path="/signup" />
+          <Route component={ForgotPassword} exact path="/forgotpassword" />
+        </Switch>
+   
+      </BrowserRouter>
     </Fragment>
 
   );

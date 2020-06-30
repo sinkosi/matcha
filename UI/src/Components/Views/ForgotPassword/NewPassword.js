@@ -47,7 +47,7 @@ export default function NewPassord(){
       </Button>
       
       
-          <Link href="#" variant="body2">
+          <Link href="/signin" variant="body2">
             {"Back to sign in page"}
           </Link>
       
