@@ -3,6 +3,9 @@ This is the readme with instruction on how to setup and get started with the bac
 The backend required modules are managed using python pipenv.
 
 run the following commands to get started:
+
+sudo apt install libpq-dev 
+
 pip3 install pipenv
 
 export PATH="$PATH:$HOME/.local/bin"
