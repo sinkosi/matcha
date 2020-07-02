@@ -1,5 +1,5 @@
 import psycopg2
-from psycopg2 import OperationalError
+from psycopg2 import OperationalError, extras
 from .dbSettings import *
 
 
@@ -29,17 +29,43 @@ def execute(connection, query):
         print(f"The error '{e}' occurred")
         return False
 
-def database_exist(db_name):
+def execute_fetchall(connection, query):
+    connection.autocommit = True
+    cursor = connection.cursor(cursor_factory=extras.DictCursor)
+    results = None
     try:
-        create_connection(db_name, db_user, db_password, db_host, db_port)
-        return True
-    except:
+        cursor.execute(query)
+        print("Query executed successfully")
+        results = cursor.fetchall()
+        return results
+    except OperationalError as e:
+        print(f"The error '{e}' occurred")
         return False
 
+def execute_fetchone(connection, query):
+    connection.autocommit = True
+    cursor = connection.cursor(cursor_factory=extras.DictCursor)
+    dir(extras)
+    result = None
+    try:
+        cursor.execute(query)
+        print("Query executed successfully")
+        result = cursor.fetchone()
+        return result
+    except OperationalError as e:
+        print(f"The error '{e}' occurred")
+        return False
+
+def database_exist(db_name):
+    if create_connection(db_name, db_user, db_password, db_host, db_port) is not None:
+        return True
+
+    return False
 
 
 def create_database(db_name):
     if not database_exist(db_name):
+        print("something")
         query = f"CREATE DATABASE {db_name}"
         server_connection = create_connection('', db_user, db_password, db_host, db_port)
         execute(server_connection,query)
@@ -51,10 +77,6 @@ def create_database(db_name):
 
 create_database(db_name)
 connection = create_connection(db_name, db_user, db_password, db_host, db_port)
-
-print("Hello world")
-# create_database_query = "CREATE DATABASE matcha"
-# create_database(server_connection, create_database_query)
 
 query_create_table_users = """
 CREATE TABLE IF NOT EXISTS users
@@ -68,7 +90,7 @@ CREATE TABLE IF NOT EXISTS users
     gender text,
     biography text,
     sexual_preferences text,
-    profie_pic text,
+    profiLe_pic integer,
     registered TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     modified TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 )
@@ -142,6 +164,10 @@ CREATE TABLE IF NOT EXISTS profile_likes
 )
 """
 
+query_change_user_profile_pic_to_reference_images = """
+    ALTER TABLE users 
+    ADD CONSTRAINT users_image_id_fkey FOREIGN KEY (profile_pic) REFERENCES images (id);
+"""
 
 def create_tabels():
     execute(connection, query_create_table_interests)
@@ -152,9 +178,99 @@ def create_tabels():
     execute(connection, query_create_table_users_interests)
     execute(connection, query_create_table_profile_visits)
     execute(connection, query_create_table_profile_likes)
+    execute(connection, query_change_user_profile_pic_to_reference_images)
 
 
-create_tabels()
+def add_user(username, email, firstname, lastname, password):
+    query = f"""INSERT INTO users(username, email, firstname, lastname, password)
+    VALUES ('{username}', '{email}', '{firstname}', '{lastname}', '{password}')"""
+    execute(connection, query)
+
+def add_image(user_id, image_url):
+    query = f"""INSERT INTO images(url, user_id)
+    VALUES ('{image_url}', '{user_id}')"""
+    execute(connection, query)
+
+def get_user_details(user_id):
+    query = f"""
+        SELECT * FROM users
+        WHERE id={user_id}"""
+    return execute_fetchone(connection, query)
+
+def get_user_by_username_password(username, password):
+    query = f"""
+        SELECT id FROM users
+        WHERE username='{username}' AND password='{password}' """
+    return execute_fetchone(connection, query)
+
+def get_user_by_email_password(email, password):
+    query = f"""
+        SELECT id FROM users
+        WHERE email='{email}' AND password='{password}' """
+    return execute_fetchone(connection, query)
+
+def set_gender(user_id, gender):
+    query = f"""
+        UPDATE users
+        SET gender='{gender}', modified=CURRENT_TIMESTAMP
+        WHERE id={user_id} """
+    return execute(connection, query)
+
+def set_biography(user_id, biography):
+    query = f"""
+        UPDATE users
+        SET biography='{biography}', modified=CURRENT_TIMESTAMP
+        WHERE id={user_id} """
+    return execute(connection, query)
+
+def set_sexual_preference(user_id, sexual_preference):
+    query = f"""
+        UPDATE users
+        SET sexual_preferences='{sexual_preference}', modified=CURRENT_TIMESTAMP
+        WHERE id={user_id} """
+    return execute(connection, query)
+
+def set_profile_pic(id, image_id):
+    query = f"""
+        UPDATE users
+        SET profile_pic='{image_id}', modified=CURRENT_TIMESTAMP
+        WHERE id={id} """
+    return execute(connection, query)
 
 
-from . import user
+def add_profile_visit(visitor_id, profile_id):
+    query = f"""
+        INSERT INTO profile_visits(profile_id, visitor_id)
+        VALUES ('{profile_id}', '{visitor_id}')"""
+    execute(connection, query)
+
+def add_profile_like(liker_id, profile_id):
+    query = f"""
+        INSERT INTO profile_likes(profile_id, liker_id)
+        VALUES ('{profile_id}', '{liker_id}')"""
+    execute(connection, query)
+
+def activate_user(user_id):
+    query = f"""
+        INSERT INTO activated(user_id)
+        VALUES ('{user_id}')"""
+    execute(connection, query)
+
+def delete_image(image_id):
+    query = f"""
+        DELETE FROM images
+        WHERE id='{image_id}'"""
+    execute(connection, query)
+
+def get_user_images(user_id):
+    query = f"""
+        SELECT id, url, uploaded FROM images
+        WHERE user_id='{user_id}' """
+    results = execute_fetchall(connection, query)
+    return list(map(dict, results))
+
+def get_users():
+    query = f"""
+        SELECT * FROM users """
+    results = execute_fetchall(connection, query)
+    return list(map(dict, results))
