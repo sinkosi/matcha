@@ -164,6 +164,16 @@ CREATE TABLE IF NOT EXISTS profile_likes
 )
 """
 
+query_create_table_account_activation_serials = """
+CREATE TABLE IF NOT EXISTS account_activation_serials
+(
+    id serial  PRIMARY KEY,
+    code text NOT NULL,
+    user_id INTEGER REFERENCES users(id),
+    generated TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+)
+"""
+
 query_change_user_profile_pic_to_reference_images = """
     ALTER TABLE users 
     ADD CONSTRAINT users_image_id_fkey FOREIGN KEY (profile_pic) REFERENCES images (id);
@@ -178,6 +188,7 @@ def create_tabels():
     execute(connection, query_create_table_users_interests)
     execute(connection, query_create_table_profile_visits)
     execute(connection, query_create_table_profile_likes)
+    execute(connection, query_create_table_profile_activation_serials)
     execute(connection, query_change_user_profile_pic_to_reference_images)
 
 
@@ -195,7 +206,7 @@ def get_user_details(user_id):
     query = f"""
         SELECT * FROM users
         WHERE id={user_id}"""
-    return execute_fetchone(connection, query)
+    return dict(execute_fetchone(connection, query))
 
 def get_user_by_username_password(username, password):
     query = f"""
@@ -254,6 +265,12 @@ def activate_user(user_id):
     query = f"""
         INSERT INTO activated(user_id)
         VALUES ('{user_id}')"""
+    execute(connection, query)
+
+def add_account_activation_code(user_id, code):
+    query = f"""
+        INSERT INTO account_activation_serials (code, user_id)
+        VALUES ('{code}', '{user_id}')"""
     execute(connection, query)
 
 def delete_image(image_id):
