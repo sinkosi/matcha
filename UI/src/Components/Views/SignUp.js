@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import FormControl from '@material-ui/core/FormControl';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,9 +14,44 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import useStyles from '../Styles/formStyle';
 import Copyright from '../Copyright';
+import register from '../../Services/register'
 
 export default function SignUp() {
   const classes = useStyles();
+
+  const [username, setusername] = useState('')
+  const [firstname, setfirstname] = useState('')
+  const [lastname, setlastname] = useState('')
+  const [email, setemail] = useState('')
+  const [password, setpassword] = useState('')
+  const [confirmpassword, setconfirmpassword] = useState('')
+  
+  const validateUsername = (event) => {
+    setusername(event.target.value)
+  }
+  const validateFirstname = (event) => {
+    setfirstname(event.target.value)
+  }
+  const validateLastname = (event) => {
+    setlastname(event.target.value)
+  }
+  const validateEmail = (event) => {
+    setemail(event.target.value)
+  }
+  const validatePassword = (event) => {
+    setpassword(event.target.value)
+  }
+  const validateConfirmPassword = (event) => {
+    setconfirmpassword(event.target.value)
+  }
+
+  const send_data = () => {
+    const formdata = {username, firstname, lastname, email, password}
+    console.log(formdata)
+    register(formdata) ? console.log(true) : console.log(false)
+  }
+
+
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -29,72 +65,96 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign Up
           </Typography>
-          <form className={classes.form} noValidate>
-          <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label="Username"
-              name="username"
-              autoComplete="username"
-              autoFocus
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="firstname"
-              label="First Name"
-              name="firstname"
-              autoComplete="firstname"
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="lastname"
-              label="Last Name"
-              name="lastname"
-              autoComplete="lastname"
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password2"
-              label="Confirm Password"
-              type="password"
-              id="password2"
-              autoComplete="confirm-password"
-            />
+
+          <form className={classes.form}  noValidate>
+          
+            <FormControl fullWidth >
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+                value={username}
+                autoFocus
+                onChange={e => validateUsername(e)}
+              />
+            </FormControl>
+
+            <FormControl fullWidth>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                id="firstname"
+                label="First Name"
+                name="firstname"
+                autoComplete="firstname"
+                value={firstname}
+                onChange={e => validateFirstname(e)}
+              />
+            </FormControl>
+            <FormControl fullWidth>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                id="lastname"
+                label="Last Name"
+                name="lastname"
+                autoComplete="lastname"
+                value={lastname}
+                onChange={e => validateLastname(e)}
+              />
+            </FormControl>
+
+            <FormControl fullWidth>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                value={email}
+                onChange={e => validateEmail(e)}
+              />
+            </FormControl>
+
+            <FormControl fullWidth>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={e => validatePassword(e)}
+              />
+            </FormControl>
+
+            <FormControl fullWidth>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                name="confirmpassword"
+                label="Confirm Password"
+                type="password"
+                id="confirmpassword"
+                autoComplete="confirm-password"
+                value={confirmpassword}
+                onChange={e => validateConfirmPassword(e)}
+              />
+            </FormControl>
             <Button
-              type="submit"
+              onClick={send_data}
               fullWidth
               variant="contained"
               color="primary"
@@ -104,9 +164,7 @@ export default function SignUp() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  
-                </Link>
+                <></>
               </Grid>
               <Grid item>
                 <Link href="/signin" variant="body2">

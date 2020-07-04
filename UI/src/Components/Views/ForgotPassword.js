@@ -11,31 +11,11 @@ import Email from './ForgotPassword/Email';
 import OTP from './ForgotPassword/OTP';
 import NewPassword from './ForgotPassword/NewPassword'
 
-
-
-// const steps = ['email address', 'one time pin', 'new password'];
-
-// function getStepContent(step) {
-//   switch (step) {
-//     case 0:
-//       return <Email />;
-//     case 1:
-//       return <OTP />;
-//     case 2:
-//       return <NewPassword />;
-//     default:
-//       throw new Error('Unknown step');
-//   }
-// }
-
 export default function ForgotPassword() {
     const [formPage, setFormPage] = useState(0);
     const classes = useStyles();
     
     const handleNext = () => { setFormPage(formPage + 1);}
-    const handlePrev = () => { setFormPage(formPage - 1);}
-
-    
 
     return (
     <Grid container component="main" className={classes.root}>
@@ -48,9 +28,8 @@ export default function ForgotPassword() {
           </Avatar>
 
            {
-            formPage === 0 ? 
-                <Email />
-            : formPage === 1 ? <OTP />
+              formPage === 0 ? <Email next={handleNext} />
+            : formPage === 1 ? <OTP next={handleNext} />
             : formPage === 2 ? <NewPassword />
             : <Fragment></Fragment>
         }

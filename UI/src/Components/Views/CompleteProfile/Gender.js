@@ -17,7 +17,7 @@ const useStyles = makeStyles({
     },
   });
 
-export default function Gender()
+export default function Gender(props)
 {
     const classes = useStyles();
     const [value, setValue] = React.useState('other');
@@ -42,7 +42,7 @@ export default function Gender()
                 
         
             </form>
-            <Button color={"primary"} size={"large"} variant={"contained"}>Next ></Button>
+            <Button color={"primary"} size={"large"} variant={"contained"} onClick={props.next}>Next ></Button>
         </Paper  >
     );
 }

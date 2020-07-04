@@ -5,7 +5,7 @@ import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import useStyles from '../../Styles/formStyle';
 
-export default function Email(){
+export default function Email(props){
   const classes = useStyles();
     return (
       <React.Fragment>
@@ -27,7 +27,8 @@ export default function Email(){
               autoFocus
             />
             <Button
-              type="submit"
+              // type="submit"
+              onClick={props.next}
               fullWidth
               variant="contained"
               color="primary"

@@ -22,7 +22,7 @@ const useStyles = makeStyles({
     },
   });
 
-export default function SexualPreference()
+export default function SexualPreference(props)
 {
     const classes = useStyles();
     const [state, setState] = React.useState({
@@ -66,7 +66,7 @@ export default function SexualPreference()
                 
         
             </form>
-            <Button color={"primary"} size={"large"} variant={"contained"}>Next ></Button>
+            <Button color={"primary"} size={"large"} variant={"contained"} onClick={props.next}>Next ></Button>
         </Paper  >
     );
 }

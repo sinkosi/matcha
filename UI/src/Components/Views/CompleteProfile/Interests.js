@@ -19,7 +19,7 @@ const useStyles = makeStyles({
     },
   });
 
-export default function Interests()
+export default function Interests(props)
 {
     const classes = useStyles();
     var [interests, setInterests] = React.useState([]);
@@ -79,7 +79,7 @@ export default function Interests()
                
             
          
-            <Button color={"primary"} size={"large"} variant={"contained"}>Next ></Button>
+            <Button color={"primary"} size={"large"} variant={"contained"} onClick={props.next}>Next ></Button>
         </Paper  >
     );
 }
