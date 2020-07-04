@@ -19,7 +19,9 @@ class register(Resource):
 			return {"errors": errors}, 404
 		
 		print("registering a user...")
-		notifications.send_registration_activation_email("email")
+		print(data)
+		Models.add_user(data['username'], data['email'], data['firstname'], data['lastname'], data['password'])
+		notifications.send_registration_activation_email(data['username'], data['email'], '123456789assdfghjyyytru')
 		return {'received': data}, 201
 
 	def get(self):
@@ -47,10 +49,13 @@ class user(Resource):
 	def put(self, user_id):
 		return jsonify({'put data': request.get_json()})
 
-
+class activate_account(Resource):
+	def get(self, activation_key):
+		return {'message': 'account activated succefully', 'key': activation_key}
 
 api.add_resource(index,"/")
 api.add_resource(register, "/register")
 api.add_resource(login, "/login")
 api.add_resource(users, "/users")
 api.add_resource(user, "/users/<int:user_id>")
+api.add_resource(activate_account, "/users/activation/activate/<string:activation_key>")
