@@ -1,7 +1,6 @@
 from app.Models import *
 
 
-
 # add_user("user1", "user1@mail.com", "user1_firstname", "user1_lastname", "users1_strong_password")
 # add_user("user2", "user2@mail.com", "user2_firstname", "user2_lastname", "users2_strong_password")
 # add_user("user3", "user3@mail.com", "user3_firstname", "user3_lastname", "users3_strong_password")
@@ -23,10 +22,14 @@ from app.Models import *
 # set_profile_complete('475aacb3-4276-47cf-aaa3-dbfb39918881')
 # set_profile_activated('475aacb3-4276-47cf-aaa3-dbfb39918881')
 
-print(is_activated('475aacb3-4276-47cf-aaa3-dbfb39918881'))
-print(is_completed('475aacb3-4276-47cf-aaa3-dbfb39918881'))
-print(is_activated('dfbb1caa-0a99-4a7f-89bf-eed2ee3cddc3'))
-print(is_completed('dfbb1caa-0a99-4a7f-89bf-eed2ee3cddc3'))
+# print(is_activated('475aacb3-4276-47cf-aaa3-dbfb39918881'))
+# print(is_completed('475aacb3-4276-47cf-aaa3-dbfb39918881'))
+# print(is_activated('dfbb1caa-0a99-4a7f-89bf-eed2ee3cddc3'))
+# print(is_completed('dfbb1caa-0a99-4a7f-89bf-eed2ee3cddc3'))
 
 
-add_profile_visit('475aacb3-4276-47cf-aaa3-dbfb39918881', 'dfbb1caa-0a99-4a7f-89bf-eed2ee3cddc3')
+# add_profile_visit('475aacb3-4276-47cf-aaa3-dbfb39918881', 'dfbb1caa-0a99-4a7f-89bf-eed2ee3cddc3')
+lst = []
+for user in get_users(limit=5):
+    lst.append(dict(user))
+print(lst)
