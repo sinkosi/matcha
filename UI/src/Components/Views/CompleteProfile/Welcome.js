@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     },
   });
 
-export default function Welcome()
+export default function Welcome(props)
 {
     const classes = useStyles();
     return (
@@ -24,7 +24,7 @@ export default function Welcome()
                 Before you can start meeting some people, and possibly meeting the love of your life, we need a few delails about you.
                 Please click next to continue... Enjoy. 
             </Typography> 
-            <Button color={"primary"} size={"large"} variant={"contained"}>Next ></Button>
+            <Button color={"primary"} size={"large"} variant={"contained"}  onClick={props.next} >Next ></Button>
         </Paper  >
     );
 }

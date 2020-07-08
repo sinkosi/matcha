@@ -5,13 +5,13 @@ import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import useStyles from '../../Styles/formStyle';
 
-export default function OTP(){
+export default function OTP(props){
     const classes = useStyles();
     return (
         <form method="POST" className={classes.form} noValidate>
             
             <Typography component="h1" variant="h5">
-                Email
+                OTP
             </Typography>
             <TextField
               variant="outlined"
@@ -25,7 +25,8 @@ export default function OTP(){
               autoFocus
             />
             <Button
-              type="submit"
+              // type="submit"
+              onClick={props.next}
               fullWidth
               variant="contained"
               color="primary"
