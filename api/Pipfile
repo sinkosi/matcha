@@ -9,8 +9,8 @@ pylint = "*"
 [packages]
 flask = "*"
 flask-restful = "*"
-psycopg2 = "*"
 requests = "*"
+py-postgresql = "*"
 
 [requires]
 python_version = "3.8"
