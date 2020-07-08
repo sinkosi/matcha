@@ -8,7 +8,7 @@ import ProfilePicture from './CompleteProfile/ProfilePicture';
 
 export default function CompleteProfile(){
 
-    const [formPage, setFormPage] = useState(0);
+    const [formPage, setFormPage] = useState(3);
     const handleNext = () => setFormPage(formPage + 1)
     // some code here
     return (

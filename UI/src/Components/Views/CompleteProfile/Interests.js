@@ -3,7 +3,7 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Grid } from '@material-ui/core';
+import { TextField, Grid, Chip } from '@material-ui/core';
 
 
 
@@ -32,6 +32,13 @@ export default function Interests(props)
     };
 
     const handleInterestChange = (event) => setInterest(event.target.value);
+
+    const handleDelete = (chipToDelete)  => {
+        console.log(chipToDelete.id)
+        console.log(interests)
+
+        setInterests((interests) => interests.filter((i) => i !== chipToDelete));
+      };
     
     return (
         <Paper elevation={5} className={classes.root}>
@@ -40,9 +47,13 @@ export default function Interests(props)
                 Please choose one or more interests.
             </Typography> 
 
-            <ul>
-                {interests.map((interest)=><li>{interest}</li>)}
-            </ul>
+            <div>
+                {interests.map((int) => 
+                    
+                    <Chip label={int} key={int} onDelete={handleDelete} color="primary" id={int}/>
+
+                )}
+            </div>
             <form method="POST" className={classes.form} noValidate>
             
             <Grid container>

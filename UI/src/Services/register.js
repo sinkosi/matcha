@@ -27,5 +27,5 @@ const activate = (code) => {
         })
 
 }
-exports [activate]
+// exports [activate]
 export default register
