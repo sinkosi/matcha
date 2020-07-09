@@ -29,7 +29,10 @@ from app.Models import *
 
 
 # add_profile_visit('475aacb3-4276-47cf-aaa3-dbfb39918881', 'dfbb1caa-0a99-4a7f-89bf-eed2ee3cddc3')
-lst = []
-for user in get_users(limit=5):
-    lst.append(dict(user))
-print(lst)
+
+add_interest("eating")
+add_interest("playing")
+add_interest("watching_tv")
+add_interest("shopping")
+add_interest("sleeping")
+add_interest("pizza")

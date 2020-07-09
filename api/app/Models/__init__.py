@@ -85,7 +85,8 @@ def is_completed(user_id):
 
 def get_user_details(user_id):
     ps = db.prepare("""
-        SELECT users.id, username, email, firstname, lastname, password, gender, biography, sexual_preferences, activated, completed, profile_pic, url as image_url
+        SELECT users.id, username, email, firstname, lastname, password, gender,
+            biography, sexual_preferences, activated, completed, profile_pic, url as image_url
         FROM users LEFT JOIN images
         ON users.profile_pic = images.id
         WHERE users.id=$1
@@ -151,3 +152,31 @@ def get_users(limit=20, filter="", page=1):
     ps = db.prepare(f"""
         SELECT * FROM users {filter} LIMIT $1 OFFSET {(page * limit) - limit}""")
     return list(map(dict, ps(limit)))
+
+
+
+def add_interest(interest):
+    ps = db.prepare("""
+        INSERT INTO interests(hashtag)
+        VALUES ($1)""")
+    ps(interest)
+
+def get_interest_id(interest):
+    ps = db.prepare("""
+        SELECT hashtag FROM interests
+        WHERE hashtag=$1 """)
+    return ps.first(interest)
+
+def get_interests_list():
+    ps = db.prepare("""
+        SELECT hashtag FROM interests """)
+    return list(map(lambda x: x[0] ,ps()))
+
+def add_user_interest(user_id, interest):
+    ps = db.prepare("""
+        INSERT INTO users_interest(user_id, interest_id) 
+        VALUES ($1, $2) """)
+    ps(user_id, interest)
+
+def get_users_with_interest(interest):
+    pass
