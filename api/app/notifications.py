@@ -1,4 +1,4 @@
-def send_registration_activation_email(username, email_address, activation_code):
+def send_registration_activation_email(username, email_address, user_id, activation_code):
     print('sending email... ')
     msg = f'''Welcome {username} to Matcha  
     You can click the link below to activate your account and start meeting some people:

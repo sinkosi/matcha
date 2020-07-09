@@ -9,7 +9,7 @@ api = Api(app)
 
 class index(Resource):
 	def get(self):
-		return jsonify({'page': 'Home'})
+		return {'page': 'Home'}
 
 class register(Resource):
 	def post(self):
@@ -19,13 +19,12 @@ class register(Resource):
 			return {"errors": errors}, 404
 		
 		print("registering a user...")
-		print(data)
-		Models.add_user(data['username'], data['email'], data['firstname'], data['lastname'], data['password'])
-		notifications.send_registration_activation_email(data['username'], data['email'], '123456789assdfghjyyytru')
+		activation_code = 'somerandomgeneratedstringforactivation'
+		user_id = Models.add_user(data['username'], data['email'], data['firstname'], data['lastname'], data['password'])
+		Models.add_activation_code(user_id, activation_code)
+		notifications.send_registration_activation_email(data['username'], data['email'], user_id, activation_code)
 		return {'received': data}, 201
 
-	def get(self):
-		return jsonify({'text': 'hello'})
 
 class login(Resource):
 	def post(self):
@@ -50,12 +49,25 @@ class user(Resource):
 		return jsonify({'put data': request.get_json()})
 
 class activate_account(Resource):
-	def get(self, activation_key):
+	def get(self, activation_key, user_id):
 		return {'message': 'account activated succefully', 'key': activation_key}
 
+class interests(Resource):
+	def get(self):
+		print(Models.get_interests_list())
+		return Models.get_interests_list()
+
+class interest(Resource):
+	def get(self, interest):
+		return Models.get_users_with_interest(interest)
+
+		
 api.add_resource(index,"/")
 api.add_resource(register, "/register")
 api.add_resource(login, "/login")
 api.add_resource(users, "/users")
-api.add_resource(user, "/users/<int:user_id>")
-api.add_resource(activate_account, "/users/activation/activate/<string:activation_key>")
+api.add_resource(user, "/users/<user_id>")
+
+api.add_resource(interests, "/interests")
+api.add_resource(interest, "/interests/<interest>")
+api.add_resource(activate_account, "/activateaccount")
