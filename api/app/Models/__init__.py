@@ -150,7 +150,12 @@ def get_user_id_by_email_password(email, password):
 
 def get_users(limit=20, filter="", page=1):
     ps = db.prepare(f"""
-        SELECT * FROM users {filter} LIMIT $1 OFFSET {(page * limit) - limit}""")
+        SELECT users.id, username, email, firstname, lastname, password, gender,
+            biography, sexual_preferences, activated, completed, profile_pic, url as image_url
+        FROM users LEFT JOIN images
+        ON users.profile_pic = images.id 
+        {filter}
+        LIMIT $1 OFFSET {(page * limit) - limit}""")
     return list(map(dict, ps(limit)))
 
 
