@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,9 +14,29 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import useStyles from '../Styles/formStyle';
 import Copyright from '../Copyright';
+import postLogin from '../../Services/login'
 
 export default function SignIn() {
-  const classes = useStyles();
+  const classes = useStyles()
+  const browserHistory = useHistory()
+  const [usernameEmail, setUsernameEmail] = useState('')
+  const [password, setPassword] = useState('')
+  
+  const validateUsernameEmail = (event) => {
+    setUsernameEmail(event.target.value)
+  }
+  const validatePassword = (event) => {
+    setPassword(event.target.value)
+  }
+
+  const sendData = () => {
+    let data = { 'login': usernameEmail, password }
+
+    postLogin(handleLoginSuccess, handleLoginError,data)
+  }
+
+  const handleLoginSuccess = (response) => {console.log(response); browserHistory.push("/users") }
+  const handleLoginError = (error) => { console.log({error}) }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -35,10 +56,12 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="usernameEmail"
+              label="Username or Email Address"
+              name="usernameEmail"
+              autoComplete="username"
+              value={usernameEmail}
+              onChange={validateUsernameEmail}
               autoFocus
             />
             <TextField
@@ -50,6 +73,8 @@ export default function SignIn() {
               label="Password"
               type="password"
               id="password"
+              value={password}
+              onChange={validatePassword}
               autoComplete="current-password"
             />
             <FormControlLabel
@@ -57,7 +82,7 @@ export default function SignIn() {
               label="Remember me"
             />
             <Button
-              type="submit"
+              onClick={sendData}
               fullWidth
               variant="contained"
               color="primary"

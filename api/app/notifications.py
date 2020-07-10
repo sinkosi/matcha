@@ -3,7 +3,7 @@ def send_registration_activation_email(username, email_address, user_id, activat
     msg = f'''Welcome {username} to Matcha  
     You can click the link below to activate your account and start meeting some people:
     
-    https://localhost:3000/activate/my/account/{activation_code}/thanks
+    http://localhost:3000/activate/{user_id}/{activation_code}
     
     
     enjoy'''

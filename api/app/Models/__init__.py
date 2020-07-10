@@ -135,7 +135,7 @@ def add_activation_code(profile_id, activation_code):
 def remove_activation_code(profile_id, activation_code):
     ps = db.prepare("""
         DELETE FROM activation_codes
-        WHERE profile_id=$1 and code=$2)""")
+        WHERE profile_id=$1 AND code=$2""")
     ps(profile_id, activation_code)
 
 def get_user_id_by_username_password(username, password):
@@ -185,3 +185,9 @@ def add_user_interest(user_id, interest):
 
 def get_users_with_interest(interest):
     pass
+
+def get_activativation_key(user_id):
+    ps = db.prepare("""
+        SELECT code FROM activation_codes 
+        WHERE profile_id=$1 """)
+    return ps.first(user_id)
