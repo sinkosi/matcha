@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
-import {BrowserRouter} from 'react-router-dom'
-import {Route, Switch} from 'react-router-dom'
+import {Route, Switch, BrowserRouter, Redirect} from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline';
 // import Header from './Components/Header'
 import Home from './Components/Home';
@@ -8,7 +7,8 @@ import SignIn from './Components/Views/SignIn';
 import SignUp from './Components/Views/SignUp';
 import ForgotPassword from './Components/Views/ForgotPassword'
 import CompleteProfile from './Components/Views/CompleteProfile'
-
+import Users from './Components/Views/Users'
+import UserProfile from './Components/Views/UserProfile'
 
 function App(props) {
   return (
@@ -16,13 +16,15 @@ function App(props) {
       <CssBaseline />
       <BrowserRouter>
         <Switch>
-          <Route component={Home} exact path="/" />
+          <Redirect exact from="/" to="/users" />
           <Route component={SignIn} exact path="/signin" />
           <Route component={SignUp} exact path="/signup" />
           <Route component={ForgotPassword} exact path="/forgotpassword" />
 
 
           <Route component={CompleteProfile} exact path="/completeprofile" />
+          <Route component={Users} exact path="/users" />
+          <Route component={UserProfile} exact path="/users/:userId" />
 
 
         </Switch>
