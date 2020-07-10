@@ -1,11 +1,12 @@
-import React, {useState, Redirect}  from 'react'
+import React, {useState}  from 'react'
+import { useHistory } from "react-router-dom";
+
 import { makeStyles } from '@material-ui/core/styles';
 import Header from '../Header'
 import getUsers from '../../Services/users'
 import { Button, Container, Grid } from '@material-ui/core'
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
@@ -25,10 +26,15 @@ const useUserStyles = makeStyles({
 
 const User = (props) => {
     const classes = useUserStyles();
+    let history = useHistory();
+
     const userUrl = "/users/"+props.user.id
+    function handleClick() {
+        history.push(userUrl);
+    }
     return (
         <Card className={classes.root} raised>
-            <CardActionArea onClick={userUrl}>
+            <CardActionArea onClick={handleClick}>
                 <CardMedia
                     className={classes.media}
                     image={props.user.image_url}
@@ -57,7 +63,7 @@ const Users = (props) => {
             <Container maxWidth="lg" align="center">
                 <Grid container spacing={2}>
                     
-                        { users.data.map(user => <Grid item md={4} lg={3} > <User key={user.id} user={user} /> </Grid> ) }
+                        { users.data.map(user => <Grid  key={user.id} item md={4} lg={3} > <User user={user} /> </Grid> ) }
                     
                 </Grid>
             </Container>
