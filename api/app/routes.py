@@ -50,7 +50,7 @@ class login(Resource):
 		print("logging in user...")
 		notifications.send_login_notification("email")
 
-		return {'activated': activated, 'completed': completed, 'message': 'account not activated'}, 201
+		return {'activated': activated, 'completed': completed, 'id': str(user_id), 'message': 'account not activated'} , 201
 
 class users(Resource):
 	def get(self):
