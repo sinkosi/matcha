@@ -30,7 +30,7 @@ def must_be_logged_in(function):
 			return {'message': 'invalid token. token tempered with'}, 401
 
 		try:
-			token_payload = base64.b64decode(token_payload+'===').decode("ASCII")
+			token_payload = base64.b64decode(payload+'===').decode("ASCII")
 			token_payload = json.loads(token_payload)
 		except binascii.Error as err:
 			print(err)
