@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { useHistory } from 'react-router-dom';
 import {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,10 +12,12 @@ import Email from './ForgotPassword/Email';
 import OTP from './ForgotPassword/OTP';
 import NewPassword from './ForgotPassword/NewPassword'
 
-export default function ForgotPassword() {
+export default function ForgotPassword(props) {
     const [formPage, setFormPage] = useState(0);
     const classes = useStyles();
-    
+    const browserHistory = useHistory()
+    if (props.loggedIn)
+    browserHistory.push('/')
     const handleNext = () => { setFormPage(formPage + 1);}
 
     return (
