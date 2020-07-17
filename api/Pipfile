@@ -13,6 +13,7 @@ requests = "*"
 py-postgresql = "*"
 flask-socketio = "*"
 eventlet = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.8"

@@ -34,7 +34,7 @@ export default function Gender(props)
             </Typography> 
             <form method="POST" className={classes.form} noValidate>
             
-            <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
+            <RadioGroup aria-label="gender" name="gender" value={value} onChange={handleChange}>
                 <FormControlLabel value="other" control={<Radio />} label="Unclassified" disabled />
                 <FormControlLabel value="female" control={<Radio />} label="Female" />
                 <FormControlLabel value="male" control={<Radio />} label="Male" />

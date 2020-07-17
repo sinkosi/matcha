@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import { deleteCookie } from '../utils/cookies'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,9 +20,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header() {
+export default function Header(props) {
   const classes = useStyles();
 
+  const handleLogout = () => {
+    deleteCookie('token')
+    props.setUserData({'loggedIn': false})
+
+  }
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -32,7 +38,7 @@ export default function Header() {
           <Typography variant="h6" className={classes.title}>
             Matcha
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit" onClick={handleLogout}>Logout</Button>
         </Toolbar>
       </AppBar>
     </div>

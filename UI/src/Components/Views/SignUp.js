@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useHistory } from 'react-router-dom';
 import FormControl from '@material-ui/core/FormControl';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -16,7 +17,8 @@ import useStyles from '../Styles/formStyle';
 import Copyright from '../Copyright';
 import register from '../../Services/register'
 
-export default function SignUp() {
+export default function SignUp(props) {
+  const browserHistory = useHistory()
   const classes = useStyles();
 
   const [username, setusername] = useState('')
@@ -26,6 +28,9 @@ export default function SignUp() {
   const [password, setpassword] = useState('')
   const [confirmpassword, setconfirmpassword] = useState('')
   
+  if (props.loggedIn)
+    browserHistory.push('/')
+
   const validateUsername = (event) => {
     setusername(event.target.value)
   }

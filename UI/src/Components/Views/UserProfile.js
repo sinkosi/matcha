@@ -1,6 +1,5 @@
-import React, {useState, useEffect}  from 'react'
+import React, {useState, useEffect, useRef}  from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import Header from '../Header'
 import getUser from '../../Services/user'
 import { Button, Container, Grid } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography';
@@ -18,13 +17,14 @@ const UserProfile = (props) => {
     const classes = useStyles();
     const [user, setUser] = useState({data: []})
 
+    let userRef = useRef()
+    userRef.current = user.data
     const userId = props.location.pathname.split("/")[2]
     const refresh = () => { getUser(setUser, userId ) }
     const loguser = () => console.log(user)
-    //useEffect(()=> refresh())
+    useEffect(() => {refresh()}, [userRef])
     return (
         <>
-            <Header />
             <Button onClick={refresh} variant="contained">refresh</Button>
             <Button onClick={loguser} variant="contained">log user</Button>
             <Container maxWidth="lg" className={classes.root}>

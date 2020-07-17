@@ -1,10 +1,8 @@
-import React, {useEffect, useState} from 'react'
-import { useHistory } from 'react-router-dom'
+import React, {useState} from 'react'
 import sendActivationKey from '../Services/activateUser'
 import { Button } from '@material-ui/core'
 
 const ActivateUser = (props) => {
-    let history = useHistory()
     const [message, setMessage] = useState("Activating...")
     const [disableButton, setDisableButton] = useState(true)
     const verifyActivationKey = () => {

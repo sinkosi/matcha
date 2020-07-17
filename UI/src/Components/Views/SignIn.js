@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import { UserContext } from '../UserContext'
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,18 +16,24 @@ import Typography from '@material-ui/core/Typography';
 import useStyles from '../Styles/formStyle';
 import Copyright from '../Copyright';
 import postLogin from '../../Services/login'
+import {setCookie, setCookieRememberMe} from '../../utils/cookies'
 
-export default function SignIn() {
+export default function SignIn(props) {
+  const {userData, setUserData} = useContext(UserContext)
   const classes = useStyles()
-  const browserHistory = useHistory()
+  const history = useHistory()
   const [usernameEmail, setUsernameEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [rememberMe, setRememberMe] = useState(false)
+
+  const handleRememberMe = ({target}) => setRememberMe(target.checked)
   
-  const validateUsernameEmail = (event) => {
-    setUsernameEmail(event.target.value)
+  const validateUsernameEmail = ({target}) => {
+    setUsernameEmail(target.value)
   }
-  const validatePassword = (event) => {
-    setPassword(event.target.value)
+
+  const validatePassword = ({target}) => {
+    setPassword(target.value)
   }
 
   const sendData = () => {
@@ -35,8 +42,18 @@ export default function SignIn() {
     postLogin(handleLoginSuccess, handleLoginError,data)
   }
 
-  const handleLoginSuccess = (response) => {console.log(response); browserHistory.push("/users") }
   const handleLoginError = (error) => { console.log({error}) }
+
+  const handleLoginSuccess = ({data}) => {
+
+    if (rememberMe)
+      setCookieRememberMe('token', data.token, 2)
+    else
+      setCookie('token', data.token)
+    
+    setUserData({'loggedIn': true, 'token': data.token })
+    
+    data.completed ? history.push("/completeprofile") : history.push("/users") }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -78,7 +95,7 @@ export default function SignIn() {
               autoComplete="current-password"
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={<Checkbox value="remember" color="primary" onChange={handleRememberMe}/>}
               label="Remember me"
             />
             <Button

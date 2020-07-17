@@ -1,8 +1,7 @@
-import React, {useState}  from 'react'
+import React, {useState, useEffect, useRef}  from 'react'
 import { useHistory } from "react-router-dom";
 
 import { makeStyles } from '@material-ui/core/styles';
-import Header from '../Header'
 import getUsers from '../../Services/users'
 import { Button, Container, Grid } from '@material-ui/core'
 import Card from '@material-ui/core/Card';
@@ -52,18 +51,20 @@ const User = (props) => {
 
 const Users = (props) => {
     const [users, setUsers] = useState({data: []})
-
+    
+    let usersRef = useRef(0)
+    usersRef.current = users.data
     const refresh = () => { getUsers(setUsers) }
-    const logusers = () => console.log(users)
+    const logusers = () => console.log(usersRef)
+    useEffect(() => {getUsers(setUsers) }, [usersRef])
     return (
         <>
-            <Header />
             <Button onClick={refresh} >reload</Button>
             <Button onClick={logusers} >log users</Button>
             <Container maxWidth="lg" align="center">
                 <Grid container spacing={2}>
                     
-                        { users.data.map(user => <Grid  key={user.id} item md={4} lg={3} > <User user={user} /> </Grid> ) }
+                    { users.data.map(user => <Grid item align="center"  key={user.id}  xs={12} sm={6} md={4} lg={3} > <User user={user} /> </Grid> ) }
                     
                 </Grid>
             </Container>
