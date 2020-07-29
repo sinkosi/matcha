@@ -3,11 +3,11 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Favorite from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
-
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import { cookieUserId } from '../../../utils/cookies'
+import { updatePreference } from '../../../Services/profile'
 
 
 const useStyles = makeStyles({
@@ -25,48 +25,41 @@ const useStyles = makeStyles({
 export default function SexualPreference(props)
 {
     const classes = useStyles();
-    const [state, setState] = React.useState({
-        checkedA: false,
-        checkedB: false,
+    const [preference, setPreference] = React.useState('both');
 
-      });
-    
-      const handleChange = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
-      };
-    
+    const handleChange = (event) => {
+      console.log(preference)
+      setPreference(event.target.value);
+    };
+
+    const handleSubmitPreference = ()=>{
+      const userId = cookieUserId()
+      updatePreference(handleSuccess, handleError, userId, preference)
+    }
+    const handleSuccess = (respose) =>{
+      console.log(respose)
+      props.next()
+    }
+    const handleError = (error) => {
+      console.log(error)
+    }
     return (
         <Paper elevation={5} className={classes.root}>
             <Typography variant={"h1"} align={"center"}>Preferences</Typography> 
             <Typography variant={"h5"} align={"center"}>
-                I would like to meet and hookup with:
+                I would like to meet and connect with:
             </Typography> 
             <form method="POST" className={classes.form} noValidate>
             
-                <FormControlLabel
-                    className={classes.checkboxFormControl}
-                    control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} checked={state.checkedA} onChange={handleChange} name="checkedA" />}
-                    label="Females"
-                />
-                
-                <FormControlLabel 
-                    className={classes.checkboxFormControl}
-                    control={
-                    <Checkbox
-                        icon={<FavoriteBorder />}
-                        checkedIcon={<Favorite />}
-                        checked={state.checkedB}
-                        onChange={handleChange}
-                        name="checkedB"
-                        color="secondary"
-                    />
-                    }
-                    label="Male"
-                />
+            <RadioGroup aria-label="preference" name="preference" value={preference} onChange={handleChange} >
+                <FormControlLabel value="both" control={<Radio />} label="Males and females" />
+                <FormControlLabel value="males" control={<Radio />} label="Males only" />
+                <FormControlLabel value="females" control={<Radio />} label="Females only" />
+            </RadioGroup>
                 
         
             </form>
-            <Button color={"primary"} size={"large"} variant={"contained"} onClick={props.next}>Next ></Button>
+            <Button color={"primary"} size={"large"} variant={"contained"} onClick={handleSubmitPreference}>Next ></Button>
         </Paper  >
     );
 }

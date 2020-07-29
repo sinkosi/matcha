@@ -13,6 +13,15 @@ def send_registration_activation_email(username, email_address, user_id, activat
     send_email(email_address, subject, msg)
     return
 
+def send_password_reset_otp(email, otp):
+    msg = f'''To reset your password, use the pin below:
+            {otp}'''
+
+    subject = "Password Reset OTP"
+
+    send_email(email, subject, msg)
+    return
+
 def send_login_notification(email):
     return
 

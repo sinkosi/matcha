@@ -14,6 +14,7 @@ import NewPassword from './ForgotPassword/NewPassword'
 
 export default function ForgotPassword(props) {
     const [formPage, setFormPage] = useState(0);
+    const [passwordResetData, setPasswordResetData] = useState({})
     const classes = useStyles();
     const browserHistory = useHistory()
     if (props.loggedIn)
@@ -31,8 +32,8 @@ export default function ForgotPassword(props) {
           </Avatar>
 
            {
-              formPage === 0 ? <Email next={handleNext} />
-            : formPage === 1 ? <OTP next={handleNext} />
+              formPage === 0 ? <Email next={handleNext} passwordResetData={passwordResetData} setPasswordResetData={setPasswordResetData} />
+            : formPage === 1 ? <OTP next={handleNext} passwordResetData={passwordResetData} setPasswordResetData={setPasswordResetData}/>
             : formPage === 2 ? <NewPassword />
             : <Fragment></Fragment>
         }

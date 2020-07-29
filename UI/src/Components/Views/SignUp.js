@@ -52,8 +52,17 @@ export default function SignUp(props) {
 
   const send_data = () => {
     const formdata = {username, firstname, lastname, email, password}
-    console.log(formdata)
-    register(formdata) ? console.log(true) : console.log(false)
+  console.log({formdata})
+    register(formdata, handleSuccess, handleError)
+  }
+
+  const handleSuccess = (response) => {
+    console.log({response})
+    browserHistory.push('/registrationsuccessful')
+  }
+
+  const handleError = (error) =>{
+    console.log({error})
   }
 
 

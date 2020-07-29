@@ -26,6 +26,9 @@ export default function SignIn(props) {
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
 
+  if (userData.loggedIn)
+    history.push('/')
+    
   const handleRememberMe = ({target}) => setRememberMe(target.checked)
   
   const validateUsernameEmail = ({target}) => {
@@ -44,16 +47,24 @@ export default function SignIn(props) {
 
   const handleLoginError = (error) => { console.log({error}) }
 
-  const handleLoginSuccess = ({data}) => {
+  const handleLoginSuccess = (response) => {
 
+    console.log(response)
+
+    if (!response.data.activated){
+      history.push("/accountnotactivated")
+      return false;
+    }
     if (rememberMe)
-      setCookieRememberMe('token', data.token, 2)
+      setCookieRememberMe('token', response.data.token, 2)
     else
-      setCookie('token', data.token)
+      setCookie('token', response.data.token)
     
-    setUserData({'loggedIn': true, 'token': data.token })
+    setUserData({'loggedIn': true, 'token': response.data.token, 'completed': response.data.completed })
     
-    data.completed ? history.push("/completeprofile") : history.push("/users") }
+    console.log(response.data.completed)
+    response.data.completed ? history.push("/") : history.push("/completeprofile") 
+  }
 
   return (
     <Grid container component="main" className={classes.root}>

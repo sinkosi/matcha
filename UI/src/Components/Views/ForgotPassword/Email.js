@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
@@ -7,6 +7,15 @@ import useStyles from '../../Styles/formStyle';
 
 export default function Email(props){
   const classes = useStyles();
+  const [email, setEmail] = useState("")
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value)
+  }
+
+  const handleSendEmail = () => {
+
+  }
     return (
       <React.Fragment>
 
@@ -16,14 +25,16 @@ export default function Email(props){
                 Email
             </Typography>
             <TextField
-              variant="outlined"
-              margin="normal"
+              variant="outlined" 
+              type="email"
               required
               fullWidth
               id="email"
               label="Email Address"
               name="email"
               autoComplete="email"
+              value={email}
+              onChange={handleEmailChange}
               autoFocus
             />
             <Button

@@ -1,4 +1,5 @@
-import React, {useState, useEffect, useRef}  from 'react'
+import React, {useState, useEffect, useRef, useContext }  from 'react'
+import {UserContext} from '../UserContext'
 import { useHistory } from "react-router-dom";
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -41,8 +42,7 @@ const User = (props) => {
                 />
                 <CardContent>
                     <Typography gutterBottom align="center" variant="h5" component="h2">{props.user.username}</Typography>
-                    <Typography gutterBottom align="center" variant="h5" component="h3">{props.user.firstname} {props.user.lastname}</Typography>
-                    
+                    <Typography gutterBottom align="center" variant="h5" component="h3">{props.user.firstname} {props.user.lastname}</Typography>                    
                 </CardContent>
             </CardActionArea>
         </Card>
@@ -51,10 +51,12 @@ const User = (props) => {
 
 const Users = (props) => {
     const [users, setUsers] = useState({data: []})
-    
+    const {userData} = useContext(UserContext)
+
+    let token = userData.token
     let usersRef = useRef(0)
     usersRef.current = users.data
-    const refresh = () => { getUsers(setUsers) }
+    const refresh = () => { getUsers(setUsers, token) }
     const logusers = () => console.log(usersRef)
     useEffect(() => {getUsers(setUsers) }, [usersRef])
     return (
@@ -62,10 +64,8 @@ const Users = (props) => {
             <Button onClick={refresh} >reload</Button>
             <Button onClick={logusers} >log users</Button>
             <Container maxWidth="lg" align="center">
-                <Grid container spacing={2}>
-                    
+                <Grid container spacing={2}> 
                     { users.data.map(user => <Grid item align="center"  key={user.id}  xs={12} sm={6} md={4} lg={3} > <User user={user} /> </Grid> ) }
-                    
                 </Grid>
             </Container>
         </>
