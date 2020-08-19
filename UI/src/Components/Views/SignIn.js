@@ -22,18 +22,33 @@ export default function SignIn(props) {
   const {userData, setUserData} = useContext(UserContext)
   const classes = useStyles()
   const history = useHistory()
-  const [usernameEmail, setUsernameEmail] = useState('')
+  const [usernameEmail, setUsernameEmail] = useState({'value': "", error: false, errormsg: ""})
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
 
   const handleRememberMe = ({target}) => setRememberMe(target.checked)
   
   const validateUsernameEmail = ({target}) => {
-    setUsernameEmail(target.value)
+
+    var reg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/;
+    if (reg.test(target.value) === false) 
+    {
+      setUsernameEmail({'value': target.value, error: true, errormsg: "Insert valid email"});
+    } else {
+      setUsernameEmail({'value': target.value, error: false, errormsg: ""})
+    }
   }
 
   const validatePassword = ({target}) => {
-    setPassword(target.value)
+
+    var msg = "Must have 8 to 20 characters, at least 1 letter, 1 number and 1 special character:";
+    var reg = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
+    if (reg.test(target.value) === false) 
+    {
+      setPassword({'value': target.value, error: true, errormsg: msg})
+    } else {
+    setPassword({'value': target.value, error: false, errormsg: ""})
+    }
   }
 
   const sendData = () => {
@@ -77,9 +92,11 @@ export default function SignIn(props) {
               label="Username or Email Address"
               name="usernameEmail"
               autoComplete="username"
-              value={usernameEmail}
+              value={usernameEmail.value}
               onChange={validateUsernameEmail}
               autoFocus
+              error = {usernameEmail.error}
+              helperText = {usernameEmail.errormsg}
             />
             <TextField
               variant="outlined"
@@ -90,9 +107,11 @@ export default function SignIn(props) {
               label="Password"
               type="password"
               id="password"
-              value={password}
+              value={password.value}
               onChange={validatePassword}
               autoComplete="current-password"
+              error = {password.error}
+              helperText = {password.errormsg}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" onChange={handleRememberMe}/>}
