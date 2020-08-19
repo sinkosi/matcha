@@ -4,13 +4,13 @@ import postgresql
 
 def create_database():
  
-    try:
-        db = postgresql.open(f'pq://{db_user}:{db_password}@{db_host}:{db_port}')
-        db.execute(f"CREATE DATABASE {db_name}")
-        db = postgresql.open(f'pq://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
+    # try:
+    db = postgresql.open(f'pq://{db_user}:{db_password}@{db_host}:{db_port}')
+    db.execute(f"CREATE DATABASE {db_name}")
+    db = postgresql.open(f'pq://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
 
-    except:
-        print("database creation failed")
+    # except:
+    #     print("database creation failed")
 
 
     CREATE_TABLES_QUERY = """
