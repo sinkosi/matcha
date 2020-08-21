@@ -10,7 +10,7 @@ const dbConfig = require("../config/db.config");
 	password:	dbConfig.PASSWORD,
 	database:	dbConfig.DB
 });*/
-
+/*
 var pgac = require('pg');
 
 const connection = new pgac({
@@ -27,4 +27,4 @@ connection.connect(error => {
 	console.log("model/db.js: MySQL Database has Connected!")
 });
 
-module.exports = connection;
+module.exports = connection;*/
