@@ -1,3 +1,5 @@
+/*
+MY SQL SETTINGS
 var mysql = require('mysql');
 
 var con = mysql.createConnection({
@@ -5,13 +7,23 @@ var con = mysql.createConnection({
   user: "root",
   password: "password"
 });
+*/
 
+var pg = require('pg');
+
+const con = new pg({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'matcha',
+  password: 'password',
+  port: 5432,
+})
 /*
 con.connect is code for establishing a connection and looking for an error
 */
 con.connect(function(err) {
   if (err) throw err;
-  console.log("MySQL Database has Connected!\n")
+  console.log("db.setup.:MySQL Database has Connected!\n")
   /*
   con.query is code for ensuring an SQL Statement can read or write to and from a
   MySql database. In the code below, sql is a placeholder for an instruction such
