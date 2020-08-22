@@ -18,6 +18,15 @@ con.connect(function(err) {
   as CREATE DATABASE mydb
   */
 /*=======================================================================
+||                         DROP DATABASE                               ||
+========================================================================*/
+var sql = "DROP SCHEMA IF EXISTS `matcha`";
+con.query(sql, function (err, result) {
+  if (err) throw err;
+  console.log("Deleting Database 'matcha'");
+});
+
+/*=======================================================================
 ||                        CREATE DATABASE                               ||
 ========================================================================*/
   var sql = "CREATE DATABASE IF NOT EXISTS matcha";
@@ -33,6 +42,15 @@ var sql = "USE matcha";
 con.query(sql, function (err, result) {
   if (err) throw err;
   console.log("SELECTING FOR USE - 'matcha'");
+});
+
+/*=======================================================================
+||                           FOREIGN KEY MANAGER                        ||
+========================================================================*/
+var sql = "SET FOREIGN_KEY_CHECKS = 0";
+con.query(sql, function (err, result) {
+  if (err) throw err;
+  console.log("FOREIGN KEY OFF");
 });
 
 /*=======================================================================
@@ -55,7 +73,9 @@ var sql = `CREATE TABLE IF NOT EXISTS matcha.users (
   registered TIMESTAMP  DEFAULT current_timestamp NOT NULL,
   modified TIMESTAMP  DEFAULT current_timestamp NOT NULL,
   activated_date TIMESTAMP NULL,
-  completed_date TIMESTAMP NULL
+  completed_date TIMESTAMP NULL,
+  CONSTRAINT fk_users_profile_pic FOREIGN KEY (profile_pic) REFERENCES images(id),
+  CONSTRAINT fk_users_location FOREIGN KEY (location) REFERENCES location(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
 con.query(sql, function (err, result) {
@@ -84,7 +104,9 @@ var sql = `CREATE TABLE IF NOT EXISTS matcha.users_interests (
     id INT(4) NOT NULL PRIMARY KEY,
     user_id INT(11) NOT NULL ,
     interest_id VARCHAR(255) NOT NULL ,
-    linked TIMESTAMP NOT NULL DEFAULT current_timestamp
+    linked TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    CONSTRAINT fk_users_interests_user_id FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT fk_users_interests_interest_id FOREIGN KEY (interest_id) REFERENCES interests (hashtag)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
 con.query(sql, function (err, result) {
@@ -99,7 +121,8 @@ var sql = `CREATE TABLE IF NOT EXISTS matcha.images (
     id INT(11) NOT NULL PRIMARY KEY,
     url VARCHAR(255) NOT NULL,
     user_id INT(11) NOT NULL,
-    uploaded TIMESTAMP NOT NULL DEFAULT current_timestamp
+    uploaded TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    CONSTRAINT fk_images_user_id FOREIGN KEY(user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
 con.query(sql, function (err, result) {
@@ -113,7 +136,8 @@ con.query(sql, function (err, result) {
 var sql = `CREATE TABLE IF NOT EXISTS matcha.activation_code (
     code VARCHAR(255) NOT NULL PRIMARY KEY,
     profile_id INT(11) NOT NULL,
-    generation_time TIMESTAMP NOT NULL DEFAULT current_timestamp
+    generation_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    CONSTRAINT fk_activation_codes_profile_id FOREIGN KEY (profile_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
 con.query(sql, function (err, result) {
@@ -128,7 +152,9 @@ var sql = `CREATE TABLE IF NOT EXISTS matcha.profile_likes (
     id INT(11)  NOT NULL PRIMARY KEY,
     profile_id int(11)  NOT NULL ,
     liker_id int(11)  NOT NULL ,
-    liked TIMESTAMP NOT NULL DEFAULT current_timestamp
+    liked TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    CONSTRAINT fk_profile_likes_profile_id FOREIGN KEY (profile_id) REFERENCES users(id),
+    CONSTRAINT fk_profile_likes_liker_id FOREIGN KEY (liker_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
 con.query(sql, function (err, result) {
@@ -143,7 +169,9 @@ var sql = `CREATE TABLE IF NOT EXISTS matcha.profile_visits (
     id INT(11)  NOT NULL PRIMARY KEY,
     profile_id INT(11)  NOT NULL ,
     visitor_id INT(11)  NOT NULL ,
-    visited TIMESTAMP  NOT NULL DEFAULT current_timestamp
+    visited TIMESTAMP  NOT NULL DEFAULT current_timestamp,
+    CONSTRAINT fk_profile_visits_profile_id FOREIGN KEY (profile_id) REFERENCES users(id),
+    CONSTRAINT fk_profile_visits_visitor_id FOREIGN KEY (visitor_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 /*
 -- fame_rating
@@ -160,7 +188,7 @@ con.query(sql, function (err, result) {
 ||                   CREATE 'LOCATION' TABLE                           ||
 ========================================================================*/
 var sql = `CREATE TABLE IF NOT EXISTS matcha.location (
-    id SERIAL  NOT NULL ,
+    id int(20)  NOT NULL PRIMARY KEY,
     address1 TEXT  NULL ,
     address2 TEXT  NULL ,
     city TEXT  NULL ,
@@ -169,7 +197,8 @@ var sql = `CREATE TABLE IF NOT EXISTS matcha.location (
     longitude NUMERIC  NULL ,
     latitude NUMERIC  NULL ,
     user_id INT(11)  NOT NULL ,
-    time TIMESTAMP  NOT NULL DEFAULT current_timestamp
+    time TIMESTAMP  NOT NULL DEFAULT current_timestamp,
+    CONSTRAINT fk_location_user_id FOREIGN KEY (user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
 con.query(sql, function (err, result) {
@@ -183,7 +212,9 @@ con.query(sql, function (err, result) {
 var sql = `CREATE TABLE IF NOT EXISTS matcha.matches (
     id INT(11)  NOT NULL PRIMARY KEY,
     user1_id INT(11)  NOT NULL ,
-    user2_id INT(11)  NOT NULL 
+    user2_id INT(11)  NOT NULL,
+    CONSTRAINT fk_matches_user1_id FOREIGN KEY (user1_id) REFERENCES users(id),
+    CONSTRAINT fk_matches_user2_id FOREIGN KEY (user2_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
 con.query(sql, function (err, result) {
@@ -194,16 +225,27 @@ con.query(sql, function (err, result) {
 /*=======================================================================
 ||                   CREATE 'MESSAGES' TABLE                           ||
 ========================================================================*/
-var sql = `CREATE TABLE matcha.messages (
+var sql = `CREATE TABLE IF NOT EXISTS matcha.messages (
     id SERIAL  NOT NULL PRIMARY KEY,
     sender INT(11)  NOT NULL ,
     send_group INT(11) NOT NULL ,
-    time TIMESTAMP  NOT NULL DEFAULT current_timestamp
+    time TIMESTAMP  NOT NULL DEFAULT current_timestamp,
+    CONSTRAINT fk_massages_sender FOREIGN KEY (sender) REFERENCES users(id),
+    CONSTRAINT fk_messages_group FOREIGN KEY (send_group) REFERENCES matches(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
 con.query(sql, function (err, result) {
   if (err) throw err;
   console.log("Creating Table 'messages'");
+});
+
+/*=======================================================================
+||                           FOREIGN KEY MANAGER                        ||
+========================================================================*/
+var sql = "SET FOREIGN_KEY_CHECKS = 1";
+con.query(sql, function (err, result) {
+  if (err) throw err;
+  console.log("FOREIGN KEY ON");
 });
 
 /*=======================================================================
