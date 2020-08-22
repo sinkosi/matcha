@@ -19,7 +19,7 @@ import postLogin from '../../Services/login'
 import {setCookie, setCookieRememberMe} from '../../utils/cookies'
 
 export default function SignIn(props) {
-  const {userData, setUserData} = useContext(UserContext)
+  const {setUserData} = useContext(UserContext)
   const classes = useStyles()
   const history = useHistory()
   const [usernameEmail, setUsernameEmail] = useState({'value': "", error: false, errormsg: ""})
@@ -30,10 +30,10 @@ export default function SignIn(props) {
   
   const validateUsernameEmail = ({target}) => {
 
-    var reg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/;
-    if (reg.test(target.value) === false) 
+    var reg = /[,<>"{}()&%$#!]/;
+    if (reg.test(target.value) === true) 
     {
-      setUsernameEmail({'value': target.value, error: true, errormsg: "Insert valid email"});
+      setUsernameEmail({'value': target.value, error: true, errormsg: "Insert validusername or email format"});
     } else {
       setUsernameEmail({'value': target.value, error: false, errormsg: ""})
     }
@@ -42,7 +42,7 @@ export default function SignIn(props) {
   const validatePassword = ({target}) => {
 
     var msg = "Must have 8 to 20 characters, at least 1 letter, 1 number and 1 special character:";
-    var reg = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
+    var reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,20}$/;
     if (reg.test(target.value) === false) 
     {
       setPassword({'value': target.value, error: true, errormsg: msg})

@@ -5,8 +5,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
@@ -21,46 +19,44 @@ export default function SignUp(props) {
   const browserHistory = useHistory()
   const classes = useStyles();
 
-  const [username, setusername] = useState('')
-  const [firstname, setfirstname] = useState('')
-  const [lastname, setlastname] = useState('')
-  const [email, setemail] = useState('')
-  const [password, setpassword] = useState('')
-  const [confirmpassword, setconfirmpassword] = useState('')
+  const [username, setusername] = useState({'value':'', 'error':false, 'errormsg':''})
+  const [firstname, setfirstname] = useState({'value':'', 'error':false, 'errormsg':''})
+  const [lastname, setlastname] = useState({'value':'', 'error':false, 'errormsg':''})
+  const [email, setemail] = useState({'value':'', 'error':false, 'errormsg':''})
+  const [password, setpassword] = useState({'value':'', 'error':false, 'errormsg':''})
+  const [confirmpassword, setconfirmpassword] = useState({'value':'', 'error':false, 'errormsg':''})
   
   if (props.loggedIn)
     browserHistory.push('/')
 
   const validateUsername = (event) => {
-    // setusername(event.target.value)
     var msg = "username can only have numeric values, alphabets, hyphens or apostrophy"
     var reg = /^[A-Za-z0-9'-]+$/
     if(reg.test(event.target.value) === false) {
-      setusername({'value': event.target.value, error: false, errormsg: msg})
+      setusername({'value': event.target.value, error: true, errormsg: msg})
     } else {
-      setusername({'value': event.target.value, error: true, errormsg: ""})
+      setusername({'value': event.target.value, error: false, errormsg: ""})
     }
   }
   const validateFirstname = (event) => {
-    // setfirstname(event.target.value)
 
-    var msg = "First namecan only have alphabets, hyphens or apostrophies"
-    var reg = /^[a-zA-Z]'?[- a-zA-Z]+$/
+    var msg = "First name can only have alphabets, hyphens or apostrophies"
+    var reg = /^[a-zA-Z']?[- a-zA-Z']+$/
     if(reg.test(event.target.value) === false) {
-      setfirstname({'value': event.target.value, error: false, errormsg: msg})
+      setfirstname({'value': event.target.value, error: true, errormsg: msg})
     } else {
-      setfirstname({'value': event.target.value, error: true, errormsg: ""})
+      setfirstname({'value': event.target.value, error: false, errormsg: ""})
     }
   }
   const validateLastname = (event) => {
     // setlastname(event.target.value)
 
     var msg = "Last Name can only have characters, hyphens or apostrophy"
-    var reg = /^[a-zA-Z]'?[- a-zA-Z]+$/
+    var reg = /^[a-zA-Z']?[- a-zA-Z']+$/
     if(reg.test(event.target.value) === false) {
-      setlastname({'value': event.target.value, error: false, errormsg: msg})
+      setlastname({'value': event.target.value, error: true, errormsg: msg})
     } else {
-      setlastname({'value': event.target.value, error: true, errormsg: ""})
+      setlastname({'value': event.target.value, error: false, errormsg: ""})
     }
   }
   const validateEmail = (event) => {
@@ -75,10 +71,9 @@ export default function SignUp(props) {
     }
   }
   const validatePassword = (event) => {
-    // setpassword(event.target.value)
 
     var msg = "Must have 8 to 20 characters, at least 1 letter, 1 number and 1 special character:";
-    var reg = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
+    var reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,20}$/;
     if (reg.test(event.target.value) === false) 
     {
       setpassword({'value': event.target.value, error: true, errormsg: msg})
@@ -87,11 +82,16 @@ export default function SignUp(props) {
     }
   }
   const validateConfirmPassword = (event) => {
-    setconfirmpassword(event.target.value)
+    var msg = "Must be the same as password entered above"
+    if (event.target.value !== password.value){
+      setconfirmpassword({'value': event.target.value, error: true, errormsg: msg})
+    } else {
+      setconfirmpassword({'value': event.target.value, error: false, errormsg: ""})
+    }
   }
 
   const send_data = () => {
-    const formdata = {username, firstname, lastname, email, password}
+    const formdata = {'username':username.value, 'firstname':firstname.value, 'lastname':lastname.value, 'email':email.value, 'password':password.value}
     console.log(formdata)
     register(formdata) ? console.log(true) : console.log(false)
   }
@@ -111,7 +111,7 @@ export default function SignUp(props) {
             Sign Up
           </Typography>
 
-          <form className={classes.form}  noValidate>
+          <form className={classes.form}  noValidate={false} >
           
             <FormControl fullWidth >
               <TextField
@@ -208,12 +208,13 @@ export default function SignUp(props) {
                 autoComplete="confirm-password"
                 value={confirmpassword.value}
                 onChange={e => validateConfirmPassword(e)}
-                // error = {confirmpassword.error}
+                error = {confirmpassword.error}
                 helperText = {confirmpassword.errormsg}
               />
             </FormControl>
             <Button
               onClick={send_data}
+              // type='submit'
               fullWidth
               variant="contained"
               color="primary"
