@@ -8,6 +8,12 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+var corsOptions = {
+	origin: "http://localhost:3000"
+  };
+  
+app.use(cors(corsOptions));
+  //app.use(cors());
 
 //set the port: This is where that whole localhost:3000 thing gets done and should be changed if
 // you have a port conflict etc. If it works then you will see the text below.
