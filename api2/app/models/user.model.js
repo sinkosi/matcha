@@ -21,7 +21,7 @@ User.create = (newUser, result) => {
 	});
 };
 
-//FIND A CUSTOMER BY ID
+//FIND A USER BY ID
 User.findById = (userID, result) => {
 	sql.query(`SELECT * FROM users WHERE id = ${userID}`, (err, res) => {
 		if (err) {
@@ -41,7 +41,7 @@ User.findById = (userID, result) => {
 	});
 };
 
-//RETRIEVE ALL CUSTOMER DATA
+//RETRIEVE ALL USER DATA
 User.getAll = result => {
 	sql.query("SELECT * FROM users", (err, res) => {
 		if (err) {
@@ -55,7 +55,7 @@ User.getAll = result => {
 	});
 };
 
-//UPDATE A CUSTOMER BY ID
+//UPDATE A USER BY ID
 User.updateById = (id, user, result) => {
 	sql.query(
 		"UPDATE users SET email = ?, name = ?, active = ? WHERE id = ?",
@@ -79,7 +79,7 @@ User.updateById = (id, user, result) => {
 	);
 };
 
-//DELETE A CUSTOMER
+//DELETE A USER
 User.remove = (id, result) => {
 	sql.query("DELETE FROM users WHERE id = ?", id, (err, res) => {
 		if (err) {
