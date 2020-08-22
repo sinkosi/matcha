@@ -11,7 +11,7 @@ const app = express();
 
 //set the port: This is where that whole localhost:3000 thing gets done and should be changed if
 // you have a port conflict etc. If it works then you will see the text below.
-const port = 5000;
+const port = 3000;
 
 // parse requests of content-type: application/json:
 app.use(bodyParser.json());

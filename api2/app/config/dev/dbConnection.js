@@ -1,5 +1,5 @@
-//import pool from './pool';
-var pool = require('pool');
+require { pool } from './pool';
+//var pool = require('pool');
 
 pool.on('connect', () => {
 	console.log('connected to the db');
@@ -60,9 +60,10 @@ pool.on('remove', () => {
 	process.exit(0);
 });
 
-export {
+module.exports = createAllTables;
+/*module.exports = createDB {
 	createAllTables,
 	dropAllTables,
-};
+};*/
 
 require('make-runnable');

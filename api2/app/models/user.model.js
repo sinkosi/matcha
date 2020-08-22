@@ -8,7 +8,7 @@ const User = function(user) {
 };
 
 //CREATE A NEW CUSTOMER
-/*User.create = (newUser, result) => {
+User.create = (newUser, result) => {
 	sql.query("INSERT INTO users SET ?", newUser, (err, res) => {
 		if (err) {
 			console.log("error: ", err);
@@ -113,4 +113,4 @@ User.removeAll = result => {
 	});
 };
 
-module.exports = User;*/
+module.exports = User;

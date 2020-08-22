@@ -3,4 +3,5 @@
 distance.js
 location.html
 open
-./api2/node_modules/
+./api2/node_modules/*
+.\api2\node_modules\*
