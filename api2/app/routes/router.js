@@ -12,7 +12,7 @@ const userMiddleware = require('../middleware/user.verify');
 /*========================================================
 ||                  SIGN UP MANAGER                      ||
 =========================================================*/
-router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
+router.post('/signup', userMiddleware.validateRegister, (req, res, next) => {
   db.query(
     `SELECT * FROM users WHERE LOWER(username) = LOWER(${db.escape(
       req.body.username
