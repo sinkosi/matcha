@@ -95,6 +95,22 @@ exports.findOne = (req, res) => {
 	});
 };
 
+exports.findUsername = (req, res => {
+	User.findUsername(req.params.username, (err, data) => {
+		if (err) {
+			if (err.kind === "not_found") {
+				res.status(404).send({
+					message: `Username not found with name: ${req.params.username}.`
+				});
+			} else {
+				res.status(500).send({
+					message: "" //Please finish the log in sequence here
+				})
+			}
+		}
+	})
+})
+
 //Update a single User with a userId in the request
 exports.update = (req, res) => {
 	//Validate Request

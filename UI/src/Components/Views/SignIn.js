@@ -33,7 +33,7 @@ export default function SignIn(props) {
     var reg = /[,<>"{}()&%$#!]/;
     if (reg.test(target.value) === true) 
     {
-      setUsernameEmail({'value': target.value, error: true, errormsg: "Insert validusername or email format"});
+      setUsernameEmail({'value': target.value, error: true, errormsg: "Insert valid username or email format"});
     } else {
       setUsernameEmail({'value': target.value, error: false, errormsg: ""})
     }
@@ -51,8 +51,11 @@ export default function SignIn(props) {
     }
   }
 
-  const sendData = () => {
-    let data = { 'login': usernameEmail, password }
+/*  const sendData = () => {
+    let data = { 'login': usernameEmail, password }*/
+
+    const sendData = () => {
+      let data = { 'users': usernameEmail, password }
 
     postLogin(handleLoginSuccess, handleLoginError,data)
   }
