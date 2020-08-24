@@ -79,7 +79,7 @@ var sql = `CREATE TABLE IF NOT EXISTS matcha.users (
 
 con.query(sql, function (err, result) {
   if (err) throw err;
-  console.log("Creating Table 'user'");
+  console.log("Creating Table 'users'");
 });
 
 /*=======================================================================
