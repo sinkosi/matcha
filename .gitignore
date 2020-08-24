@@ -5,3 +5,5 @@ location.html
 open
 ./api2/node_modules/*
 .\api2\node_modules\*
+./docs
+/docs
