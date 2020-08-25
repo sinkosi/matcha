@@ -46,7 +46,11 @@ exports.create = (req, res) => {
 
 	//Create a User
 	const user = new User({
+		username: req.body.username,
+		firstname: req.body.firstname,
+		lastname: req.body.lastname,
 		email: req.body.email,
+		password: req.body.password,
 		name: req.body.name,
 		active: req.body.active
 	});
@@ -90,6 +94,22 @@ exports.findOne = (req, res) => {
 		} else res.send(data);			
 	});
 };
+
+exports.findUsername = (req, res => {
+	User.findUsername(req.params.username, (err, data) => {
+		if (err) {
+			if (err.kind === "not_found") {
+				res.status(404).send({
+					message: `Username not found with name: ${req.params.username}.`
+				});
+			} else {
+				res.status(500).send({
+					message: "" //Please finish the log in sequence here
+				})
+			}
+		}
+	})
+})
 
 //Update a single User with a userId in the request
 exports.update = (req, res) => {
