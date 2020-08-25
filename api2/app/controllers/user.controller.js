@@ -95,7 +95,7 @@ exports.findOne = (req, res) => {
 	});
 };
 
-exports.findUsername = (req, res => {
+exports.findUsername = (req, res) => {
 	User.findUsername(req.params.username, (err, data) => {
 		if (err) {
 			if (err.kind === "not_found") {
@@ -109,7 +109,7 @@ exports.findUsername = (req, res => {
 			}
 		}
 	})
-})
+}
 
 //Update a single User with a userId in the request
 exports.update = (req, res) => {
