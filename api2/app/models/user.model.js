@@ -44,9 +44,10 @@ User.findById = (userID, result) => {
 };
 
 // FIND A USER BY USERNAME
-User.findByUserName = (user, result) => {
-	//sql.query("SELECT * FROM users WHERE username = '?'", [user.username], (err, res) => {
-	sql.query(`SELECT * FROM users WHERE username = ''${user.username}'';`, (err, res) => {
+User.findByUserName = (username, result) => {
+	//sql.query("SELECT * FROM users WHERE username = '?'", [user.username], (err, res) => {	
+	//sql.query("SELECT * FROM users WHERE username = 'thoko'", (err, res) => {
+	sql.query(`SELECT * FROM users WHERE username = '${username}';`, (err, res) => {
 		if (err) {
 			console.log("error: ", err);
 			result(err, null);
