@@ -20,9 +20,6 @@ module.exports = app => {
 	//Retrieve a single User with userId
 	app.get("/users/:userId", users.findOne);
 
-	//Retrieve a user by username
-	app.post("/users/login/:username", users.findUsername);
-
 	//Update a User with userId
 	app.put("/users/:userId", users.update);
 
@@ -33,11 +30,8 @@ module.exports = app => {
 	app.delete("/users", users.deleteAll);
 
 	//Create a new User
-	app.post("/signup", users.create);
+	app.post("/signup", users.signup);
 
-	//Retrieve a user by username
-	app.post("/login/:username", users.findUsername);
-
-	//Retrieve a user by username
+	//Retrieve a users login details
 	app.post("/login", users.login);
 };

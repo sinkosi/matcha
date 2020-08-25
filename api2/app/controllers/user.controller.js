@@ -95,22 +95,6 @@ exports.findOne = (req, res) => {
 	});
 };
 
-exports.findUsername = (req, res) => {
-	User.findByUserName(req.params.username, (err, data) => {
-		if (err) {
-			if (err.kind === "not_found") {
-				res.status(404).send({
-					message: `Username not found with name: ${req.params.username}.`
-				});
-			} else {
-				res.status(500).send({
-					message: "Error retrieving User with username: " + req.params.username //TODO: Please finish the log in sequence here
-				});
-			}
-		} else res.send(data);
-	});
-};
-
 //Update a single User with a userId in the request
 exports.update = (req, res) => {
 	//Validate Request
@@ -167,8 +151,10 @@ exports.deleteAll = (req, res) => {
 	});
 };
 
+//LOGIN HANDLER
+
 exports.login = (req, res) => {
-	User.findLogin(req.body.login, (err, data) => {
+	User.findLogin(req.body.login, req.body.password, (err, data) => {
 		if (err) {
 			if (err.kind === "not_found") {
 				res.status(404).send({
@@ -180,5 +166,48 @@ exports.login = (req, res) => {
 				});
 			}
 		} else res.send(data);
+	});
+};
+
+//SIGN UP WITH ENCRYPTION
+
+//Create and Save a new User
+exports.signup = (req, res) => {
+	//Validate request
+	if (!req.body)	{
+		res.status(400).send({
+			message: "Content can not be empty!"
+		});
+	}
+
+	//Create a User
+	const user = new User({
+		username: req.body.username,
+		firstname: req.body.firstname,
+		lastname: req.body.lastname,
+		email: req.body.email,
+		password: req.body.password
+	});
+
+	//Save User in the database
+	User.signup(user, (err, data) => {
+		if (err) {
+			if (err.kind === "inUse") {
+				res.status(409).send({
+					message: `409: Username already in use`
+				});
+			} else if (err.kind === "bcrypt err") {
+				res.status(500).send({
+					message: `Unknown Bcrypt failure`
+				});
+			}
+			else {
+				res.status(500).send({
+					message:
+						err.message || "Some error occurred while creating the User."
+				});
+			}
+		}	
+		else res.send(data);
 	});
 };
