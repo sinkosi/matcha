@@ -95,8 +95,8 @@ exports.findOne = (req, res) => {
 	});
 };
 
-exports.findUsername = (req, res => {
-	User.findUsername(req.params.username, (err, data) => {
+exports.findUsername = (req, res) => {
+	User.findByUserName(req.params.username, (err, data) => {
 		if (err) {
 			if (err.kind === "not_found") {
 				res.status(404).send({
@@ -104,12 +104,12 @@ exports.findUsername = (req, res => {
 				});
 			} else {
 				res.status(500).send({
-					message: "" //Please finish the log in sequence here
-				})
+					message: "Error retrieving User with username: " + req.params.username //TODO: Please finish the log in sequence here
+				});
 			}
-		}
-	})
-})
+		} else res.send(data);
+	});
+};
 
 //Update a single User with a userId in the request
 exports.update = (req, res) => {
