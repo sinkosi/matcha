@@ -100,7 +100,7 @@ con.query(sql, function (err, result) {
 ||                   CREATE 'USERS_INTERESTS' TABLE                     ||
 ========================================================================*/
 var sql = `CREATE TABLE IF NOT EXISTS matcha.users_interests (
-    id INT(4) NOT NULL PRIMARY KEY,
+    id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     user_id INT(11) NOT NULL ,
     interest_id VARCHAR(255) NOT NULL ,
     linked TIMESTAMP NOT NULL DEFAULT current_timestamp,
@@ -117,7 +117,7 @@ con.query(sql, function (err, result) {
 ||                   CREATE 'IMAGES' TABLE                             ||
 ========================================================================*/
 var sql = `CREATE TABLE IF NOT EXISTS matcha.images (
-    id INT(11) NOT NULL PRIMARY KEY,
+    id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     url VARCHAR(255) NOT NULL,
     user_id INT(11) NOT NULL,
     uploaded TIMESTAMP NOT NULL DEFAULT current_timestamp,
@@ -148,7 +148,7 @@ con.query(sql, function (err, result) {
 ||                   CREATE 'PROFILE LIKES' TABLE                      ||
 ========================================================================*/
 var sql = `CREATE TABLE IF NOT EXISTS matcha.profile_likes (
-    id INT(11)  NOT NULL PRIMARY KEY,
+    id INT(11)  NOT NULL PRIMARY KEY AUTO_INCREMENT,
     profile_id int(11)  NOT NULL ,
     liker_id int(11)  NOT NULL ,
     liked TIMESTAMP NOT NULL DEFAULT current_timestamp,
@@ -165,7 +165,7 @@ con.query(sql, function (err, result) {
 ||                   CREATE 'PROFILE VISITS' TABLE                      ||
 ========================================================================*/
 var sql = `CREATE TABLE IF NOT EXISTS matcha.profile_visits (
-    id INT(11)  NOT NULL PRIMARY KEY,
+    id INT(11)  NOT NULL PRIMARY KEY AUTO_INCREMENT,
     profile_id INT(11)  NOT NULL ,
     visitor_id INT(11)  NOT NULL ,
     visited TIMESTAMP  NOT NULL DEFAULT current_timestamp,
@@ -187,7 +187,7 @@ con.query(sql, function (err, result) {
 ||                   CREATE 'LOCATION' TABLE                           ||
 ========================================================================*/
 var sql = `CREATE TABLE IF NOT EXISTS matcha.location (
-    id int(20)  NOT NULL PRIMARY KEY,
+    id int(20)  NOT NULL PRIMARY KEY AUTO_INCREMENT,
     address1 TEXT  NULL ,
     address2 TEXT  NULL ,
     city TEXT  NULL ,
@@ -209,7 +209,7 @@ con.query(sql, function (err, result) {
 ||                   CREATE 'MATCHES' TABLE                             ||
 ========================================================================*/
 var sql = `CREATE TABLE IF NOT EXISTS matcha.matches (
-    id INT(11)  NOT NULL PRIMARY KEY,
+    id INT(11)  NOT NULL PRIMARY KEY AUTO_INCREMENT,
     user1_id INT(11)  NOT NULL ,
     user2_id INT(11)  NOT NULL,
     CONSTRAINT fk_matches_user1_id FOREIGN KEY (user1_id) REFERENCES users(id),
@@ -225,7 +225,7 @@ con.query(sql, function (err, result) {
 ||                   CREATE 'MESSAGES' TABLE                           ||
 ========================================================================*/
 var sql = `CREATE TABLE IF NOT EXISTS matcha.messages (
-    id SERIAL  NOT NULL PRIMARY KEY,
+    id int(11)  NOT NULL PRIMARY KEY AUTO_INCREMENT,
     sender INT(11)  NOT NULL ,
     send_group INT(11) NOT NULL ,
     time TIMESTAMP  NOT NULL DEFAULT current_timestamp,
