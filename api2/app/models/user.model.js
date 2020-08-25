@@ -43,6 +43,27 @@ User.findById = (userID, result) => {
 	});
 };
 
+// FIND A USER BY USERNAME
+User.findByUserName = (user, result) => {
+	//sql.query("SELECT * FROM users WHERE username = '?'", [user.username], (err, res) => {
+	sql.query(`SELECT * FROM users WHERE username = ''${user.username}'';`, (err, res) => {
+		if (err) {
+			console.log("error: ", err);
+			result(err, null);
+			return;
+		}
+
+		if (res.length) {
+			console.log("found user: ", res[0]);
+			result(null, res[0]);
+			return;
+		}
+
+		//User with that user id has not been found.
+		result({ kind: "not found" }, null);
+	});
+};
+
 //RETRIEVE ALL USER DATA
 User.getAll = result => {
 	sql.query("SELECT * FROM users", (err, res) => {
