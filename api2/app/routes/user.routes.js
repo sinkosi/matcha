@@ -31,4 +31,10 @@ module.exports = app => {
 
 	//Delete all Users
 	app.delete("/users", users.deleteAll);
+
+	//Create a new User
+	app.post("/signup", users.create);
+
+	//Retrieve a user by username
+	app.post("/login/:username", users.findUsername);
 };
