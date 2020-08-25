@@ -86,8 +86,11 @@ con.query(sql, function (err, result) {
 ||                   CREATE 'INTERESTS' TABLE                           ||
 ========================================================================*/
 var sql = `CREATE TABLE IF NOT EXISTS matcha.interests (
-  hashtag VARCHAR(30)  NOT NULL PRIMARY KEY,
-  added TIMESTAMP NOT NULL DEFAULT current_timestamp
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  hashtag VARCHAR(30)  NOT NULL,
+  user_id INT(11) NOT NULL ,
+  added TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  CONSTRAINT fk_interests_user_id FOREIGN KEY (user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
 con.query(sql, function (err, result) {
@@ -96,22 +99,22 @@ con.query(sql, function (err, result) {
 });
 
 
-/*=======================================================================
-||                   CREATE 'USERS_INTERESTS' TABLE                     ||
-========================================================================*/
-var sql = `CREATE TABLE IF NOT EXISTS matcha.users_interests (
-    id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    user_id INT(11) NOT NULL ,
-    interest_id VARCHAR(255) NOT NULL ,
-    linked TIMESTAMP NOT NULL DEFAULT current_timestamp,
-    CONSTRAINT fk_users_interests_user_id FOREIGN KEY (user_id) REFERENCES users(id),
-    CONSTRAINT fk_users_interests_interest_id FOREIGN KEY (interest_id) REFERENCES interests (hashtag)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
+// /*=======================================================================
+// ||                   CREATE 'USERS_INTERESTS' TABLE                     ||
+// ========================================================================*/
+// var sql = `CREATE TABLE IF NOT EXISTS matcha.users_interests (
+//     id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+//     user_id INT(11) NOT NULL ,
+//     interest_id VARCHAR(255) NOT NULL ,
+//     linked TIMESTAMP NOT NULL DEFAULT current_timestamp,
+//     CONSTRAINT fk_users_interests_user_id FOREIGN KEY (user_id) REFERENCES users(id),
+//     CONSTRAINT fk_users_interests_interest_id FOREIGN KEY (interest_id) REFERENCES interests (hashtag)
+// ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
-con.query(sql, function (err, result) {
-  if (err) throw err;
-  console.log("Creating Table 'users_interests'");
-});
+// con.query(sql, function (err, result) {
+//   if (err) throw err;
+//   console.log("Creating Table 'users_interests'");
+// });
 
 /*=======================================================================
 ||                   CREATE 'IMAGES' TABLE                             ||

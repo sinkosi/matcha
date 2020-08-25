@@ -139,7 +139,7 @@ User.removeAll = result => {
 // FIND A USER BY USERNAME
 User.findLogin = (username, result) => {
 	//User.findByUserName = (username, result) => {
-		sql.query(`SELECT * FROM users WHERE LOWER(username) = LOWER(${sql.escape(username)});`, (err, res) => {
+		sql.query(`SELECT * FROM users WHERE LOWER(username) = LOWER(${sql.escape(username.value)});`, (err, res) => {
 		//sql.query(`SELECT * FROM users WHERE LOWER(username) = 'thoko';`, (err, res) => {
 			if (err) {
 				console.log("error: ", err);

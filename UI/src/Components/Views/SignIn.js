@@ -23,7 +23,7 @@ export default function SignIn(props) {
   const classes = useStyles()
   const history = useHistory()
   const [usernameEmail, setUsernameEmail] = useState({'value': "", error: false, errormsg: ""})
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState({'value': "", error: false, errormsg: ""})
   const [rememberMe, setRememberMe] = useState(false)
 
   const handleRememberMe = ({target}) => setRememberMe(target.checked)
@@ -47,7 +47,7 @@ export default function SignIn(props) {
     {
       setPassword({'value': target.value, error: true, errormsg: msg})
     } else {
-    setPassword({'value': target.value, error: false, errormsg: ""})
+      setPassword({'value': target.value, error: false, errormsg: ""})
     }
   }
 
@@ -56,6 +56,7 @@ export default function SignIn(props) {
 
     const sendData = () => {
       let data = { 'login': usernameEmail, password }
+      //let data = { 'username': usernameEmail.value, 'password': password.value }
 
     postLogin(handleLoginSuccess, handleLoginError,data)
   }

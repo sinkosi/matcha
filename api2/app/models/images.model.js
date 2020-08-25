@@ -46,6 +46,19 @@ const Images = function() {
         });
     };
 
+    this.getAll = (callback) => {
+        sql.query("SELECT * FROM images", (err, res) => {
+            if (err) {
+                console.log("error: ", err);
+                callback(err, null);
+                return;
+            }
+
+            callback(null, res);
+            return;
+        });
+    };
+
     this.removeOne = (imageId, callback) => {
         sql.query("DELETE FROM images WHERE id = ?", [imageId], (err, res) => {
             if (err) {
@@ -60,4 +73,4 @@ const Images = function() {
     }
 }
 
-module.exports = Images;
+module.exports = new Images();

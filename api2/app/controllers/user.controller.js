@@ -168,7 +168,7 @@ exports.deleteAll = (req, res) => {
 };
 
 exports.login = (req, res) => {
-	User.findLogin(req.body.username, (err, data) => {
+	User.findLogin(req.body.login, (err, data) => {
 		if (err) {
 			if (err.kind === "not_found") {
 				res.status(404).send({

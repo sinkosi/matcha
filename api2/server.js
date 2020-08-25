@@ -47,6 +47,7 @@ app.use('/api', router);
 
 //THE ROUTES need to be invoked here to ensure that the app is listening for route changes
 require("./app/routes/user.routes")(app);
+require("./app/routes/images.routes")(app);
 
 //startup app at http://localhost:3000
 //the text below should be visible if the server is running but if it is not then error messages
