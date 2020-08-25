@@ -7,3 +7,4 @@ open
 .\api2\node_modules\*
 ./docs
 /docs
+/python
