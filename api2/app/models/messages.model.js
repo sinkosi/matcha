@@ -24,7 +24,7 @@ const Messages = function() {
                 return;
             }
 
-            callback(null, res[0]);
+            callback(null, res);
             return;
         });
     };
