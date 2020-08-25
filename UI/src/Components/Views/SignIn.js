@@ -55,7 +55,7 @@ export default function SignIn(props) {
     let data = { 'login': usernameEmail, password }*/
 
     const sendData = () => {
-      let data = { '/login': usernameEmail, password }
+      let data = { 'login': usernameEmail, password }
 
     postLogin(handleLoginSuccess, handleLoginError,data)
   }

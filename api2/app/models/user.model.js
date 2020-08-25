@@ -45,6 +45,7 @@ User.findById = (userID, result) => {
 
 // FIND A USER BY USERNAME
 User.findByUserName = (username, result) => {
+//User.findByUserName = (username, result) => {
 	sql.query(`SELECT * FROM users WHERE LOWER(username) = LOWER(${sql.escape(username)}';`, (err, res) => {
 		if (err) {
 			console.log("error: ", err);
@@ -134,5 +135,27 @@ User.removeAll = result => {
 		result(null, res);
 	});
 };
+
+// FIND A USER BY USERNAME
+User.findLogin = (username, result) => {
+	//User.findByUserName = (username, result) => {
+		sql.query(`SELECT * FROM users WHERE LOWER(username) = LOWER(${sql.escape(username)});`, (err, res) => {
+		//sql.query(`SELECT * FROM users WHERE LOWER(username) = 'thoko';`, (err, res) => {
+			if (err) {
+				console.log("error: ", err);
+				result(err, null);
+				return;
+			}
+	
+			if (res.length) {
+				console.log("found user: ", res[0]);
+				result(null, res[0]);
+				return;
+			}
+	
+			//User with that user id has not been found.
+			result({ kind: "not found" }, null);
+		});
+	};
 
 module.exports = User;

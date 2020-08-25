@@ -37,4 +37,7 @@ module.exports = app => {
 
 	//Retrieve a user by username
 	app.post("/login/:username", users.findUsername);
+
+	//Retrieve a user by username
+	app.post("/login", users.login);
 };
