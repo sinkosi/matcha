@@ -228,6 +228,7 @@ var sql = `CREATE TABLE IF NOT EXISTS matcha.messages (
     id int(11)  NOT NULL PRIMARY KEY AUTO_INCREMENT,
     sender INT(11)  NOT NULL ,
     send_group INT(11) NOT NULL ,
+    message TEXT NOT NULL,
     time TIMESTAMP  NOT NULL DEFAULT current_timestamp,
     CONSTRAINT fk_massages_sender FOREIGN KEY (sender) REFERENCES users(id),
     CONSTRAINT fk_messages_group FOREIGN KEY (send_group) REFERENCES matches(id)
