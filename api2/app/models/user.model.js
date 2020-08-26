@@ -177,15 +177,16 @@ User.signup = (newUser, result) => {
  */
 // FIND A USER BY USERNAME
 User.findLogin = (username, password, result) => {
-	sql.query(`SELECT * FROM users WHERE LOWER(username) = LOWER(${sql.escape(username.value)});`, (err, res) => {
+	sql.query(`SELECT * FROM users WHERE LOWER(username) = LOWER(${sql.escape(username.value)});`,
+	(err, res) => {
 		if (err) {
 		// ?This mean the user does not exist
 			console.log("error: ", err);
 			result(err, null);
 			return;
 		}
-		if (res.length && password.value === res[0].password ) {
-			console.log("found user: ", res[0].password);
+		if (res.length && bcrypt.compareSync(password.value, res[0].password)) {
+			console.log("found user: ", res[0].username);
 			result(null, res[0]);
 			return;
 		}
