@@ -177,15 +177,18 @@ User.signup = (newUser, result) => {
  */
 // FIND A USER BY USERNAME
 User.findLogin = (username, password, result) => {
-	sql.query(`SELECT * FROM users WHERE LOWER(username) = LOWER(${sql.escape(username.value)});`, (err, res) => {
+	sql.query(`SELECT * FROM users 
+		WHERE (LOWER(username) = ? OR LOWER(email) = ?);`, [(username.value), (username.value)],
+	//sql.query(`SELECT * FROM users WHERE LOWER(username) = LOWER(${sql.escape(username.value)});`,
+	(err, res) => {
 		if (err) {
 		// ?This mean the user does not exist
 			console.log("error: ", err);
 			result(err, null);
 			return;
 		}
-		if (res.length && password.value === res[0].password ) {
-			console.log("found user: ", res[0].password);
+		if (res.length && bcrypt.compareSync(password.value, res[0].password)) {
+			console.log("found user: ", res[0].username);
 			result(null, res[0]);
 			return;
 		}
@@ -200,7 +203,7 @@ User.findLogin = (username, password, result) => {
  * !=================================
  */
 User.signup = (newUser, result) => {
-	sql.query(`SELECT * FROM users WHERE LOWER(username) = ${sql.escape(newUser.username)};`,
+	sql.query(`SELECT * FROM users WHERE LOWER(username) = ?;`, [(newUser.username)],
 	(err, res) => {
 		if (err) {
 			console.log("Some error occured", err);
@@ -218,9 +221,15 @@ User.signup = (newUser, result) => {
 					result ({ kind: "bcrypt err"});
 					return;
 				} else {
-					sql.query(`INSERT INTO users (username, email, firstname, lastname, password) VALUES
-					(${sql.escape(newUser.username)}, ${sql.escape(newUser.email)}, ${sql.escape(newUser.firstname)},
-					${sql.escape(newUser.lastname)}, ${sql.escape(hash)});`,
+					sql.query(`INSERT INTO users (username, email, firstname, lastname, password) 
+					VALUES (?, ?, ?, ?, ?);`,
+					[
+						(newUser.username),
+						(newUser.email),
+						(newUser.firstname),
+						(newUser.lastname),
+						(hash)
+					],
 					(err, res) => {
 						if (err) {
 							console.log("error: ", err);

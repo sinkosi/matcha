@@ -39,10 +39,10 @@ Express.js and that will be our routes manager
 *
 app.get('/wtc', function(req, res){
 	res.send('This is routing for the application developed using Node and Express...');
-});*/
+});
 const router = require('./app/routes/router.js');
 app.use('/api', router);
-
+*/
 //app.get('/users', req)
 
 //THE ROUTES need to be invoked here to ensure that the app is listening for route changes

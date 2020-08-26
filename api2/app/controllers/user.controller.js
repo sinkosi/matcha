@@ -158,11 +158,11 @@ exports.login = (req, res) => {
 		if (err) {
 			if (err.kind === "not_found") {
 				res.status(404).send({
-					message: `404: Username not found with name: ${req.params.username}.`
+					message: `404: Username not found with name: ${req.body.login.value}.`
 				});
 			} else {
 				res.status(500).send({
-					message: "500: Error retrieving User with username: " + req.params.username //TODO: Please finish the log in sequence here
+					message: "500: Error retrieving User with username: " + req.body.login["value"] //TODO: Please finish the log in sequence here
 				});
 			}
 		} else res.send(data);

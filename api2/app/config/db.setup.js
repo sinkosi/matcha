@@ -1,8 +1,12 @@
-var mysql = require('mysql');
+const mysql = require('mysql');
+const db = require('./db.config');
+
+
 var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "mosima"
+  host: db.HOST,
+  user: db.USER,
+  password: db.PASSWORD,
+  database: db.DB
 });
 
 /*
@@ -18,7 +22,7 @@ con.connect(function(err) {
   */
 /*=======================================================================
 ||                         DROP DATABASE                               ||
-========================================================================*
+========================================================================*/
 var sql = "DROP SCHEMA IF EXISTS `matcha`";
 con.query(sql, function (err, result) {
   if (err) throw err;
