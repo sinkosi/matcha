@@ -3,7 +3,7 @@ import Axios from 'axios'
 const register = (data)=>{
 
     //Axios.post('http://localhost:5000/register', data).then(
-        Axios.post('http://localhost:5000/users', data).then(
+        Axios.post('http://localhost:5000/signup', data).then(
         response => {
             console.log({response})
             return true

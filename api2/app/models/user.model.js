@@ -1,4 +1,5 @@
 const sql = require("./db");
+const bcrypt = require('bcrypt');
 
 //Constructor
 const User = function(user) {
@@ -26,27 +27,6 @@ User.create = (newUser, result) => {
 //FIND A USER BY ID
 User.findById = (userID, result) => {
 	sql.query(`SELECT * FROM users WHERE id = ${userID}`, (err, res) => {
-		if (err) {
-			console.log("error: ", err);
-			result(err, null);
-			return;
-		}
-
-		if (res.length) {
-			console.log("found user: ", res[0]);
-			result(null, res[0]);
-			return;
-		}
-
-		//User with that user id has not been found.
-		result({ kind: "not found" }, null);
-	});
-};
-
-// FIND A USER BY USERNAME
-User.findByUserName = (user, result) => {
-	//sql.query("SELECT * FROM users WHERE username = '?'", [user.username], (err, res) => {
-	sql.query(`SELECT * FROM users WHERE username = ''${user.username}'';`, (err, res) => {
 		if (err) {
 			console.log("error: ", err);
 			result(err, null);
@@ -133,6 +113,127 @@ User.removeAll = result => {
 
 		console.log(`deleted ${res.affectedRows} users`);
 		result(null, res);
+	});
+};
+
+/**
+ * !=================================
+ * !		Login (no encryption)	|
+ * !=================================
+ *
+// FIND A USER BY USERNAME
+User.findLogin = (username, password, result) => {
+	sql.query(`SELECT * FROM users WHERE LOWER(username) = LOWER(${sql.escape(username.value)});`, (err, res) => {
+		if (err) {
+		// ?This mean the user does not exist
+			console.log("error: ", err);
+			result(err, null);
+			return;
+		}
+		if (res.length && password.value === res[0].password ) {
+			console.log("found user: ", res[0].password);
+			result(null, res[0]);
+			return;
+		}
+		//User with that user username has not been found.
+		result({ kind: "not found" }, null);
+	});
+};
+
+/**
+ * !=================================
+ * !		Signup (no encryption)	|
+ * !=================================
+ *
+User.signup = (newUser, result) => {
+	sql.query(`SELECT * FROM users WHERE LOWER(username) = ${sql.escape(newUser.username)};`, (err, res) => {
+		if (err) {
+			console.log("Some error occured", err);
+			result(err, null);
+			return;
+		}
+		if (res.length) {
+			console.log("Username is already in use", err);
+			result ({ kind: "inUse"}, null);
+			return;
+		} else {
+			sql.query("INSERT INTO users SET ?", newUser, (err, res) => {
+			if (err) {
+				console.log("error: ", err);
+				result(err, null);
+				return;
+				}
+			})
+		}
+		console.log("created user: ", { id: res.insertID, ...newUser });
+		result(null, { id: res.insertID, ...newUser });
+	});
+};
+
+/**
+ * !=================================
+ * ?	Login (with encryption)		|
+ * !=================================
+ */
+// FIND A USER BY USERNAME
+User.findLogin = (username, password, result) => {
+	sql.query(`SELECT * FROM users WHERE LOWER(username) = LOWER(${sql.escape(username.value)});`,
+	(err, res) => {
+		if (err) {
+		// ?This mean the user does not exist
+			console.log("error: ", err);
+			result(err, null);
+			return;
+		}
+		if (res.length && bcrypt.compareSync(password.value, res[0].password)) {
+			console.log("found user: ", res[0].username);
+			result(null, res[0]);
+			return;
+		}
+		//User with that user username has not been found.
+		result({ kind: "not found" }, null);
+	});
+};
+
+/**
+ * !=================================
+ * ?	Signup (with encryption)	|
+ * !=================================
+ */
+User.signup = (newUser, result) => {
+	sql.query(`SELECT * FROM users WHERE LOWER(username) = ${sql.escape(newUser.username)};`,
+	(err, res) => {
+		if (err) {
+			console.log("Some error occured", err);
+			result(err, null);
+			return;
+		}
+		if (res.length) {
+			console.log("Username is already in use", err);
+			result ({ kind: "inUse"}, null);
+			return;
+		} else {
+			bcrypt.hash(newUser.password, 10, (err, hash) => {
+				if (err) {
+					console.log("Bcrypt failure", err);
+					result ({ kind: "bcrypt err"});
+					return;
+				} else {
+					sql.query(`INSERT INTO users (username, email, firstname, lastname, password) VALUES
+					(${sql.escape(newUser.username)}, ${sql.escape(newUser.email)}, ${sql.escape(newUser.firstname)},
+					${sql.escape(newUser.lastname)}, ${sql.escape(hash)});`,
+					(err, res) => {
+						if (err) {
+							console.log("error: ", err);
+							result(err, null);
+							return;
+						}		
+						console.log("created user: ", { id: res.insertID, ...newUser });
+						result(null, { id: res.insertID, ...newUser });
+					});
+				};
+			});
+		};
 	});
 };
 
