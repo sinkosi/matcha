@@ -34,6 +34,9 @@ HTTP STATUS CODES - FOR RESTFUL APIs (it is important)
 
 */
 const User = require("../models/user.model");
+const ActivationCode = require("../models/activation");
+const email = require("../config/email.config");
+
 
 //Create and Save a new User
 exports.create = (req, res) => {
@@ -51,18 +54,32 @@ exports.create = (req, res) => {
 		lastname: req.body.lastname,
 		email: req.body.email,
 		password: req.body.password,
-		name: req.body.name,
-		active: req.body.active
 	});
 
 	//Save User in the database
-	User.create(user, (err, data) => {
+	User.create(user, (err, userdata) => {
 		if (err)
 			res.status(500).send({
 				message:
 					err.message || "Some error occurred while creating the User."
 			});
-		else res.send(data);
+		
+		console.log("creating activation code:");
+		let userId  = userdata.id
+		let code = randomString(14);
+
+		const activation = new ActivationCode({userId, code})
+		ActivationCode.create(activation, (err, data) => {
+			if (err)
+				res.status(500).send({
+					message:
+						err.message || "Some error occurred while creating the User."
+				});
+
+
+				email.activationEmail(userdata.email, userId, code);
+				res.send(userdata);
+		});
 	});
 };
 
@@ -211,3 +228,19 @@ exports.signup = (req, res) => {
 		else res.send(data);
 	});
 };
+
+
+exports.activate = (req, res) => {
+	console.log(req.params)
+}
+
+
+function randomString(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }

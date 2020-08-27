@@ -36,14 +36,10 @@ app.get('/', (req, res) => {
 /*Defining The Route
 What is a route, this works like the href in a standard issue MAMP stack. With Node, we use APIs from
 Express.js and that will be our routes manager
-*
-app.get('/wtc', function(req, res){
-	res.send('This is routing for the application developed using Node and Express...');
-});
-const router = require('./app/routes/router.js');
-app.use('/api', router);
 */
-//app.get('/users', req)
+// const router = require('./app/routes/router.js');
+// app.use('/api', router);
+
 
 //THE ROUTES need to be invoked here to ensure that the app is listening for route changes
 require("./app/routes/user.routes")(app);
