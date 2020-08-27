@@ -1,6 +1,6 @@
 import Axios from 'axios'
 
-const register = (data)=>{
+const register = (data, success, error)=>{
 
         Axios.post('http://localhost:5000/signup', data).then(
         response => {
