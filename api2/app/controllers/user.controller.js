@@ -235,6 +235,19 @@ exports.activate = (req, res) => {
 }
 
 
+exports.forgotPasswordEmail = (req, res) => {
+	console.log(req.body);
+}
+
+exports.forgotPasswordOTP = (req, res) => {
+	console.log(req.body);
+}
+
+exports.forgotPasswordNewPassword = (req, res) => {
+	console.log(req.body);
+}
+
+
 function randomString(length) {
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
