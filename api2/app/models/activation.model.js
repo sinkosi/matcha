@@ -10,20 +10,45 @@ const ActivationCode = function({userId, code}) {
 };
 
 //CREATE A NEW CUSTOMER
-ActivationCode.create = (newUser, result) => {
-	sql.query("INSERT INTO activation_code SET ?", newUser, (err, res) => {
+ActivationCode.create = (newCode, result) => {
+	sql.query("INSERT INTO activation_code SET ?", newCode, (err, res) => {
 		if (err) {
 			console.log("error: ", err);
 			result(err, null);
 			return;
 		}
 
-		console.log("created new code: ", { id: res.insertID, ...newUser });
-		result(null, { id: res.insertID, ...newUser });
+		console.log("created new code: ", { id: res.insertId, ...newCode });
+		result(null, { id: res.insertId, ...newCode });
+	});
+};
+
+ActivationCode.findByProfileId = (profileId, result) => {
+	sql.query("SELECT * FROM activation_code WHERE profile_id = ?", profileId, (err, res) => {
+		if (err) {
+			console.log("error: ", err);
+			result(err, null);
+			return;
+		}
+
+		console.log("found activation code: ", res );
+		result(null, res[res.length - 1]);
 	});
 };
 
 
+ActivationCode.removeByProfileId = (profileId, result) => {
+	sql.query("DELETE FROM activation_code WHERE profile_id = ?", profileId, (err, res) => {
+		if (err) {
+			console.log("error: ", err);
+			result(err, null);
+			return;
+		}
+
+		console.log("found activation code: ", res );
+		result(null, res);
+	});
+};
 
 
 module.exports = ActivationCode;

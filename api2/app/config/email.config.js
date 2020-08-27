@@ -1,4 +1,5 @@
-const config = require('../../secret.js');
+// const config = require('../../secret.js');
+config = require("../../secret")
 const mailer = require('nodemailer');
 
 // const email = mailer.createTransport({
@@ -38,14 +39,14 @@ const Email = function(){
         port: 587,
         secure: false,
         requireTLS: true,
-        /*auth: {
+        auth: {
             user: 'mmamalek@student.wethinkcode.co.za',
             pass: 'averysimplepasswordcreatedformatcha'
-        }*/
-         auth: {
-               user: config.emailUsername,
-               pass: config.emailPassword
         }
+        //  auth: {
+        //        user: config.emailUsername,
+        //        pass: config.emailPassword
+        // }
     });
 
     this.send = (to, from, subject, message) => {
@@ -75,6 +76,17 @@ const Email = function(){
 
 
         this.send(emailAddress, config.emailUsername, "Matcha account activation", msg)
+    }
+
+    this.passwordResetEmail = (emailAddress, activationCode) => { 
+        msg = `
+        You have requested to reset you matcha Password. Please copy and paste the follow OTP
+
+        ${activationCode}`
+
+
+
+        this.send(emailAddress, 'mmamalek@student.wethinkcode.co.za', "Passord reset OTP", msg)
     } 
 }
 

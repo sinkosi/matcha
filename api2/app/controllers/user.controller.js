@@ -248,15 +248,85 @@ exports.activate = (req, res) => {
 };
 
 exports.forgotPasswordEmail = (req, res) => {
+	let code = randomString(6);
+	
+	User.findByEmail(req.body.email, (err, data) => {
+		if (err)
+			res.status(404).send({message: 'something went wrong'})
+		else {
+			let userId = data.id;
+
+			console.log({userId});
+			let opt = new ActivationCode({userId, code});
+			ActivationCode.create(opt, (err, data) => {});
+
+			email.passwordResetEmail(req.body.email, code);
+			res.status(200).send({message: "otp sent"})
+		}
+	})
 	console.log(req.body);
 }
 
 exports.forgotPasswordOTP = (req, res) => {
 	console.log(req.body);
+	User.findByEmail(req.body.email, (err, data) => {
+		if (err)
+			res.status(404).send({message: 'something went wrong'})
+		else {
+			let userId = data.id;
+
+			console.log({userId});
+
+			ActivationCode.findByProfileId(userId, (err, data) => {
+				if (err){
+					res.status(404).send({message: "Wrong OPT. Please use the OPT from your email"});
+					return
+				}
+				
+				console.log({data});
+				console.log(data.code);
+				console.log(req.body.otp);
+				if (data.code != req.body.otp){
+					res.status(404).send({message: "Wrong OPT. Please use the OPT from your email"});
+					return;
+				}
+				
+				res.status(200).send({message:"otp accepted"})
+			});
+		}
+	})
 }
 
 exports.forgotPasswordNewPassword = (req, res) => {
 	console.log(req.body);
+	User.findByEmail(req.body.email, (err, data) => {
+		if (err)
+			res.status(404).send({message: 'something went wrong'})
+		else {
+			let userId = data.id;
+
+			ActivationCode.findByProfileId(userId, (err, data) => {
+				if (err){
+					res.status(404).send({message: "Wrong OPT. Please use the OPT from your email"});
+					return
+				}
+				if (data.code != req.body.otp){
+					res.status(404).send({message: "Wrong OPT. Please use the OPT from your email"});
+					return;
+				}
+				User.updateById(userId, {password:req.body.newPassword}, (err, data) => {
+					if (err){
+						console.log(err)
+						res.status(404).send({message: err || "failed to set new password"})
+						return
+					}
+					ActivationCode.removeByProfileId(userId, (err, data) => {});
+					console.log(data)
+					res.status(200).send({message:"password was updated successfully"})
+				})
+			});
+		}
+	})
 }
 
 

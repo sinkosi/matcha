@@ -14,8 +14,8 @@ const sendOTP = (f, g, {email, otp}) => {
     .catch(g)
 }
 
-const sendNewPassword = (f, g, {email, otp, password}) => {
-    api.post('forgotpassword/newpassword', {email, otp, password})
+const sendNewPassword = (f, g, {email, otp, newPassword}) => {
+    api.post('forgotpassword/newpassword', {email, otp, newPassword})
     .then(f)
     .catch(g)
 }

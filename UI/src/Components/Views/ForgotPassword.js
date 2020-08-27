@@ -19,7 +19,7 @@ export default function ForgotPassword(props) {
     const browserHistory = useHistory()
     if (props.loggedIn)
     browserHistory.push('/')
-    const handleNext = () => { setFormPage(formPage + 1);}
+    const handleNext = () => { console.log({data}); setFormPage(formPage + 1);}
 
     return (
     <Grid container component="main" className={classes.root}>
