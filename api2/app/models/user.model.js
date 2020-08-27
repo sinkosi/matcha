@@ -116,6 +116,43 @@ User.removeAll = result => {
 	});
 };
 
+//UPDATE USER WITH ACTIVATION CODE
+User.updateByIdCode = (id, code, result) => {
+	sql.query(
+		`SELECT * FROM activation_code where profile_id = ? AND code = ?`,
+		[id, code],
+		(err, res) => {
+			if (err) {
+				console.log("error: ", err);
+				result(null, err);
+				return;
+			}
+
+			if (res.affectedRows == 0) {
+				//user not found or not changed
+				result({ kind: "not_found" }, null);
+				return;
+			}
+			sql.query(`UPDATE matcha.users SET activated = 1 WHERE id = ?`,
+			[id],
+			(err, res) => {
+				if (err) {
+					console.log("error: ", err);
+					result(null, err);
+					return;
+				}
+				if (res.affectedRows == 0) {
+					//user not found or not changed
+					result({ kind: "not_found" }, null);
+					return;
+				}	
+			})
+			console.log("updated user: ")//, { id: id, ...user });
+			result(null, { id: id});
+		}
+	);
+};
+
 /**
  * !=================================
  * !		Login (no encryption)	|
@@ -178,7 +215,7 @@ User.signup = (newUser, result) => {
 // FIND A USER BY USERNAME
 User.findLogin = (username, password, result) => {
 	sql.query(`SELECT * FROM users 
-		WHERE (LOWER(username) = ? OR LOWER(email) = ?);`, [(username.value), (username.value)],
+		WHERE (LOWER(username) = ? OR LOWER(email) = ?) AND (activated = 1);`, [(username.value), (username.value)],
 	//sql.query(`SELECT * FROM users WHERE LOWER(username) = LOWER(${sql.escape(username.value)});`,
 	(err, res) => {
 		if (err) {

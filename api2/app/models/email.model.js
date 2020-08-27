@@ -1,4 +1,4 @@
-const config = require('../../secret.js');
+//const config = require('../../secret.js');
 const mailer = require('nodemailer');
 
 // const email = mailer.createTransport({
@@ -38,14 +38,14 @@ const Email = function(){
         port: 587,
         secure: false,
         requireTLS: true,
-        /*auth: {
+        auth: {
             user: 'mmamalek@student.wethinkcode.co.za',
             pass: 'averysimplepasswordcreatedformatcha'
-        }*/
-         auth: {
+        }
+        /*auth: {
                user: config.emailUsername,
                pass: config.emailPassword
-        }
+        }*/
     });
 
     this.send = (to, from, subject, message) => {

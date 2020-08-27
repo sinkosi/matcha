@@ -35,6 +35,8 @@ module.exports = app => {
 	//Retrieve a users login details
 	app.post("/login", users.login);
 	
+	//Update a User with userId & Activation Code
+	//app.put("/users/:userId", users.update);
 	app.get("/activate/:userId/:activationKey", users.activate)
 
 	app.post("/forgotpassword/email", users.forgotPasswordEmail);
