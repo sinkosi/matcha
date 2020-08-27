@@ -34,7 +34,6 @@ HTTP STATUS CODES - FOR RESTFUL APIs (it is important)
 
 */
 const User = require("../models/user.model");
-const ActivationCode = require("../models/activation.model");
 const email = require("../config/email.config");
 
 
@@ -236,8 +235,13 @@ exports.activate = (req, res) => {
 		if (err) {
 			if (err.kind === "not_found") {
 				res.status(404).send({
-					message: `Not found User with id ${req.params.userId} or key ${req.params.activationKey}.`
+					message: `This key is invalid, please request a new activation code!`
 				});
+			if (err.kind === "db") {
+				res.status(404).send({
+					message: `Unable to update Database at this moment`
+				});
+			}
 			} else {
 				res.status(500).send({
 					message: `Error retrieving User with id " + ${req.params.userId} or key ${req.params.activationKey}.`
