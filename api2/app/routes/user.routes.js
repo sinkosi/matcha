@@ -34,4 +34,6 @@ module.exports = app => {
 
 	//Retrieve a users login details
 	app.post("/login", users.login);
+	
+	app.get("/activate/:userId/:activationKey", users.activate)
 };
