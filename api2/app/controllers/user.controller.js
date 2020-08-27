@@ -34,6 +34,7 @@ HTTP STATUS CODES - FOR RESTFUL APIs (it is important)
 
 */
 const User = require("../models/user.model");
+const ActivationCode = require("../models/activation.model")
 const email = require("../config/email.config");
 
 
@@ -219,12 +220,6 @@ exports.signup = (req, res) => {
 		});
 	}
 	
-	// password (repeat) does not match
-	/*if (!req.body.confirmpassword || req.body.password != req.body.confirmpassword) {
-		return res.status(400).send({
-			msg: 'Both passwords must match'
-		});
-	}*/
 
 	//Create a User
 	const user = new User({
@@ -253,8 +248,16 @@ exports.signup = (req, res) => {
 						err.message || "Some error occurred while creating the User."
 				});
 			}
-		}	
-		else res.send(data);
+		}
+		else {
+			let userId = data.id;
+			let code = randomString(25);
+
+			const activation = new ActivationCode({userId, code})
+			ActivationCode.create(activation, (err, data) => {});
+			email.activationEmail(data.email, userId, code);
+			res.send(data);
+		} 
 	});
 };
 

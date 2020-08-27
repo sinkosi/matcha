@@ -1,4 +1,4 @@
-gi// !THIS FILE CAN BE DELETED!
+
 
 const sql = require("./db");
 const bcrypt = require('bcrypt');
