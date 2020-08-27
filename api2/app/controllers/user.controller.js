@@ -34,7 +34,6 @@ HTTP STATUS CODES - FOR RESTFUL APIs (it is important)
 
 */
 const User = require("../models/user.model");
-const ActivationCode = require("../models/activation.model");
 const email = require("../config/email.config");
 
 
@@ -197,6 +196,27 @@ exports.signup = (req, res) => {
 		});
 	}
 
+	// username min length 3
+	if (!req.body.username || req.body.username.length < 3) {
+		return res.status(400).send({
+			msg: 'Please enter a username with min. 3 chars'
+		});
+	}
+
+	// password min 6 chars
+	if (!req.body.password || req.body.password.length < 10) {
+		return res.status(400).send({
+			msg: 'Please enter a password with min. 6 chars'
+		});
+	}
+	
+	// password (repeat) does not match
+	if (!req.body.confirmpassword || req.body.password != req.body.confirmpassword) {
+		return res.status(400).send({
+			msg: 'Both passwords must match'
+		});
+	}
+
 	//Create a User
 	const user = new User({
 		username: req.body.username,
@@ -236,11 +256,15 @@ exports.activate = (req, res) => {
 		if (err) {
 			if (err.kind === "not_found") {
 				res.status(404).send({
-					message: `Not found User with id ${req.params.userId} or key ${req.params.activationKey}.`
+					message: `This key is invalid, please request a new activation code!`
+				});
+			} else if (err.kind === "db") {
+				res.status(404).send({
+					message: `Unable to update Database at this moment`
 				});
 			} else {
 				res.status(500).send({
-					message: `Error retrieving User with id " + ${req.params.userId} or key ${req.params.activationKey}.`
+					message: `Error retrieving User with id ${req.params.userId} or key ${req.params.activationKey}.`
 				});
 			}
 		} else res.send(data);			

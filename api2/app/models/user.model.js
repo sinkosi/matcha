@@ -144,28 +144,48 @@ User.updateByIdCode = (id, code, result) => {
 				result(null, err);
 				return;
 			}
-
-			if (res.affectedRows == 0) {
+			if (!res.length) {
 				//user not found or not changed
 				result({ kind: "not_found" }, null);
 				return;
 			}
-			sql.query(`UPDATE matcha.users SET activated = 1 WHERE id = ?`,
-			[id],
-			(err, res) => {
-				if (err) {
-					console.log("error: ", err);
-					result(null, err);
-					return;
+			if (res.length) {
+				sql.query(`UPDATE matcha.users SET activated = 1, activated_date = NOW() WHERE id = ?`,
+				[id],
+				(err, res) => {
+					if (err) {
+						console.log("error: ", err);
+						result(null, err);
+						return;
+					}
+					if (res.affectedRows == 0) {
+						//user not found or not changed
+						result({ kind: "db" }, null);
+						return;
+					}
+					if (res.affectedRows == 1) {
+						console.log("ROUND 2\n")
+						sql.query(
+							`DELETE FROM activation_code where profile_id = ? AND code = ?`,
+							[id, code],
+							(err, res) => {
+								if (err) {
+									console.log("error: ", err);
+									result(null, err);
+									return;
+								}
+								if (!res.length) {
+									//user not found or not changed
+									result({ kind: "not_found" }, null);
+									return;
+								}
+							}
+						)
+					}
+				console.log(`updated user: ${id}`)//, { id: id, ...user });
+				result(null, { id: id});
 				}
-				if (res.affectedRows == 0) {
-					//user not found or not changed
-					result({ kind: "not_found" }, null);
-					return;
-				}	
-			})
-			console.log("updated user: ")//, { id: id, ...user });
-			result(null, { id: id});
+			)}
 		}
 	);
 };
