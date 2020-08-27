@@ -140,7 +140,8 @@ con.query(sql, function (err, result) {
 ||                   CREATE 'ACTIVATION CODE' TABLE                    ||
 ========================================================================*/
 var sql = `CREATE TABLE IF NOT EXISTS matcha.activation_code (
-    code VARCHAR(255) NOT NULL PRIMARY KEY,
+    code_id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    code VARCHAR(255) NOT NULL,
     profile_id INT(11) NOT NULL,
     generation_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
     CONSTRAINT fk_activation_codes_profile_id FOREIGN KEY (profile_id) REFERENCES users(id)

@@ -34,7 +34,7 @@ HTTP STATUS CODES - FOR RESTFUL APIs (it is important)
 
 */
 const User = require("../models/user.model");
-const ActivationCode = require("../models/activation");
+const ActivationCode = require("../models/activation.model");
 const email = require("../config/email.config");
 
 
@@ -77,8 +77,8 @@ exports.create = (req, res) => {
 				});
 
 
-				email.activationEmail(userdata.email, userId, code);
-				res.send(userdata);
+			email.activationEmail(userdata.email, userId, code);
+			res.send(userdata);
 		});
 	});
 };
@@ -231,9 +231,21 @@ exports.signup = (req, res) => {
 
 
 exports.activate = (req, res) => {
-	console.log(req.params)
-}
-
+	//Validate Request
+	User.updateByIdCode(req.params.userId, req.params.activationKey, (err, data) => {
+		if (err) {
+			if (err.kind === "not_found") {
+				res.status(404).send({
+					message: `Not found User with id ${req.params.userId} or key ${req.params.activationKey}.`
+				});
+			} else {
+				res.status(500).send({
+					message: `Error retrieving User with id " + ${req.params.userId} or key ${req.params.activationKey}.`
+				});
+			}
+		} else res.send(data);			
+	});
+};
 
 function randomString(length) {
     var result           = '';
