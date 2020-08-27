@@ -1,2 +1,13 @@
 .venv
 .vscode
+distance.js
+location.html
+open
+/api2/node_modules/
+.\api2\node_modules\*
+./docs
+/docs
+#/python
+api2/comments.js
+api2/comments.js
+api2/secret.js

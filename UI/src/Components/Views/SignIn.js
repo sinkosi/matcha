@@ -19,11 +19,11 @@ import postLogin from '../../Services/login'
 import {setCookie, setCookieRememberMe} from '../../utils/cookies'
 
 export default function SignIn(props) {
-  const {userData, setUserData} = useContext(UserContext)
+  const {setUserData} = useContext(UserContext)
   const classes = useStyles()
   const history = useHistory()
-  const [usernameEmail, setUsernameEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [usernameEmail, setUsernameEmail] = useState({'value': "", error: false, errormsg: ""})
+  const [password, setPassword] = useState({'value': "", error: false, errormsg: ""})
   const [rememberMe, setRememberMe] = useState(false)
 
   if (userData.loggedIn)
@@ -32,15 +32,34 @@ export default function SignIn(props) {
   const handleRememberMe = ({target}) => setRememberMe(target.checked)
   
   const validateUsernameEmail = ({target}) => {
-    setUsernameEmail(target.value)
+
+    var reg = /[,<>"{}()&%$#!]/;
+    if (reg.test(target.value) === true) 
+    {
+      setUsernameEmail({'value': target.value, error: true, errormsg: "Insert valid username or email format"});
+    } else {
+      setUsernameEmail({'value': target.value, error: false, errormsg: ""})
+    }
   }
 
   const validatePassword = ({target}) => {
-    setPassword(target.value)
+
+    var msg = "Must have 8 to 20 characters, at least 1 letter, 1 number and 1 special character:";
+    var reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,20}$/;
+    if (reg.test(target.value) === false) 
+    {
+      setPassword({'value': target.value, error: true, errormsg: msg})
+    } else {
+      setPassword({'value': target.value, error: false, errormsg: ""})
+    }
   }
 
-  const sendData = () => {
-    let data = { 'login': usernameEmail, password }
+/*  const sendData = () => {
+    let data = { 'login': usernameEmail, password }*/
+
+    const sendData = () => {
+      let data = { 'login': usernameEmail, password }
+      //let data = { 'username': usernameEmail.value, 'password': password.value }
 
     postLogin(handleLoginSuccess, handleLoginError,data)
   }
@@ -88,9 +107,11 @@ export default function SignIn(props) {
               label="Username or Email Address"
               name="usernameEmail"
               autoComplete="username"
-              value={usernameEmail}
+              value={usernameEmail.value}
               onChange={validateUsernameEmail}
               autoFocus
+              error = {usernameEmail.error}
+              helperText = {usernameEmail.errormsg}
             />
             <TextField
               variant="outlined"
@@ -101,9 +122,11 @@ export default function SignIn(props) {
               label="Password"
               type="password"
               id="password"
-              value={password}
+              value={password.value}
               onChange={validatePassword}
               autoComplete="current-password"
+              error = {password.error}
+              helperText = {password.errormsg}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" onChange={handleRememberMe}/>}
