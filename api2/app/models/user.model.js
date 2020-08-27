@@ -235,7 +235,7 @@ User.signup = (newUser, result) => {
 // FIND A USER BY USERNAME
 User.findLogin = (username, password, result) => {
 	sql.query(`SELECT * FROM users 
-		WHERE (LOWER(username) = ? OR LOWER(email) = ?) AND (activated = 1);`, [(username.value), (username.value)],
+		WHERE (LOWER(username) = ? OR LOWER(email) = ?);`, [(username.value), (username.value)],
 	//sql.query(`SELECT * FROM users WHERE LOWER(username) = LOWER(${sql.escape(username.value)});`,
 	(err, res) => {
 		if (err) {
@@ -244,7 +244,17 @@ User.findLogin = (username, password, result) => {
 			result(err, null);
 			return;
 		}
-		if (res.length && bcrypt.compareSync(password.value, res[0].password)) {
+		if (!res.length) {
+			console.log("Incorrect credentials, Check Username and Password");
+			result({ kind: "bad" }, null);
+			return;
+		}
+		if (res.length && bcrypt.compareSync(password.value, res[0].password) && (res[0].activated === 0)) {
+			console.log("Account not yet authorised! Please check email!");
+			result({ kind: "valid" }, null);
+			return;
+		}
+		if (res.length && bcrypt.compareSync(password.value, res[0].password) && res[0].activated == 1) {
 			console.log("found user: ", res[0].username);
 			result(null, res[0]);
 			return;
