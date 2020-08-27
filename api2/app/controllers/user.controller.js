@@ -176,6 +176,15 @@ exports.login = (req, res) => {
 				res.status(404).send({
 					message: `404: Username not found with name: ${req.body.login.value}.`
 				});
+			} else if (err.kind == "bad"){
+				res.status(401).send({
+					message: `401: Bad Credentials, unable to authenticate`
+				})
+			}
+			else if (err.kind == "valid"){
+				res.status(303).send({
+					message: `303: See other, Please use email to authenticate account`
+				})
 			} else {
 				res.status(500).send({
 					message: "500: Error retrieving User with username: " + req.body.login["value"] //TODO: Please finish the log in sequence here
@@ -204,18 +213,18 @@ exports.signup = (req, res) => {
 	}
 
 	// password min 6 chars
-	if (!req.body.password || req.body.password.length < 10) {
+	if (!req.body.password || req.body.password.length < 8) {
 		return res.status(400).send({
-			msg: 'Please enter a password with min. 6 chars'
+			msg: 'Please enter a password with min. 8 chars'
 		});
 	}
 	
 	// password (repeat) does not match
-	if (!req.body.confirmpassword || req.body.password != req.body.confirmpassword) {
+	/*if (!req.body.confirmpassword || req.body.password != req.body.confirmpassword) {
 		return res.status(400).send({
 			msg: 'Both passwords must match'
 		});
-	}
+	}*/
 
 	//Create a User
 	const user = new User({
@@ -234,7 +243,7 @@ exports.signup = (req, res) => {
 					message: `409: Username already in use`
 				});
 			} else if (err.kind === "bcrypt err") {
-				res.status(500).send({
+				res.status(403).send({
 					message: `Unknown Bcrypt failure`
 				});
 			}
@@ -248,7 +257,6 @@ exports.signup = (req, res) => {
 		else res.send(data);
 	});
 };
-
 
 exports.activate = (req, res) => {
 	//Validate Request
