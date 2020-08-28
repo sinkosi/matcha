@@ -175,6 +175,7 @@ exports.findImgbyUserId = (req, res) => {
         } else res.send(data);
     });
 }
+
 //RETRIEVE ALL IMAGES (NO SORT)
 exports.findAllImg = (req, res) => {
     Image.getAllImg((err, data) => {
@@ -185,6 +186,7 @@ exports.findAllImg = (req, res) => {
         } else res.send(data);
     });
 }
+
 //DELETE AN IMAGE
 exports.deleteOneImage = (req, res) => {
     let imageId = req.params.imageId;
