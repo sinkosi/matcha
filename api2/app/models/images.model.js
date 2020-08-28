@@ -34,7 +34,7 @@ Image.findById = (imageId, result) => {
 
         console.log("inserted image: ",  res);
         result(null, res[0]);
-        return;
+        
     });
 };
 
@@ -44,25 +44,25 @@ Image.findByUserId = (userId, result) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);
-            return;
+        
         }
-
+        console.log("Images have been retrieved: ", res);
         result(null, res);
-        return;
+        
     });
 };
 
 //RETRIEVE ALL IMAGES (NO SORT)
-Image.getAll = (result) => {
+Image.getAllImg = result => {
     sql.query("SELECT * FROM images", (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);
             return;
         }
-
+        console.log("Images: ", res);
         result(null, res);
-        return;
+        
     });
 };
 
@@ -74,9 +74,9 @@ Image.removeOne = (imageId, result) => {
             result(err, null);
             return;
         }
-
+        console.log("Image deleted: ", res);
         result(null, res);
-        return;
+    
     });
 }
 
