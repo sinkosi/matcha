@@ -125,9 +125,9 @@ exports.imgCreate = (req, res) => {
             message: "Content cannot be empty!"
         });
     }
-    const image = new Images({
-        imageUrl = req.body.url,
-        userID = req.body.user_id/*,
+    const image = new Image({
+        imageUrl: req.body.imageurl,
+        userID: req.body.user_id/*,
         uploaded = image.uploaded*/
     })
     //Save image to database

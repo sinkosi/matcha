@@ -1,14 +1,14 @@
 const sql = require("./db");
 
 //Constructor
-const Images = function(image) {
+const Image = function(image) {
     this.url = image.url;
     this.user_id = image.user_id;
-    this.uploaded = image.uploaded;
+    //this.uploaded = image.uploaded;
 }
 
 //Add a new image
-image.addOne = (imageUrl, userID, result) => {
+Image.addOne = (imageUrl, userID, result) => {
     sql.query("INSERT INTO images (url, user_id) VALUES (?, ?)", [imageUrl, userID], 
     (err, res) => {
         if (err) {
@@ -24,7 +24,7 @@ image.addOne = (imageUrl, userID, result) => {
 };
 
 //FIND AN IMAGE BY ITS ID
-image.findById = (imageId, result) => {
+Image.findById = (imageId, result) => {
     sql.query("SELECT * FROM images WHERE id = ?", [imageId], (err, res) => {
         if (err) {
             console.log("error: ", err);
@@ -39,7 +39,7 @@ image.findById = (imageId, result) => {
 };
 
 //USER ID USED TO RETRIEVE ALL USERS PICS
-image.findByUserId = (userId, result) => {
+Image.findByUserId = (userId, result) => {
     sql.query("SELECT * FROM images WHERE user_id = ?", [userId], (err, res) => {
         if (err) {
             console.log("error: ", err);
@@ -53,7 +53,7 @@ image.findByUserId = (userId, result) => {
 };
 
 //RETRIEVE ALL IMAGES (NO SORT)
-image.getAll = (result) => {
+Image.getAll = (result) => {
     sql.query("SELECT * FROM images", (err, res) => {
         if (err) {
             console.log("error: ", err);
@@ -67,7 +67,7 @@ image.getAll = (result) => {
 };
 
 //DELETE AN IMAGE
-image.removeOne = (imageId, result) => {
+Image.removeOne = (imageId, result) => {
     sql.query("DELETE FROM images WHERE id = ?", [imageId], (err, res) => {
         if (err) {
             console.log("error: ", err);
@@ -80,4 +80,4 @@ image.removeOne = (imageId, result) => {
     });
 }
 
-module.exports = new Images();
+module.exports = Image;

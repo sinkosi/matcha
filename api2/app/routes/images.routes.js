@@ -1,12 +1,12 @@
-module.exports = (app) => {
+module.exports = app => {
 
     const images = require("../controllers/images.controller")
-    
+    /*
     //Retrieve all images
     app.get("/images", images.getAll)
     
     //Create new Image
-    app.post("/images", images.imgCreate);
+    app.post("/images", images.imgCreate);*/
 
     //Find Image by Image ID
     app.get("images/:imageId", images.findOneImg);
@@ -15,6 +15,5 @@ module.exports = (app) => {
     app.get("users/images/:userId", images.findImgbyUserId);
 
     //Delete An Image
-    app.delete("images/:imageId", deleteOneImage);
-
-}
+    app.delete("images/:imageId", images.deleteOneImage);
+};
