@@ -3,7 +3,7 @@ module.exports = app => {
     const images = require("../controllers/images.controller")
     
     //Retrieve all images
-   // app.get("/images", images.getAll)
+    app.get("/images", images.findAllImg)
     
     //Create new Image
     app.post("/images", images.imgCreate);
