@@ -6,6 +6,8 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
+
+
 const app = express();
 
 var corsOptions = {
@@ -20,7 +22,8 @@ app.use(cors(corsOptions));
 const port = 5000;
 
 // parse requests of content-type: application/json:
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb', type: 'application/json'}));
+// app.use(bodyParser.json());
 
 //parse requests of content-type:application/x-www-form-urlencoded:
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -32,6 +35,8 @@ app.get('/', (req, res) => {
 						name: "Test"
 	});
 });
+
+app.use('/static',express.static('uploads'))
 
 /*Defining The Route
 What is a route, this works like the href in a standard issue MAMP stack. With Node, we use APIs from

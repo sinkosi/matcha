@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom'; 
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';

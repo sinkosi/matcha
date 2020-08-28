@@ -1,5 +1,6 @@
 
 const Image = require("../models/images.model");
+const fs = require("fs");
 
 
 
@@ -23,6 +24,18 @@ exports.findOneImg = (req, res) => {
 
 exports.upload = (req, res) => {
     console.log(req.body)
+    let path = './uploads/images/'+req.body.name;
+    let buffer = new Buffer(req.body.data);
+    let x = Buffer.from(req.body.data, 'base64').toString()
+
+    fs.writeFile(path, req.body.data, {encoding:'base64'}, (err, data) => {
+        if (err) {
+            res.status(501).send({message:"error saving image"})
+        }
+        console.log({data})
+        
+    })
+
 }
 //USER ID USED TO RETRIEVE ALL USERS PICS
 exports.findImgbyUserId = (req, res) => {

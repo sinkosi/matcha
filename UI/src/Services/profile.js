@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getCookie } from '../utils/cookies'
+// import { getCookie } from '../utils/cookies'
 
 const api = axios.create({baseURL: 'http://localhost:5000'})
 // let header = {'headers' : {'token' : `bearer ${getCookie('token')}`}}
@@ -45,9 +45,9 @@ const updateBiography =  (success, error, userId, biography) => {
     .catch(error)
 }
 
-const uploadImage =  (success, error, image) => {
+const uploadImage =  (success, error, userId, image) => {
 
-    api.post('/images', image)
+    api.post('/images/upload/'+userId, image)
     .then(success)
     .catch(error)
 }

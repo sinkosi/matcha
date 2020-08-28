@@ -39,7 +39,7 @@ export default function ProfilePicture(props)
     const handleSendProfilePic = () => {
         // const userId = cookieUserId()
         const userId = userData.data.id
-        uploadImage(handleSuccess, handleError, image )
+        uploadImage(handleSuccess, handleError, userId, image )
     }
     const handleSuccess = (response) =>{
         console.log({response})
@@ -66,16 +66,16 @@ export default function ProfilePicture(props)
 
 
     const handleImageChange = (event) => {
-        var file = event.target.files[0],
-          reader = new FileReader();
-        console.log(file)
-        reader.onloadend = function () {
-          var b64 = reader.result.replace(/^data:.+;base64,/, '');
-          setImage( {
-              'name': file.name,
-              'type': file.type,
-              'size': file.size,
-              'data': b64
+      let file = event.target.files[0]
+      let reader = new FileReader();
+      console.log(file);
+      reader.onloadend = function () {
+        var b64 = reader.result.replace(/^data:.+;base64,/, '');
+        setImage( {
+          'name': file.name,
+          'type': file.type,
+          'size': file.size,
+          'data': b64
             } );
         };
       
@@ -90,17 +90,9 @@ export default function ProfilePicture(props)
                 Please upload a profile picture
             </Typography>
 
-            <input type="file"  onChange={handleImageChange}/>
-            <Button color="primary" size="large" variant="contained" fullWidth >Select a picture</Button>
-  
+            <Input type="file"  onChange={handleImageChange}/>
+            <Button color="primary" size="large" variant="contained" fullWidth onClick={ ()=>{ console.log(image)}} >Select a picture</Button>
 
-           
-            
-            
-            
-            
-               
-            
             <Button color={"primary"} size={"large"} variant={"contained"} onClick={handleSendProfilePic}  >Upload</Button>
         </Paper  >
     );
