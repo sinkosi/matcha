@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { UserContext } from './UserContext'
+import CompleteProfile from './Views/CompleteProfile'
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const {userData} = useContext(UserContext)
@@ -8,9 +9,11 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
  
   return (
     <>
-      { userData.loggedIn ? 
-        <Route {...rest} render={props => <Component {...rest} {...props} />} /> :
-        <Redirect to='/signin' />
+      { !userData.loggedIn ? 
+          <Redirect to='/signin' /> :
+          !userData.completed ?
+          <Route {...rest} render={props => <CompleteProfile {...rest} {...props} />} /> :
+            <Route {...rest} render={props => <Component {...rest} {...props} />} />
       }
        </>    
   )

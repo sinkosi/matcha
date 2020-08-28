@@ -1,12 +1,12 @@
 module.exports = app => {
 
     const images = require("../controllers/images.controller")
-    /*
+    
     //Retrieve all images
-    app.get("/images", images.getAll)
+   // app.get("/images", images.getAll)
     
     //Create new Image
-    app.post("/images", images.imgCreate);*/
+    app.post("/images", images.imgCreate);
 
     //Find Image by Image ID
     app.get("images/:imageId", images.findOneImg);

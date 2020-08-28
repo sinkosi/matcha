@@ -22,7 +22,7 @@ const UserProfile = (props) => {
     const userId = props.location.pathname.split("/")[2]
     const refresh = () => { getUser(setUser, userId ) }
     const loguser = () => console.log(user)
-    useEffect(() => {refresh()}, [userRef])
+    useEffect(() => {refresh()}, [userRef, refresh])
     return (
         <>
             <Button onClick={refresh} variant="contained">refresh</Button>

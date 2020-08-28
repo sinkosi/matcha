@@ -34,15 +34,17 @@ const getCookie = (cookieName) => {
     return cookieValue
 }
 
-export {setCookie, setCookieRememberMe, deleteCookie, getCookie}
-// function checkCookie() {
-//     var user = getCookie("username");
-//     if (user != "") {
-//         alert("Welcome again " + user);
-//     } else {
-//         user = prompt("Please enter your name:", "");
-//         if (user != "" && user != null) {
-//         setCookie("username", user, 365);
-//         }
-//     }
-// }
+const cookieUserId = () => {
+    let token = getCookie('token')
+
+
+    if (token){
+        let tokenPayload = token.split('.')[1] + '=='
+        let userData = atob(tokenPayload)
+        userData = JSON.parse(userData)
+        return userData.id
+    }
+    return
+}
+
+export {setCookie, setCookieRememberMe, deleteCookie, getCookie, cookieUserId}

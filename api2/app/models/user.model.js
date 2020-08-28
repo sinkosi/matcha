@@ -44,6 +44,25 @@ User.findById = (userID, result) => {
 	});
 };
 
+User.findByEmail = (email, result) => {
+	sql.query(`SELECT * FROM users WHERE email='${email}'`, (err, res) => {
+		if (err) {
+			console.log("error: ", err);
+			result(err, null);
+			return;
+		}
+
+		if (res.length) {
+			console.log("found user: ", res[0]);
+			result(null, res[0]);
+			return;
+		}
+
+		//User with that user id has not been found.
+		result({ kind: "not found" }, null);
+	});
+};
+
 //RETRIEVE ALL USER DATA
 User.getAll = result => {
 	sql.query("SELECT * FROM users", (err, res) => {
@@ -61,9 +80,7 @@ User.getAll = result => {
 //UPDATE A USER BY ID
 User.updateById = (id, user, result) => {
 	sql.query(
-		"UPDATE users SET email = ?, name = ?, active = ? WHERE id = ?",
-		[user.email, user.name, user.active, id],
-		(err, res) => {
+		"UPDATE users SET ? WHERE id = ?", [user, id], (err, res) => {
 			if (err) {
 				console.log("error: ", err);
 				result(null, err);
@@ -96,7 +113,6 @@ User.remove = (id, result) => {
 			result({ kind: "not_found" }, null);
 			return;
 		}
-
 		console.log("deleted user with id: ", id);
 		result(null, res);
 	});
@@ -124,7 +140,7 @@ User.updateByIdCode = (id, code, result) => {
 		(err, res) => {
 			if (err) {
 				console.log("error: ", err);
-				result(null, err);
+				result(err, res);
 				return;
 			}
 			if (!res.length) {
@@ -133,7 +149,7 @@ User.updateByIdCode = (id, code, result) => {
 				return;
 			}
 			if (res.length) {
-				sql.query(`UPDATE matcha.users SET activated = 1, activated_date = NOW() WHERE id = ?`,
+				sql.query(`UPDATE matcha.users SET activated = 0, activated_date = NOW() WHERE id = ?`,
 				[id],
 				(err, res) => {
 					if (err) {
@@ -149,24 +165,27 @@ User.updateByIdCode = (id, code, result) => {
 					if (res.affectedRows == 1) {
 						//Code has worked, it must be deleted from DB
 						sql.query(
-							`SELECT * FROM activation_code where profile_id = ? AND code = ?`,
+							`DELETE FROM activation_code where profile_id = ? AND code = ?`,
 							[id, code],
 							(err, res) => {
 								if (err) {
 									console.log("error: ", err);
-									result(null, err);
+									result(err, null);
 									return;
 								}
-								if (!res.length) {
+								if (res.affectedRows == 0) {
 									//user not found or not changed
 									result({ kind: "not_found" }, null);
 									return;
 								}
+								console.log("deleted user activation code for user with ID: ", id);
+								//User code has been deleted
 							}
 						)
 					}
 				console.log(`updated user: ${id}`)//, { id: id, ...user });
 				result(null, { id: id});
+				return;
 				}
 			)}
 		}
@@ -303,8 +322,8 @@ User.signup = (newUser, result) => {
 							result(err, null);
 							return;
 						}		
-						console.log("created user: ", { id: res.insertID, ...newUser });
-						result(null, { id: res.insertID, ...newUser });
+						console.log("created user: ", { id: res.insertId, ...newUser });
+						result(null, { id: res.insertId, ...newUser });
 					});
 				};
 			});

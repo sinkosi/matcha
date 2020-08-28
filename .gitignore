@@ -11,3 +11,4 @@ open
 api2/comments.js
 api2/comments.js
 api2/secret.js
+api2/app/config/db.config.js

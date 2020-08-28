@@ -4,6 +4,9 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Grid, Chip } from '@material-ui/core';
+import {updateInterests} from '../../../Services/profile'
+import { cookieUserId } from '../../../utils/cookies'
+
 
 
 
@@ -39,6 +42,18 @@ export default function Interests(props)
 
         setInterests((interests) => interests.filter((i) => i !== chipToDelete));
       };
+
+    const handleSubmitInterests = () => {
+        const userId = cookieUserId()
+        updateInterests(handleSuccess, handleError, userId, interests)
+    }
+    const handleSuccess = (respose) =>{
+        console.log(respose)
+        props.next()
+    }
+    const handleError = (error) => {
+        console.log(error)
+    }
     
     return (
         <Paper elevation={5} className={classes.root}>
@@ -90,7 +105,7 @@ export default function Interests(props)
                
             
          
-            <Button color={"primary"} size={"large"} variant={"contained"} onClick={props.next}>Next ></Button>
+            <Button color={"primary"} size={"large"} variant={"contained"} onClick={handleSubmitInterests}>Next ></Button>
         </Paper  >
     );
 }
