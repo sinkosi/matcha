@@ -52,10 +52,10 @@ Interests.findByUserId = (userId, result) => {
 
         console.log(`Found interests for user with ID: ${userId}`,  res);
         result(null, res[0]);
-        return;
     });
 };
 
+//RETRIEVE ALL IMAGES (NO SORT)
 Interests.getAllInterest = result => {
     sql.query("SELECT * FROM interests", (err, res) => {
         if (err) {

@@ -45,6 +45,7 @@ Express.js and that will be our routes manager
 require("./app/routes/user.routes")(app);
 require("./app/routes/images.routes")(app);
 require("./app/routes/interest.routes")(app);
+require("./app/routes/likes.routes")(app);
 
 //startup app at http://localhost:3000
 //the text below should be visible if the server is running but if it is not then error messages
