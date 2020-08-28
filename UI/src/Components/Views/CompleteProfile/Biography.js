@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField } from '@material-ui/core';
 import {updateBiography} from '../../../Services/profile'
-import { cookieUserId } from '../../../utils/cookies'
+// import { cookieUserId } from '../../../utils/cookies'
+import { UserContext } from '../../UserContext'
+
 
 
 
@@ -26,14 +28,15 @@ export default function Biography(props)
 {
     const classes = useStyles();
     var [biography, setBiography] = React.useState("");
-    
+    const { userData } = useContext(UserContext);
     
 
 
     const handleBiographyChange = (event) => setBiography(event.target.value);
 
     const handleSubmitBiography = () => {
-        const userId = cookieUserId()
+        // const userId = cookieUserId()
+        const userId = userData.data.id
         updateBiography(handleSuccess, handleError, userId, biography)
     }
     const handleSuccess = (respose) =>{

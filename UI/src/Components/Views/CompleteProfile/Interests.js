@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Grid, Chip } from '@material-ui/core';
 import {updateInterests} from '../../../Services/profile'
-import { cookieUserId } from '../../../utils/cookies'
+// import { cookieUserId } from '../../../utils/cookies'
+import { UserContext } from '../../UserContext'
+
 
 
 
@@ -27,6 +29,7 @@ export default function Interests(props)
     const classes = useStyles();
     var [interests, setInterests] = React.useState([]);
     var [interest, setInterest] = React.useState("#");
+    const { userData } = useContext(UserContext);
     
     
     const handleAddInterest = (event) => {
@@ -44,7 +47,8 @@ export default function Interests(props)
       };
 
     const handleSubmitInterests = () => {
-        const userId = cookieUserId()
+        // const userId = cookieUserId()
+        const userId = userData.data.id
         updateInterests(handleSuccess, handleError, userId, interests)
     }
     const handleSuccess = (respose) =>{

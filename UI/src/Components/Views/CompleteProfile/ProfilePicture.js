@@ -7,7 +7,8 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { Input  } from '@material-ui/core';
 import { uploadImage, updateProfilePic} from '../../../Services/profile'
-import { cookieUserId } from '../../../utils/cookies'
+// import { cookieUserId } from '../../../utils/cookies'
+
 
 
 
@@ -36,12 +37,14 @@ export default function ProfilePicture(props)
       history.push('/')
 
     const handleSendProfilePic = () => {
-        const userId = cookieUserId()
+        // const userId = cookieUserId()
+        const userId = userData.data.id
         uploadImage(handleSuccess, handleError, image )
     }
     const handleSuccess = (response) =>{
         console.log({response})
-        const userId = cookieUserId()
+        // const userId = cookieUserId()
+        const userId = userData.data.id
         updateProfilePic(handleCompleteProfile, err => console.log({err}) , userId, response.data.image_id)
    
     }

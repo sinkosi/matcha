@@ -130,6 +130,7 @@ exports.update = (req, res) => {
 	if (req.body.profilePic) user.profile_pic = req.body.profilePic;
 	if (req.body.location) {/* some location stuff: user.location = req.body.location; */}
 	if (req.body.interests) {/* some interesting stuff: user.firstname = req.body.firstname; */}
+	if (req.body.dob) {/* some interesting stuff: user.firstname = req.body.firstname; */}
 
 	console.log({user})
 	if (user) {

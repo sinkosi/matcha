@@ -25,6 +25,7 @@ export default function Header(props) {
 
   const handleLogout = () => {
     deleteCookie('token')
+    deleteCookie('loginData')
     props.setUserData({'loggedIn': false})
 
   }
