@@ -36,6 +36,7 @@ HTTP STATUS CODES - FOR RESTFUL APIs (it is important)
 const User = require("../models/user.model");
 const ActivationCode = require("../models/activation.model")
 const email = require("../config/email.config");
+const Interests = require("../models/interests.model");
 
 
 //Create and Save a new User
@@ -130,11 +131,15 @@ exports.update = (req, res) => {
 	if (req.body.sexualPreference) user.sexual_preferences = req.body.sexualPreference;
 	if (req.body.profilePic) user.profile_pic = req.body.profilePic;
 	if (req.body.location) {/* some location stuff: user.location = req.body.location; */}
-	if (req.body.interests) {/* some interesting stuff: user.firstname = req.body.firstname; */}
+	if (req.body.interests) { 
+		req.body.interests.forEach(interest => {
+			Interests.add(req.params.userId, interest, (err, res) => {});
+		})
+	}
 	if (req.body.dob) {/* some interesting stuff: user.firstname = req.body.firstname; */}
 
 	console.log({user})
-	if (user) {
+	if (user.length > 0) {
 		User.updateById(
 			req.params.userId,
 			user,
@@ -153,7 +158,7 @@ exports.update = (req, res) => {
 			}
 		);
 	}
-	else console.log("empty body")
+	else res.status(200).send({message:'empty body'});
 };
 
 //Delete a User with the specified userId in the request

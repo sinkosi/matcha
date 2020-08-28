@@ -1,4 +1,5 @@
 const sql = require("./db");
+const { query } = require("express");
 
 /**
  * ? CONSTRUCTOR
@@ -9,8 +10,25 @@ const Interests = function(interest) {
     this.user_id = interest.user_id;
 }
 
+Interests.addMany = (userId, interestsArray, result) => {
+    querystr = "";
+    interestsArray.forEach(interest => {
+        querystr += `INSERT INTO interests (hashtag, user_id) VALUES ('${interest}', '${userId}'); `
+    });
+    console.log(querystr);
+    sql.query(querystr, (err, res) =>{
+        if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+        }
+        console.log(`Interests add for user with id: ${userId}`, res);
+        result(null, res.insertId);
+    });
+}
+
 Interests.add = (userId, interest, result) => {
-    sql.query("INSERT INTO interests (hashtag, user_id) VALUES (?, ?)", [userId, interest], 
+    sql.query("INSERT INTO interests (hashtag, user_id) VALUES (?, ?)", [interest, userId], 
     (err, res) => {
         if (err) {
             console.log("error: ", err);
@@ -38,8 +56,7 @@ Interests.findByUserId = (userId, result) => {
     });
 };
 
-//RETRIEVE ALL IMAGES (NO SORT)
-Image.getAllInterest = result => {
+Interests.getAllInterest = result => {
     sql.query("SELECT * FROM interests", (err, res) => {
         if (err) {
             console.log("error: ", err);
@@ -52,33 +69,6 @@ Image.getAllInterest = result => {
     });
 };
 
-    // this.findUsersByInterest = (profileId, callback) => {
-    //     sql.query("SELECT * FROM profile_likes WHERE profile_id = ?", [profileId], (err, res) => {
-    //         if (err) {
-    //             console.log("error: ", err);
-    //             callback(err, null);
-    //             return;
-    //         }
-
-    //         callback(null, res);
-    //         return;
-    //     });
-    // };
-
-
-
-    // this.removeOne = (likerId, profileId, callback) => {
-    //     sql.query("DELETE FROM profile_likes WHERE liker_id = ? AND profile_id = ?", [likerId, profileId], (err, res) => {
-    //         if (err) {
-    //             console.log("error: ", err);
-    //             callback(err, null);
-    //             return;
-    //         }
-
-    //         callback(null, res);
-    //         return;
-    //     });
-    // }
 
 
 module.exports = Interests;
