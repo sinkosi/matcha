@@ -75,12 +75,18 @@ export default function SignIn(props) {
       history.push("/accountnotactivated")
       return false;
     }
-    if (rememberMe)
+
+    let loginData = {'loggedIn': true, 'token': response.data.token, 'completed': response.data.completed , 'data': response.data};
+    if (rememberMe){
       setCookieRememberMe('token', response.data.token, 2)
-    else
+      setCookieRememberMe('loginData', JSON.stringify(loginData));
+    }
+    else{
+      setCookie('loginData', JSON.stringify(loginData));
       setCookie('token', response.data.token)
+    }
     
-    setUserData({'loggedIn': true, 'token': response.data.token, 'completed': response.data.completed , 'data': response.data})
+    setUserData(loginData);
     
     console.log(response.data.completed)
     response.data.completed ? history.push("/") : history.push("/completeprofile") 
