@@ -42,7 +42,7 @@ Likes.findByProfileId = (profileId, result) => {
 };
 
 
-Likes.removeOne = (likerId, profileId, result) => {
+Likes.removeLike = (likerId, profileId, result) => {
     sql.query("DELETE FROM profile_likes WHERE liker_id = ? AND profile_id = ?", [likerId, profileId], (err, res) => {
         if (err) {
             console.log("error: ", err);

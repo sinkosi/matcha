@@ -7,13 +7,13 @@ exports.likesCreate = (req, res) => {
             message: "Content cannot be empty!"
         });
     }
-    const image = new Image({
+    const likes = new Likes({
         likerId: req.body.likerId,
         profileId: req.body.profileId
     })
 
     //Save Like to database
-    Likes.addLike = (likerId, profileId, (err, data) => {
+    Likes.addLike(likerId, profileId, (err, data) => {
         if (err) {
             res.status(500).send({
                 message: err.message || "Some error occurred while adding image"
@@ -62,7 +62,7 @@ exports.findByProfileId = (req, res) => {
 exports.DeleteLike = (req, res) => {
     let likerId = req.params.likerId;
     let profileId = req.params.profileId;
-    Likes.removeLike = (likerId, profileId, (err, data) => {
+    Likes.removeLike(likerId, profileId, (err, data) => {
         if (err) {
 			if (err.kind === "not_found") {
 				res.status(404).send({

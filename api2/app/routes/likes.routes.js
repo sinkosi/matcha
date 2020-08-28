@@ -1,6 +1,6 @@
 module.exports = app => {
 
-    const likes = require("../controllers/likes.controller")
+    const likes = require("../controllers/likes.controller");
 
     //Create a new like
     app.post("likes/", likes.likesCreate);

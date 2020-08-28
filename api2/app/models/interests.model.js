@@ -34,7 +34,6 @@ Interests.findByUserId = (userId, result) => {
 
         console.log(`Found interests for user with ID: ${userId}`,  res);
         result(null, res[0]);
-        return;
     });
 };
 
