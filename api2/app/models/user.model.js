@@ -10,7 +10,7 @@ const User = function(user) {
 	this.password = user.password;
 };
 
-//CREATE A NEW CUSTOMER
+//CREATE A NEW USER
 User.create = (newUser, result) => {
 	sql.query("INSERT INTO users SET ?", newUser, (err, res) => {
 		if (err) {
@@ -164,7 +164,7 @@ User.updateByIdCode = (id, code, result) => {
 						return;
 					}
 					if (res.affectedRows == 1) {
-						console.log("ROUND 2\n")
+						//Code has worked, it must be deleted from DB
 						sql.query(
 							`DELETE FROM activation_code where profile_id = ?`,
 							[id],
