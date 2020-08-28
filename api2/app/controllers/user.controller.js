@@ -262,6 +262,7 @@ exports.activate = (req, res) => {
 	//Validate Request
 	User.updateByIdCode(req.params.userId, req.params.activationKey, (err, data) => {
 		if (err) {
+			console.log(`userID: ${req.params.userId} + KEY: ${req.params.activationKey}`)
 			if (err.kind === "not_found") {
 				res.status(404).send({
 					message: `This key is invalid, please request a new activation code!`

@@ -149,7 +149,7 @@ User.updateByIdCode = (id, code, result) => {
 					if (res.affectedRows == 1) {
 						//Code has worked, it must be deleted from DB
 						sql.query(
-							`DELETE FROM activation_code where profile_id = ? AND code = ?`,
+							`SELECT * FROM activation_code where profile_id = ? AND code = ?`,
 							[id, code],
 							(err, res) => {
 								if (err) {
