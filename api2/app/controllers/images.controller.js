@@ -1,8 +1,8 @@
 
-const User = require("../models/user.model");
+const Image = require("../models/images.model");
 
 //Create and Save a new User
-
+/*
 const ImagesModel = require("../models/images.model");
 
 exports.getAll = (req, res) => {
@@ -17,7 +17,7 @@ exports.getAll = (req, res) => {
         res.status(200).send(data);
     })
 }
-
+*/
 
 // //Retrieve all Users from the database.
 // exports.findAll = (req, res) => {
@@ -119,3 +119,86 @@ exports.getAll = (req, res) => {
 // 		}else res.send({ message: "All Users were deleted successfully!" });
 // 	});
 // };
+exports.imgCreate = (req, res) => {
+    if(!req.body) {
+        res.status(400).send({
+            message: "Content cannot be empty!"
+        });
+    }
+    const image = new Images({
+        imageUrl = req.body.url,
+        userID = req.body.user_id/*,
+        uploaded = image.uploaded*/
+    })
+    //Save image to database
+    Image.addOne(imageUrl, userID, (err, data) => {
+        if (err) {
+            res.status(500).send({
+                message: err.message || "Some error occurred while adding image"
+            });
+        } else res.send({data});
+    })
+}
+
+//FIND AN IMAGE BY ITS ID
+exports.findOneImg = (req, res) => {
+    let imageId = req.params.imageId;
+    Image.findById(imageId, (err, data) => {
+        if (err) {
+            if (err.kind === "not found") {
+                res.status(404).send({
+                    message: `Not found Img with id ${imageId}.`
+                });
+            } else {
+                res.status(500).send({
+                    message: `Error retrieving Image with id ${imageId}.`
+                });
+            };
+        } else res.send(data);
+    });
+};
+
+//USER ID USED TO RETRIEVE ALL USERS PICS
+exports.findImgbyUserId = (req, res) => {
+    let userId = req.params.imageId;
+    Image.findByUserId(userId, (err, data) => {
+        if (err) {
+            if (err.kind === "not found") {
+                res.status(404).send({
+                    message: `Not found Img with id ${userId}.`
+                });
+            } else {
+                res.status(500).send({
+                    message: `Error retrieving Image with id ${userId}.`
+                });
+            };
+        } else res.send(data);
+    });
+}
+//RETRIEVE ALL IMAGES (NO SORT)
+exports.findAllImg = (req, res) => {
+    Image.getAll((err, data) => {
+        if (err) {
+            res.status(500).send({
+                message: err.message || "No images retrieved"
+            });
+        } else res.send(data);
+    });
+}
+//DELETE AN IMAGE
+exports.deleteOneImage = (req, res) => {
+    let imageId = req.params.imageId;
+    Image.removeOne(imageId, (err, data) => {
+        if (err) {
+			if (err.kind === "not_found") {
+				res.status(404).send({
+					message: `Not found User Image with id ${imageId}.`
+				});
+			}else {
+				res.status(500).send({
+					message: `Could not delete User Image with id ${imageId}.`
+				});
+			}
+		}else res.send({ message: `User Image was deleted successfully!`});    
+    });
+}
