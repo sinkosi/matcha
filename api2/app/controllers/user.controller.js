@@ -34,6 +34,7 @@ HTTP STATUS CODES - FOR RESTFUL APIs (it is important)
 
 */
 const User = require("../models/user.model");
+const ActivationCode = require("../models/activation.model")
 const email = require("../config/email.config");
 
 
@@ -176,6 +177,15 @@ exports.login = (req, res) => {
 				res.status(404).send({
 					message: `404: Username not found with name: ${req.body.login.value}.`
 				});
+			} else if (err.kind == "bad"){
+				res.status(401).send({
+					message: `401: Bad Credentials, unable to authenticate`
+				})
+			}
+			else if (err.kind == "valid"){
+				res.status(303).send({
+					message: `303: See other, Please use email to authenticate account`
+				})
 			} else {
 				res.status(500).send({
 					message: "500: Error retrieving User with username: " + req.body.login["value"] //TODO: Please finish the log in sequence here
@@ -204,18 +214,12 @@ exports.signup = (req, res) => {
 	}
 
 	// password min 6 chars
-	if (!req.body.password || req.body.password.length < 10) {
+	if (!req.body.password || req.body.password.length < 8) {
 		return res.status(400).send({
-			msg: 'Please enter a password with min. 6 chars'
+			msg: 'Please enter a password with min. 8 chars'
 		});
 	}
 	
-	// password (repeat) does not match
-	if (!req.body.confirmpassword || req.body.password != req.body.confirmpassword) {
-		return res.status(400).send({
-			msg: 'Both passwords must match'
-		});
-	}
 
 	//Create a User
 	const user = new User({
@@ -234,7 +238,7 @@ exports.signup = (req, res) => {
 					message: `409: Username already in use`
 				});
 			} else if (err.kind === "bcrypt err") {
-				res.status(500).send({
+				res.status(403).send({
 					message: `Unknown Bcrypt failure`
 				});
 			}
@@ -244,11 +248,18 @@ exports.signup = (req, res) => {
 						err.message || "Some error occurred while creating the User."
 				});
 			}
-		}	
-		else res.send(data);
+		}
+		else {
+			let userId = data.id;
+			let code = randomString(25);
+
+			const activation = new ActivationCode({userId, code})
+			ActivationCode.create(activation, (err, data) => {});
+			email.activationEmail(data.email, userId, code);
+			res.send(data);
+		} 
 	});
 };
-
 
 exports.activate = (req, res) => {
 	//Validate Request
@@ -256,20 +267,110 @@ exports.activate = (req, res) => {
 		if (err) {
 			if (err.kind === "not_found") {
 				res.status(404).send({
-					message: `This key is invalid, please request a new activation code!`
+					message: `This key is invalid, please use the link in your email to activate your account!`
 				});
+				return;
 			} else if (err.kind === "db") {
 				res.status(404).send({
 					message: `Unable to update Database at this moment`
 				});
+				return;
 			} else {
 				res.status(500).send({
 					message: `Error retrieving User with id ${req.params.userId} or key ${req.params.activationKey}.`
 				});
+				return;
 			}
-		} else res.send(data);			
+			return;
+		}
+		else{
+			res.status(200).send(data);
+		}			
 	});
 };
+
+exports.forgotPasswordEmail = (req, res) => {
+	let code = randomString(6);
+	
+	User.findByEmail(req.body.email, (err, data) => {
+		if (err)
+			res.status(404).send({message: 'something went wrong'})
+		else {
+			let userId = data.id;
+
+			console.log({userId});
+			let opt = new ActivationCode({userId, code});
+			ActivationCode.create(opt, (err, data) => {});
+
+			email.passwordResetEmail(req.body.email, code);
+			res.status(200).send({message: "otp sent"})
+		}
+	})
+	console.log(req.body);
+}
+
+exports.forgotPasswordOTP = (req, res) => {
+	console.log(req.body);
+	User.findByEmail(req.body.email, (err, data) => {
+		if (err)
+			res.status(404).send({message: 'something went wrong'})
+		else {
+			let userId = data.id;
+
+			console.log({userId});
+
+			ActivationCode.findByProfileId(userId, (err, data) => {
+				if (err){
+					res.status(404).send({message: "Wrong OPT. Please use the OPT from your email"});
+					return
+				}
+				
+				console.log({data});
+				console.log(data.code);
+				console.log(req.body.otp);
+				if (data.code != req.body.otp){
+					res.status(404).send({message: "Wrong OPT. Please use the OPT from your email"});
+					return;
+				}
+				
+				res.status(200).send({message:"otp accepted"})
+			});
+		}
+	})
+}
+
+exports.forgotPasswordNewPassword = (req, res) => {
+	console.log(req.body);
+	User.findByEmail(req.body.email, (err, data) => {
+		if (err)
+			res.status(404).send({message: 'something went wrong'})
+		else {
+			let userId = data.id;
+
+			ActivationCode.findByProfileId(userId, (err, data) => {
+				if (err){
+					res.status(404).send({message: "Wrong OPT. Please use the OPT from your email"});
+					return
+				}
+				if (data.code != req.body.otp){
+					res.status(404).send({message: "Wrong OPT. Please use the OPT from your email"});
+					return;
+				}
+				User.updateById(userId, {password:req.body.newPassword}, (err, data) => {
+					if (err){
+						console.log(err)
+						res.status(404).send({message: err || "failed to set new password"})
+						return
+					}
+					ActivationCode.removeByProfileId(userId, (err, data) => {});
+					console.log(data)
+					res.status(200).send({message:"password was updated successfully"})
+				})
+			});
+		}
+	})
+}
+
 
 function randomString(length) {
     var result           = '';

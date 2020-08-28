@@ -38,4 +38,8 @@ module.exports = app => {
 	//Update a User with userId & Activation Code
 	//app.put("/users/:userId", users.update);
 	app.get("/activate/:userId/:activationKey", users.activate)
+
+	app.post("/forgotpassword/email", users.forgotPasswordEmail);
+	app.post("/forgotpassword/otp", users.forgotPasswordOTP);
+	app.post("/forgotpassword/newpassword", users.forgotPasswordNewPassword);
 };

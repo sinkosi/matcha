@@ -44,6 +44,25 @@ User.findById = (userID, result) => {
 	});
 };
 
+User.findByEmail = (email, result) => {
+	sql.query(`SELECT * FROM users WHERE email='${email}'`, (err, res) => {
+		if (err) {
+			console.log("error: ", err);
+			result(err, null);
+			return;
+		}
+
+		if (res.length) {
+			console.log("found user: ", res[0]);
+			result(null, res[0]);
+			return;
+		}
+
+		//User with that user id has not been found.
+		result({ kind: "not found" }, null);
+	});
+};
+
 //RETRIEVE ALL USER DATA
 User.getAll = result => {
 	sql.query("SELECT * FROM users", (err, res) => {
@@ -61,9 +80,7 @@ User.getAll = result => {
 //UPDATE A USER BY ID
 User.updateById = (id, user, result) => {
 	sql.query(
-		"UPDATE users SET email = ?, name = ?, active = ? WHERE id = ?",
-		[user.email, user.name, user.active, id],
-		(err, res) => {
+		"UPDATE users SET ? WHERE id = ?", [user, id], (err, res) => {
 			if (err) {
 				console.log("error: ", err);
 				result(null, err);
@@ -124,7 +141,7 @@ User.updateByIdCode = (id, code, result) => {
 		(err, res) => {
 			if (err) {
 				console.log("error: ", err);
-				result(null, err);
+				result(err, res);
 				return;
 			}
 			if (!res.length) {
@@ -149,12 +166,12 @@ User.updateByIdCode = (id, code, result) => {
 					if (res.affectedRows == 1) {
 						//Code has worked, it must be deleted from DB
 						sql.query(
-							`DELETE FROM activation_code where profile_id = ? AND code = ?`,
-							[id, code],
+							`DELETE FROM activation_code where profile_id = ?`,
+							[id],
 							(err, res) => {
 								if (err) {
 									console.log("error: ", err);
-									result(null, err);
+									result(err, null);
 									return;
 								}
 								if (!res.length) {
@@ -167,6 +184,7 @@ User.updateByIdCode = (id, code, result) => {
 					}
 				console.log(`updated user: ${id}`)//, { id: id, ...user });
 				result(null, { id: id});
+				return;
 				}
 			)}
 		}
@@ -235,7 +253,7 @@ User.signup = (newUser, result) => {
 // FIND A USER BY USERNAME
 User.findLogin = (username, password, result) => {
 	sql.query(`SELECT * FROM users 
-		WHERE (LOWER(username) = ? OR LOWER(email) = ?) AND (activated = 1);`, [(username.value), (username.value)],
+		WHERE (LOWER(username) = ? OR LOWER(email) = ?);`, [(username.value), (username.value)],
 	//sql.query(`SELECT * FROM users WHERE LOWER(username) = LOWER(${sql.escape(username.value)});`,
 	(err, res) => {
 		if (err) {
@@ -244,7 +262,17 @@ User.findLogin = (username, password, result) => {
 			result(err, null);
 			return;
 		}
-		if (res.length && bcrypt.compareSync(password.value, res[0].password)) {
+		if (!res.length) {
+			console.log("Incorrect credentials, Check Username and Password");
+			result({ kind: "bad" }, null);
+			return;
+		}
+		if (res.length && bcrypt.compareSync(password.value, res[0].password) && (res[0].activated === 0)) {
+			console.log("Account not yet authorised! Please check email!");
+			result({ kind: "valid" }, null);
+			return;
+		}
+		if (res.length && bcrypt.compareSync(password.value, res[0].password) && res[0].activated == 1) {
 			console.log("found user: ", res[0].username);
 			result(null, res[0]);
 			return;
@@ -293,8 +321,8 @@ User.signup = (newUser, result) => {
 							result(err, null);
 							return;
 						}		
-						console.log("created user: ", { id: res.insertID, ...newUser });
-						result(null, { id: res.insertID, ...newUser });
+						console.log("created user: ", { id: res.insertId, ...newUser });
+						result(null, { id: res.insertId, ...newUser });
 					});
 				};
 			});

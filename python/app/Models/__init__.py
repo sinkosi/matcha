@@ -26,6 +26,41 @@ def add_location(user_id, address1, address2, city, state, code, longitude, lati
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id """)
     return ps.first(address1, address2, city, state, code, longitude, latitude, user_id)
 
+def set_username(user_id, username):
+    ps = db.prepare("""
+        UPDATE users
+        SET username=$1, modified=CURRENT_TIMESTAMP
+        WHERE id=$2""")
+    ps(username, user_id)
+
+def set_firstname(user_id, firstname):
+    ps = db.prepare("""
+        UPDATE users
+        SET firstname=$1, modified=CURRENT_TIMESTAMP
+        WHERE id=$2""")
+    ps(firstname, user_id)
+
+def set_lastname(user_id, lastname):
+    ps = db.prepare("""
+        UPDATE users
+        SET lastname=$1, modified=CURRENT_TIMESTAMP
+        WHERE id=$2""")
+    ps(lastname, user_id)
+
+def set_email(user_id, email):
+    ps = db.prepare("""
+        UPDATE users
+        SET email=$1, modified=CURRENT_TIMESTAMP
+        WHERE id=$2""")
+    ps(email, user_id)
+
+def set_password(user_id, password):
+    ps = db.prepare("""
+        UPDATE users
+        SET password=$1, modified=CURRENT_TIMESTAMP
+        WHERE id=$2""")
+    ps(password, user_id)
+
 def set_gender(user_id, gender):
     ps = db.prepare("""
         UPDATE users
@@ -34,11 +69,12 @@ def set_gender(user_id, gender):
     ps(gender, user_id)
 
 def set_biography(user_id, biography):
-    ps = db.execute("""
+    ps = db.prepare("""
         UPDATE users
         SET biography=$1, modified=CURRENT_TIMESTAMP
-        WHERE id=$2 """)
+        WHERE id=$2""")
     ps(biography, user_id)
+
 
 def set_sexual_preference(user_id, sexual_preference):
     ps = db.prepare("""
@@ -112,6 +148,12 @@ def get_user_images(user_id):
         WHERE user_id=$1""")
     return ps(user_id)
 
+def get_image_owner(image_id):
+    ps = db.prepare("""
+        SELECT user_id FROM images
+        WHERE id=$1""")
+    return ps.first(image_id)
+
 
 
 def add_profile_visit(visitor_id, profile_id):
@@ -148,6 +190,11 @@ def get_user_id_by_email_password(email, password):
         SELECT id FROM users WHERE email=$1 and password=$2""")
     return ps.first(email, password)
 
+def get_user_id_by_email(email):
+    ps = db.prepare("""
+        SELECT id FROM users WHERE email=$1""")
+    return ps.first(email)
+
 def get_users(limit=20, filter="", page=1):
     ps = db.prepare(f"""
         SELECT users.id, username, email, firstname, lastname, password, gender,
@@ -179,9 +226,21 @@ def get_interests_list():
 
 def add_user_interest(user_id, interest):
     ps = db.prepare("""
-        INSERT INTO users_interest(user_id, interest_id) 
+        INSERT INTO users_interests(user_id, interest_id) 
         VALUES ($1, $2) """)
     ps(user_id, interest)
+
+
+def user_interest_exist(user_id, interest):
+    ps = db.prepare("""
+        SELECT * FROM users_interests
+        WHERE user_id=$1 AND interest_id=$2 
+        """)
+    exist = ps.first(user_id, interest)
+    if exist:
+        return True
+    else:
+        return False
 
 def get_users_with_interest(interest):
     pass
