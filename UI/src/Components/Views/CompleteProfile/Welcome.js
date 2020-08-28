@@ -24,7 +24,7 @@ export default function Welcome(props)
                 Before you can start meeting some people, and possibly meeting the love of your life, we need a few delails about you.
                 Please click next to continue... Enjoy. 
             </Typography> 
-            <Button color={"primary"} size={"large"} variant={"contained"}  onClick={props.next} >Next ></Button>
+            <Button color={"primary"} size={"large"} variant={"contained"}  onClick={props.next} >Next &gt</Button>
         </Paper  >
     );
 }
