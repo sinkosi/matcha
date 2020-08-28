@@ -120,6 +120,7 @@ exports.update = (req, res) => {
 			message: "Content can not be empty"
 		});
 	}
+	console.log(req.body)
 	let user = {};
 	if (req.body.firstname) user.firstname = req.body.firstname;
 	if (req.body.lastname) user.lastname = req.body.lastname;

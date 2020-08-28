@@ -38,6 +38,7 @@ export default function SexualPreference(props)
     const handleSubmitPreference = ()=>{
       // const userId = cookieUserId()
       const userId = userData.data.id
+      console.log({preference})
       updatePreference(handleSuccess, handleError, userId, preference)
     }
     const handleSuccess = (respose) =>{
