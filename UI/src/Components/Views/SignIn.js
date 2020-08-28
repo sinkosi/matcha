@@ -19,7 +19,7 @@ import postLogin from '../../Services/login'
 import {setCookie, setCookieRememberMe} from '../../utils/cookies'
 
 export default function SignIn(props) {
-  const {setUserData} = useContext(UserContext)
+  const {userData, setUserData} = useContext(UserContext)
   const classes = useStyles()
   const history = useHistory()
   const [usernameEmail, setUsernameEmail] = useState({'value': "", error: false, errormsg: ""})

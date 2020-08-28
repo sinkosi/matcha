@@ -141,7 +141,7 @@ User.updateByIdCode = (id, code, result) => {
 		(err, res) => {
 			if (err) {
 				console.log("error: ", err);
-				result(null, err);
+				result(err, res);
 				return;
 			}
 			if (!res.length) {
@@ -166,12 +166,12 @@ User.updateByIdCode = (id, code, result) => {
 					if (res.affectedRows == 1) {
 						console.log("ROUND 2\n")
 						sql.query(
-							`DELETE FROM activation_code where profile_id = ? AND code = ?`,
-							[id, code],
+							`DELETE FROM activation_code where profile_id = ?`,
+							[id],
 							(err, res) => {
 								if (err) {
 									console.log("error: ", err);
-									result(null, err);
+									result(err, null);
 									return;
 								}
 								if (!res.length) {
@@ -184,6 +184,7 @@ User.updateByIdCode = (id, code, result) => {
 					}
 				console.log(`updated user: ${id}`)//, { id: id, ...user });
 				result(null, { id: id});
+				return;
 				}
 			)}
 		}

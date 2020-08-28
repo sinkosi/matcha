@@ -55,7 +55,7 @@ export default function OTP(props){
             value={OTP.value}
             error={OTP.err}
             helperText={OTP.errmsg}
-            onChange={e => validateOTP(e)}
+            onChange={validateOTP}
             autoFocus
           />
           <Button

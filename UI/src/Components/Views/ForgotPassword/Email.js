@@ -36,15 +36,7 @@ export default function Email(props){
   const handleError = (error) => {console.log({error})} 
 
   const classes = useStyles();
-  const [email, setEmail] = useState("")
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value)
-  }
-
-  const handleSendEmail = () => {
-
-  }
     return (
       <React.Fragment>
 
@@ -62,11 +54,9 @@ export default function Email(props){
               label="Email Address"
               name="email"
               autoComplete="email"
-              value={email}
-              onChange={handleEmailChange}
+              onChange={validateEmail}
               autoFocus
               value={email.value}
-              onChange={e => validateEmail(e)}
               error = {email.error}
               helperText = {email.errormsg}
             />

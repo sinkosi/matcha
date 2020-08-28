@@ -267,18 +267,25 @@ exports.activate = (req, res) => {
 		if (err) {
 			if (err.kind === "not_found") {
 				res.status(404).send({
-					message: `This key is invalid, please request a new activation code!`
+					message: `This key is invalid, please use the link in your email to activate your account!`
 				});
+				return;
 			} else if (err.kind === "db") {
 				res.status(404).send({
 					message: `Unable to update Database at this moment`
 				});
+				return;
 			} else {
 				res.status(500).send({
 					message: `Error retrieving User with id ${req.params.userId} or key ${req.params.activationKey}.`
 				});
+				return;
 			}
-		} else res.send(data);			
+			return;
+		}
+		else{
+			res.status(200).send(data);
+		}			
 	});
 };
 
