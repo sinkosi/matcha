@@ -147,7 +147,7 @@ User.updateByIdCode = (id, code, result) => {
 						return;
 					}
 					if (res.affectedRows == 1) {
-						console.log("ROUND 2\n")
+						//Code has worked, it must be deleted from DB
 						sql.query(
 							`DELETE FROM activation_code where profile_id = ? AND code = ?`,
 							[id, code],
