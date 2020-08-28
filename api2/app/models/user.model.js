@@ -113,7 +113,6 @@ User.remove = (id, result) => {
 			result({ kind: "not_found" }, null);
 			return;
 		}
-
 		console.log("deleted user with id: ", id);
 		result(null, res);
 	});
@@ -150,7 +149,7 @@ User.updateByIdCode = (id, code, result) => {
 				return;
 			}
 			if (res.length) {
-				sql.query(`UPDATE matcha.users SET activated = 1, activated_date = NOW() WHERE id = ?`,
+				sql.query(`UPDATE matcha.users SET activated = 0, activated_date = NOW() WHERE id = ?`,
 				[id],
 				(err, res) => {
 					if (err) {
@@ -166,19 +165,21 @@ User.updateByIdCode = (id, code, result) => {
 					if (res.affectedRows == 1) {
 						//Code has worked, it must be deleted from DB
 						sql.query(
-							`DELETE FROM activation_code where profile_id = ?`,
-							[id],
+							`DELETE FROM activation_code where profile_id = ? AND code = ?`,
+							[id, code],
 							(err, res) => {
 								if (err) {
 									console.log("error: ", err);
 									result(err, null);
 									return;
 								}
-								if (!res.length) {
+								if (res.affectedRows == 0) {
 									//user not found or not changed
 									result({ kind: "not_found" }, null);
 									return;
 								}
+								console.log("deleted user activation code for user with ID: ", id);
+								//User code has been deleted
 							}
 						)
 					}

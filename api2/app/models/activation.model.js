@@ -18,7 +18,7 @@ ActivationCode.create = (newCode, result) => {
 			return;
 		}
 
-		console.log("created new code: ", { id: res.insertId, ...newCode });
+		console.log("Activation Model: created new code: ", { id: res.insertId, ...newCode });
 		result(null, { id: res.insertId, ...newCode });
 	});
 };
