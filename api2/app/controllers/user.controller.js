@@ -120,24 +120,38 @@ exports.update = (req, res) => {
 			message: "Content can not be empty"
 		});
 	}
+	let user = {};
+	if (req.body.firstname) user.firstname = req.body.firstname;
+	if (req.body.lastname) user.lastname = req.body.lastname;
+	if (req.body.password) {/* some bcrypt stuff: user.password = req.body.password; */}
+	if (req.body.gender) user.gender = req.body.gender;
+	if (req.body.biography) user.biography = req.body.biography;
+	if (req.body.sexualPreference) user.sexual_preferences = req.body.sexualPreference;
+	if (req.body.profilePic) user.profile_pic = req.body.profilePic;
+	if (req.body.location) {/* some location stuff: user.location = req.body.location; */}
+	if (req.body.interests) {/* some interesting stuff: user.firstname = req.body.firstname; */}
 
-	User.updateById(
-		req.params.userId,
-		new User(req.body),
-		(err, data) => {
-			if (err) {
-				if (err.kind === "not_found") {
-					res.status(404).send({
-						message: `Not found User with id ${req.params.userId}.`
-					});
-				} else {
-				res.status(500).send({
-					message: "Error updating User with id " + req.params.userId
-					});
-				}
-			} else res.send(data);
-		}
-	);
+	console.log({user})
+	if (user) {
+		User.updateById(
+			req.params.userId,
+			user,
+			(err, data) => {
+				if (err) {
+					if (err.kind === "not_found") {
+						res.status(404).send({
+							message: `Not found User with id ${req.params.userId}.`
+						});
+					} else {
+					res.status(500).send({
+						message: "Error updating User with id " + req.params.userId
+						});
+					}
+				} else res.send(data);
+			}
+		);
+	}
+	else console.log("empty body")
 };
 
 //Delete a User with the specified userId in the request
