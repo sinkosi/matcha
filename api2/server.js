@@ -3,6 +3,7 @@
 
 // modules ======================================
 const express = require('express');
+const io = require('socket.io');//(server, { origins: '*:*'});
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
@@ -47,6 +48,10 @@ require("./app/routes/images.routes")(app);
 require("./app/routes/interest.routes")(app);
 require("./app/routes/likes.routes")(app);
 
+/**
+ * ! SOCKET IO
+ */
+app.io = io;
 //startup app at http://localhost:3000
 //the text below should be visible if the server is running but if it is not then error messages
 //will be printed.
