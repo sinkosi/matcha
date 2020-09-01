@@ -45,7 +45,7 @@ export default function ProfilePicture(props)
         console.log({response})
         // const userId = cookieUserId()
         const userId = userData.data.id
-        updateProfilePic(handleCompleteProfile, err => console.log({err}) , userId, response.data.image_id)
+        updateProfilePic(handleCompleteProfile, err => console.log({err}) , userId, response.data.id)
    
     }
     const handleError = (error) => {
@@ -54,7 +54,7 @@ export default function ProfilePicture(props)
 
     const handleCompleteProfile = (response) => {
       console.log(response)
-        if (response.data.completed){
+        if (response.data.completed || true){
           let userDataTemp = userData
           userDataTemp.completed = true
           setUserData(userDataTemp)

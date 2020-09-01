@@ -23,17 +23,26 @@ exports.findOneImg = (req, res) => {
 };
 
 exports.upload = (req, res) => {
-    console.log(req.body)
-    let path = './uploads/images/'+req.body.name;
-    let buffer = new Buffer(req.body.data);
-    let x = Buffer.from(req.body.data, 'base64').toString()
-
+    userId = req.params.userId;
+    let imgdir = './uploads/images/'+userId;
+    fs.mkdir(imgdir, (err) => {});
+    let fileExtention = req.body.name.split('.');
+    fileExtention = fileExtention[fileExtention.length - 1];
+    
+    let name = randomString(20)+'.'+fileExtention;
+    let path = imgdir+'/'+name;
+    let url = 'http://localhost:5000/static/images/'+userId+'/'+name;
     fs.writeFile(path, req.body.data, {encoding:'base64'}, (err, data) => {
         if (err) {
             res.status(501).send({message:"error saving image"})
+            return;
         }
-        console.log({data})
-        
+
+        Image.addOne(url,path, userId,(err, result) => {
+            if (err) console.log(err)
+
+            else res.status(201).send({id:result, message:"image uploaded successfully"})
+        })
     })
 
 }
@@ -83,3 +92,14 @@ exports.deleteOneImage = (req, res) => {
 		}else res.send({ message: `User Image was deleted successfully!`});    
     });
 }
+
+
+function randomString(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }

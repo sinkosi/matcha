@@ -67,7 +67,7 @@ exports.create = (req, res) => {
 		
 		console.log("creating activation code:");
 		let userId  = userdata.id
-		let code = randomString(14);
+		let code = tring(14);
 
 		const activation = new ActivationCode({userId, code})
 		ActivationCode.create(activation, (err, data) => {
@@ -138,8 +138,8 @@ exports.update = (req, res) => {
 	}
 	if (req.body.dob) {/* some interesting stuff: user.firstname = req.body.firstname; */}
 
-	console.log({user})
-	if (user.length > 0) {
+	console.log({user}, Object.keys(user).length);
+	if (Object.keys(user).length > 0) {
 		User.updateById(
 			req.params.userId,
 			user,
@@ -149,12 +149,20 @@ exports.update = (req, res) => {
 						res.status(404).send({
 							message: `Not found User with id ${req.params.userId}.`
 						});
+						return;
 					} else {
 					res.status(500).send({
 						message: "Error updating User with id " + req.params.userId
 						});
+						return;
 					}
-				} else res.send(data);
+				}
+				else {
+					res.send(data);
+					User.updateById(req.params.userId, {completed: true})
+					
+				} 
+				return;
 			}
 		);
 	}
