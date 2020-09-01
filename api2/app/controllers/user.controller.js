@@ -159,7 +159,15 @@ exports.update = (req, res) => {
 				}
 				else {
 					res.send(data);
-					User.updateById(req.params.userId, {completed: true})
+
+					User.findById(req.params.userId, (err, result) => {
+						if (err) console.log(err)
+
+						console.log(result)
+						if (result.sexual_preferences && result.profile_pic && result.biography){
+							User.updateById(req.params.userId, {completed: true}, (err, result) => {})
+						}
+					})
 					
 				} 
 				return;
