@@ -1,6 +1,5 @@
 import React, {useState, useEffect}  from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import Header from '../Header'
 import getUser from '../../Services/user'
 import { Button, Container, Grid, TextField } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography';
@@ -23,7 +22,6 @@ const UserProfileEdit = (props) => {
     //useEffect(()=> refresh())
     return (
         <>
-            <Header />
             <Button onClick={refresh} variant="contained">refresh</Button>
             <Button onClick={loguser} variant="contained">log user</Button>
             <Container maxWidth="lg" className={classes.root}>

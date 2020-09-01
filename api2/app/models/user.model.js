@@ -149,7 +149,7 @@ User.updateByIdCode = (id, code, result) => {
 				return;
 			}
 			if (res.length) {
-				sql.query(`UPDATE matcha.users SET activated = 0, activated_date = NOW() WHERE id = ?`,
+				sql.query(`UPDATE matcha.users SET activated = 1, activated_date = NOW() WHERE id = ?`,
 				[id],
 				(err, res) => {
 					if (err) {

@@ -66,10 +66,11 @@ var sql = `CREATE TABLE IF NOT EXISTS matcha.users (
   firstname VARCHAR(100) NOT NULL,
   lastname VARCHAR(100) NOT NULL,
   password VARCHAR(255) NOT NULL,
-  gender VARCHAR(1) NULL,
+  gender VARCHAR(10) NULL,
   biography VARCHAR(255) NULL,
-  sexual_preferences int(1) NULL,
+  sexual_preferences VARCHAR(10) NULL,
   profile_pic int(20) NULL,
+  date_of_birth TIMESTAMP NULL,
   location int(20)   NULL,
   activated INT(1) DEFAULT 0 NOT NULL,
   completed INT(1) DEFAULT 0 NOT NULL,
@@ -126,6 +127,7 @@ con.query(sql, function (err, result) {
 var sql = `CREATE TABLE IF NOT EXISTS matcha.images (
     id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     url VARCHAR(255) NOT NULL,
+    path VARCHAR(255) NULL,
     user_id INT(11) NOT NULL,
     uploaded TIMESTAMP NOT NULL DEFAULT current_timestamp,
     CONSTRAINT fk_images_user_id FOREIGN KEY(user_id) REFERENCES users(id)

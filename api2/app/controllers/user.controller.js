@@ -36,6 +36,7 @@ HTTP STATUS CODES - FOR RESTFUL APIs (it is important)
 const User = require("../models/user.model");
 const ActivationCode = require("../models/activation.model")
 const email = require("../config/email.config");
+const Interests = require("../models/interests.model");
 
 
 //Create and Save a new User
@@ -66,7 +67,7 @@ exports.create = (req, res) => {
 		
 		console.log("creating activation code:");
 		let userId  = userdata.id
-		let code = randomString(14);
+		let code = tring(14);
 
 		const activation = new ActivationCode({userId, code})
 		ActivationCode.create(activation, (err, data) => {
@@ -120,24 +121,60 @@ exports.update = (req, res) => {
 			message: "Content can not be empty"
 		});
 	}
+	console.log(req.body)
+	let user = {};
+	if (req.body.firstname) user.firstname = req.body.firstname;
+	if (req.body.lastname) user.lastname = req.body.lastname;
+	if (req.body.password) {/* some bcrypt stuff: user.password = req.body.password; */}
+	if (req.body.gender) user.gender = req.body.gender;
+	if (req.body.biography) user.biography = req.body.biography;
+	if (req.body.sexualPreference) user.sexual_preferences = req.body.sexualPreference;
+	if (req.body.profilePic) user.profile_pic = req.body.profilePic;
+	if (req.body.location) {/* some location stuff: user.location = req.body.location; */}
+	if (req.body.interests) { 
+		req.body.interests.forEach(interest => {
+			Interests.add(req.params.userId, interest, (err, res) => {});
+		})
+	}
+	if (req.body.dob) {/* some interesting stuff: user.firstname = req.body.firstname; */}
 
-	User.updateById(
-		req.params.userId,
-		new User(req.body),
-		(err, data) => {
-			if (err) {
-				if (err.kind === "not_found") {
-					res.status(404).send({
-						message: `Not found User with id ${req.params.userId}.`
-					});
-				} else {
-				res.status(500).send({
-					message: "Error updating User with id " + req.params.userId
-					});
+	console.log({user}, Object.keys(user).length);
+	if (Object.keys(user).length > 0) {
+		User.updateById(
+			req.params.userId,
+			user,
+			(err, data) => {
+				if (err) {
+					if (err.kind === "not_found") {
+						res.status(404).send({
+							message: `Not found User with id ${req.params.userId}.`
+						});
+						return;
+					} else {
+					res.status(500).send({
+						message: "Error updating User with id " + req.params.userId
+						});
+						return;
+					}
 				}
-			} else res.send(data);
-		}
-	);
+				else {
+					res.send(data);
+
+					User.findById(req.params.userId, (err, result) => {
+						if (err) console.log(err)
+
+						console.log(result)
+						if (result.sexual_preferences && result.profile_pic && result.biography){
+							User.updateById(req.params.userId, {completed: true}, (err, result) => {})
+						}
+					})
+					
+				} 
+				return;
+			}
+		);
+	}
+	else res.status(200).send({message:'empty body'});
 };
 
 //Delete a User with the specified userId in the request

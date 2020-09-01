@@ -11,7 +11,6 @@ import Congratulations from './CompleteProfile/Congratulations';
 export default function CompleteProfile(props){
 
     const [formPage, setFormPage] = useState(0);
-    const [gender, setGender] = useState(0)
 
     const handleNext = () => {setFormPage(formPage + 1)}
     

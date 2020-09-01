@@ -25,8 +25,8 @@ function App(props) {
 
       <CssBaseline />
       <UserContext.Provider value={{userData, setUserData}}>
-        { userData.loggedIn ? <Header setUserData={setUserData} /> : <></> }
         <BrowserRouter>
+        { userData.loggedIn ? <Header setUserData={setUserData} {...props} /> : <></> }
           <Switch>
             <Redirect exact from="/" to="/users" />
             <SignedOutRoute exact path="/signin" component={SignIn} {...props} />
@@ -39,8 +39,8 @@ function App(props) {
             <ProtectedRoute exact path="/completeprofile" component={CompleteProfile}  {...props}/>
             <ProtectedRoute component={Users}  exact path="/users" />
             <ProtectedRoute component={UserProfile} exact path="/users/:userId" />
-            <ProtectedRoute component={UserProfileEdit} exact path="/users/:userId/edit" />
-            <ProtectedRoute component={UserProfileEdit} exact path="/users/:userId/edit" />
+            <ProtectedRoute component={UserProfileEdit} exact path="/profile" />
+            <ProtectedRoute component={UserProfileEdit} exact path="/profile/edit" />
           </Switch>
         </BrowserRouter>
       </UserContext.Provider>

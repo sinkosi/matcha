@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -6,7 +6,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import { cookieUserId } from '../../../utils/cookies'
+// import { cookieUserId } from '../../../utils/cookies'
+import { UserContext } from '../../UserContext'
+
 import { updatePreference } from '../../../Services/profile'
 
 
@@ -26,6 +28,7 @@ export default function SexualPreference(props)
 {
     const classes = useStyles();
     const [preference, setPreference] = React.useState('both');
+    const { userData } = useContext(UserContext);
 
     const handleChange = (event) => {
       console.log(preference)
@@ -33,7 +36,9 @@ export default function SexualPreference(props)
     };
 
     const handleSubmitPreference = ()=>{
-      const userId = cookieUserId()
+      // const userId = cookieUserId()
+      const userId = userData.data.id
+      console.log({preference})
       updatePreference(handleSuccess, handleError, userId, preference)
     }
     const handleSuccess = (respose) =>{

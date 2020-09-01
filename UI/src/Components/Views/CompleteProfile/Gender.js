@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -7,8 +7,8 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { updateGender } from '../../../Services/profile'
-import { cookieUserId } from '../../../utils/cookies'
-
+// import { cookieUserId } from '../../../utils/cookies'
+import { UserContext } from '../../UserContext'
 
 
 
@@ -25,6 +25,9 @@ export default function Gender(props)
 {
     const classes = useStyles();
     const [gender, setGender] = React.useState('bisexual');
+    const { userData } = useContext(UserContext);
+
+    console.log(userData)
 
     const handleChange = (event) => {
       console.log(gender)
@@ -32,7 +35,8 @@ export default function Gender(props)
     };
 
     const handleSubmitGender = ()=>{
-      const userId = cookieUserId()
+      // const userId = cookieUserId()
+      const userId = userData.data.id
       updateGender(handleSuccess, handleError, userId, gender)
     }
     const handleSuccess = (respose) =>{

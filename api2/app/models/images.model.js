@@ -8,8 +8,8 @@ const Image = function(image) {
 }
 
 //Add a new image
-Image.addOne = (imageUrl, userID, result) => {
-    sql.query("INSERT INTO images (url, user_id) VALUES (?, ?)", [imageUrl, userID], 
+Image.addOne = (imageUrl, imagePath, userID, result) => {
+    sql.query("INSERT INTO images (url, path, user_id) VALUES (?, ?, ?)", [imageUrl, imagePath, userID], 
     (err, res) => {
         if (err) {
             console.log("error: ", err);

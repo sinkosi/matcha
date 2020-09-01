@@ -54,17 +54,18 @@ export default function SignIn(props) {
     }
   }
 
-/*  const sendData = () => {
-    let data = { 'login': usernameEmail, password }*/
-
-    const sendData = () => {
-      let data = { 'login': usernameEmail, password }
-      //let data = { 'username': usernameEmail.value, 'password': password.value }
+  const sendData = () => {
+    let data = { 'login': usernameEmail, password }
 
     postLogin(handleLoginSuccess, handleLoginError,data)
   }
 
-  const handleLoginError = (error) => { console.log({error}) }
+  const handleLoginError = (error) => { 
+    console.log(error.response)
+    if (error.response.status === 303){
+      history.push("/accountnotactivated")
+    }
+  }
 
   const handleLoginSuccess = (response) => {
 
@@ -74,12 +75,18 @@ export default function SignIn(props) {
       history.push("/accountnotactivated")
       return false;
     }
-    if (rememberMe)
+
+    let loginData = {'loggedIn': true, 'token': response.data.token, 'completed': response.data.completed , 'data': response.data};
+    if (rememberMe){
       setCookieRememberMe('token', response.data.token, 2)
-    else
+      setCookieRememberMe('loginData', JSON.stringify(loginData));
+    }
+    else{
+      setCookie('loginData', JSON.stringify(loginData));
       setCookie('token', response.data.token)
+    }
     
-    setUserData({'loggedIn': true, 'token': response.data.token, 'completed': response.data.completed })
+    setUserData(loginData);
     
     console.log(response.data.completed)
     response.data.completed ? history.push("/") : history.push("/completeprofile") 

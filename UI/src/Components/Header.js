@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { deleteCookie } from '../utils/cookies'
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,12 +23,21 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header(props) {
   const classes = useStyles();
+  let browserHistory = useHistory();
 
   const handleLogout = () => {
     deleteCookie('token')
+    deleteCookie('loginData')
     props.setUserData({'loggedIn': false})
-
   }
+
+  const handleSuggestions = () => { browserHistory.push('/users') }
+  const handleSearch = () => { browserHistory.push('/users' ) }
+  const handleProfile = () => { browserHistory.push('/profile') }
+  const handleChats = () => { browserHistory.push('/chat') }
+  const handleNotifications = () => { browserHistory.push('/notifications') }
+  
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -38,6 +48,11 @@ export default function Header(props) {
           <Typography variant="h6" className={classes.title}>
             Matcha
           </Typography>
+          <Button color="inherit" onClick={handleSuggestions}>Suggestions</Button>
+          <Button color="inherit" onClick={handleSearch}>Search</Button>
+          <Button color="inherit" onClick={handleChats}>Chats</Button>
+          <Button color="inherit" onClick={handleNotifications}>Notifications</Button>
+          <Button color="inherit" onClick={handleProfile}>Profile</Button>
           <Button color="inherit" onClick={handleLogout}>Logout</Button>
         </Toolbar>
       </AppBar>

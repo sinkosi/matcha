@@ -1,22 +1,33 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect,useRef} from 'react'
 import sendActivationKey from '../Services/activateUser'
 import { Button } from '@material-ui/core'
 
 const ActivateUser = (props) => {
     const [message, setMessage] = useState("Activating...")
     const [disableButton, setDisableButton] = useState(true)
-    const verifyActivationKey = () => {
-        console.log("doing some verification...")
-        let data = props.location.pathname.split("/")
-        let userId = data[2];
-        let activationKey = data[3]
-        console.log({userId},{activationKey})
+    const [req, setReq] = useState({value:0})
 
-        sendActivationKey(handleActivated, handleError, userId, activationKey)
+    let reqRef = useRef(0)
+    reqRef.current = req.value
+    const verifyActivationKey = () => {
+        if (req.value === 0){
+            console.log("doing some verification...")
+            let data = props.location.pathname.split("/")
+            let userId = data[2];
+            let activationKey = data[3]
+            console.log({userId},{activationKey})
+            
+            sendActivationKey(handleActivated, handleError, userId, activationKey)
+            setReq({value: 1});
+        }
     }
+    const callVerify = () => verifyActivationKey()
+
     const handleActivated = () => { setMessage("activation successful. Continue to login."); setDisableButton(false) }
     const handleError = (err) => { console.log({err}); setMessage("Error: "+err)}
-    verifyActivationKey()
+    useEffect(() => {callVerify()}, [reqRef, callVerify])
+
+    
     return (
         <>
             <h1>{message}</h1>
