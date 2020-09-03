@@ -5,7 +5,6 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import { Input  } from '@material-ui/core';
 import { uploadImage, updateProfilePic} from '../../../Services/profile'
 // import { cookieUserId } from '../../../utils/cookies'
 
@@ -21,8 +20,13 @@ const useStyles = makeStyles({
       },
     checkboxFormControl: {
     display: 'block'
-    
     },
+    input: {
+      display: "none"
+    },
+    buttonNext: {
+      marginTop: '3rem'
+    }
   });
 
 
@@ -90,10 +94,12 @@ export default function ProfilePicture(props)
                 Please upload a profile picture
             </Typography>
 
-            <Input type="file"  onChange={handleImageChange}/>
-            <Button color="primary" size="large" variant="contained" fullWidth onClick={ ()=>{ console.log(image)}} >Select a picture</Button>
+            <input type="file" id="select-image" accept="image/*" className={classes.input} onChange={handleImageChange}/>
+            <label htmlFor="select-image" >
+              <Button color="primary" size="large" variant="contained" fullWidth  component="span">Select a picture</Button>
+            </label>
 
-            <Button color={"primary"} size={"large"} variant={"contained"} onClick={handleSendProfilePic}  >Upload</Button>
+            <Button color={"primary"} size={"large"} variant={"contained"} onClick={handleSendProfilePic}  className={classes.buttonNext}>Upload</Button>
         </Paper  >
     );
 }

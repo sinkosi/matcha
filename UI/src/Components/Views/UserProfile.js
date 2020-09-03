@@ -2,11 +2,12 @@ import React, {useState, useEffect, useRef, useContext }  from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import getUser from '../../Services/user'
 import { getUserInteractions } from '../../Services/user'
-import { Container, Grid, Paper } from '@material-ui/core'
+import { Container, Grid, Paper, Fab } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography';
 import { UserContext } from '../UserContext'
+import { useHistory } from 'react-router-dom';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme)=>({
     root: {
 
     },
@@ -14,6 +15,7 @@ const useStyles = makeStyles({
         maxWidth: "100%"
       },
     paper: {
+        width:'100%',
         padding: '1rem',
         height:'100%'
     },
@@ -23,18 +25,29 @@ const useStyles = makeStyles({
     images: {
         maxWidth:"100%",
         padding: "1rem"
+    },
+    margin: {
+        margin: theme.spacing(1),
+    },
+    fab: {
+        position: 'fixed',
+  right: '1rem',
+  bottom: '1rem'
     }
-});
+}));
 
 const UserProfile = (props) => {
     const classes = useStyles();
     const [user, setUser] = useState({data: []})
     const {userData} = useContext(UserContext)
     let userRef = useRef()
+    let history = useHistory()
     const userId = (props.path === "/profile" ? userData.data.id : props.location.pathname.split("/")[2])
     userRef.current = user.data
 
-    // const refresh = () => { getUser(setUser, userId ) }
+    const handleClickEdit = (event) => {
+        history.push("/profile/edit")
+    }
 
     useEffect(() => {getUser(setUser, userId )}, [userId])
 
@@ -100,7 +113,7 @@ const UserProfile = (props) => {
                     <Grid item xs={12} align="center">
                         <Paper elevation={2} className={classes.paper}>
                             <Typography>Interests</Typography>
-                            {user.data.interests ? user.data.interests.map( (interest, index) => <p key={index}>{interest},ind {index} </p>): "No interests 😥"}
+                            {user.data.interests ? user.data.interests.map( (interest, index) => <p key={index}>{interest} </p>): "No interests 😥"}
                         </Paper>
                     </Grid>
                     <Grid item xs={12} align="center">
@@ -112,7 +125,6 @@ const UserProfile = (props) => {
                                         <Grid item  xs={12} md={6} lg={4} key={image.id}> <img src={image.url} alt="" className={classes.images}/> 
                                         </Grid>)
                                     : <Grid item align="center"> "No images <span role='img' aria-label="">😥</span>" </Grid>}
-
                             </Grid>
                         </Paper>
                     </Grid>
@@ -120,6 +132,18 @@ const UserProfile = (props) => {
                 </Grid>
                 {props.path === "/profile" ? <Interactions {...props} userId={userId}></Interactions> : "" }
             </Container>
+            {props.path === "/profile" ? <Fab
+                variant="extended"
+                size="large"
+                color="secondary"
+                aria-label="edit profile"
+                className={classes.fab}
+                onClick={handleClickEdit}
+          
+                >
+                
+                Edit profile
+                </Fab> : <></> }
         </>
     )
 }
