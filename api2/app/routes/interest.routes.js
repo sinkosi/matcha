@@ -3,7 +3,7 @@ module.exports = app => {
     const interest = require("../controllers/interest.controller")
     
     //Retrieve all interests
-    app.get("/interest", interest.findAllInterest)
+    app.get("/interests", interest.findAllInterests)
     
     //Create new interest
     app.post("/interest", interest.interestCreate);

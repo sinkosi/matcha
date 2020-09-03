@@ -1,9 +1,7 @@
-import React, {useState, useEffect, useRef, useContext }  from 'react'
+import React, {useState }  from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import getUser from '../../../Services/user'
 import { updateUserProfile } from '../../../Services/profile'
-import { Container, Grid, Paper, TextField, Button, RadioGroup, FormControl, FormControlLabel, Radio } from '@material-ui/core'
-import Typography from '@material-ui/core/Typography';
+import { Paper, TextField, Button, FormControl } from '@material-ui/core'
 
 
 const useStyles = makeStyles({

@@ -8,5 +8,10 @@ const getUserImages =  (userId, f, g) => {
 	.catch(g)
 }
 
+const deleteImage = (imageId, f, g) => {
+	api.delete('/images/'+imageId)
+	.then(f)
+	.catch(g)
+}
 // exports [activate]
-export {getUserImages}
+export {getUserImages, deleteImage}

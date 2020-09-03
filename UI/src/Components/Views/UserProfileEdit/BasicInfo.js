@@ -1,16 +1,9 @@
-import React, {useState, useEffect, useRef, useContext }  from 'react'
+import React, {useState }  from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import getUser from '../../../Services/user'
 import { updateUserProfile } from '../../../Services/profile'
-import { Container, Grid, Paper, TextField, Button, RadioGroup, FormControl, FormControlLabel, Radio } from '@material-ui/core'
+import { Paper, TextField, Button, RadioGroup, FormControl, FormControlLabel, Radio } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography';
-import 'date-fns'
-import DateFnsUtils from '@date-io/date-fns'
-import {
-    MuiPickersUtilsProvider,
-    KeyboardTimePicker,
-    KeyboardDatePicker,
-  } from '@material-ui/pickers'
+
 
 const useStyles = makeStyles({
     root: {
@@ -50,7 +43,6 @@ const BasicInfo = (props) => {
     const [gender, setGender] = React.useState(props.user.data.gender)
     const [preference, setPreference] = React.useState(props.user.data.sexual_preferences)
     var [biography, setBiography] = React.useState(props.user.data.biography)
-    const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'))
 
 
     const classes = useStyles()
@@ -111,10 +103,6 @@ const BasicInfo = (props) => {
       
       const validateBiography = (event) => setBiography(event.target.value);
 
-      const validateDate = (date) => {
-        setSelectedDate(date);
-      };
-
     
       const send_data = () => {
         const formdata = {'username':username.value, 'firstname':firstname.value, 'lastname':lastname.value, 'email':email.value, gender, sexualPreference:preference, biography}
@@ -143,7 +131,7 @@ const BasicInfo = (props) => {
                 name="username"
                 autoComplete="username"
                 value={username.value}
-                autoFocus
+                // autoFocus
                 fullWidth
                 onChange={e => validateUsername(e)}
                 error = {username.error}
@@ -223,24 +211,11 @@ const BasicInfo = (props) => {
                 label="biography"
                 name="biography"
                 onChange={validateBiography}
-                autoFocus
+                // autoFocus
                 className={classes.bio}
             />
 
-            {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                    margin="normal"
-                    id="date-picker-dialog"
-                    label="Date of birth"
-                    format="dd/MM/yyyy"
-                    value={selectedDate}
-                    onChange={validateDate}
-                    KeyboardButtonProps={{
-                        'aria-label': 'change date',
-                    }}
-                />
-            </MuiPickersUtilsProvider>
-             */}
+
     
 
 

@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useRef, useContext }  from 'react'
+import React, {useState, useEffect}  from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import {getUserImages} from '../../../Services/images'
+import {getUserImages, deleteImage} from '../../../Services/images'
 import { uploadImage, updateProfilePic} from '../../../Services/profile'
 import { Grid, Paper, Button, ButtonGroup } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography';
@@ -38,44 +38,36 @@ const useStyles = makeStyles({
 	},
 	imagecard: {
 		padding: "1rem",
-		margin: "1rem"
+		margin: "0.7rem",
+		height: "100%"
 	},
 	input: {
 		display: "none"
 	}
 });
 
+const handleSendImage = ( success, error, userId, image, images, setImage) => {
+	// const userId = cookieUserId()
+	if (image && userId && images.length < 5)
+		uploadImage(success, error, userId, image )
+
+}
+
 const Images = (props) => {
 	const classes = useStyles()
 	const [images, setImages] = useState({data: []})
-	const [image, setImage] = useState({})
+	const [image, setImage] = useState(null)
 	const userId = props.user.data.id;
-	const imageRef = useRef()
+	const forceUpdate = useForceUpdate();
 
-	imageRef.current = image;
 	useEffect(() => {
 		getUserImages(props.user.data.id, setImages, (err) => {console.log({err})})
 	}, [props.user.data.id])
 
-	const handleSendImage = () => {
-			// const userId = cookieUserId()
-			
-				uploadImage(handleSuccess, handleError, userId, image )
-				setImage(null)
 
-
+	const update = () => {
+		getUserImages(props.user.data.id, setImages, (err) => {console.log({err})})
 	}
-	const handleSuccess = (response) =>{
-			console.log({response})
-			// const userId = cookieUserId()
-			// const userId = userData.data.id
-			// updateProfilePic(handleCompleteProfile, err => console.log({err}) , userId, response.data.id)
-
-	}
-	const handleError = (error) => {
-			console.log(error)
-	}
-
 
 	const handleImageChange = (event) => {
 		let file = event.target.files[0]
@@ -96,27 +88,28 @@ const Images = (props) => {
 	};
 	
 	useEffect(() => {
-		uploadImage(handleSuccess, handleError, userId, image )
+		handleSendImage((res)=>{setImage(null); getUserImages(userId, setImages, (err) => {console.log({err})})}, ()=>{}, userId, image, images.data)
 		return () => {
-			setImage({})
+			setImage(null)
 		}
-	}, [userId, imageRef])
+	}, [userId, image, images.data])
 
+		console.log("rendering images...")
 	return (
 	<>
 		<Paper elevation={2} className={classes.paper}>
 			<Typography>Images</Typography>
-			<Grid container >
+			<Grid container spacing={2} >
 				{ images.data.length
 					? images.data.map( (image) => 
-						<Grid item  xs={12} md={6} lg={4} key={image.id}> <Image image={image}/>  </Grid>
+						<Grid item  xs={12} md={6} lg={4} key={image.id}> <Image image={image} update={update} forceUpdate={forceUpdate}/>  </Grid>
 					)
 					: <Grid item align="center"> "No images <span role='img' aria-label="">😥</span>" </Grid>}
 			</Grid>
 
 			<input type="file" id="select-image" accept="image/*" className={classes.input} onChange={handleImageChange}/>
 			<label htmlFor="select-image" >
-				{	images.data.length <= 2 ?
+				{	images.data.length < 5 ?
 						<Button color="primary" size="large" variant="contained" fullWidth  component="span" >Upload a new picture</Button> 
 					: <></>}
 			</label>
@@ -125,21 +118,38 @@ const Images = (props) => {
 	)
 }
 
-const Image = ({image}) => {
+const Image = (props) => {
 	const classes =  useStyles()
 
+	const handleClickProfilePic = (event) => {
+		updateProfilePic(()=>{},()=>{},props.image.user_id, props.image.id)
+		props.update()
+
+	}
+
+	const handleClickDelete = (event) => {
+		deleteImage(props.image.id, (res) => console.log("deleted image "+props.image.id),
+		(err) => {console.log("error deleting image.")})
+		props.update()
+	}
 
 	return (
 		<>
 			<Paper variant="outlined" className={classes.imagecard}>
-				<img src={image.url} alt="" className={classes.images}/>
-				<ButtonGroup color="primary" fullWidth aria-label="outlined primary button group" className={classes.imagebtngr}>
-  					<Button>Profile Picture</Button>
-  					<Button>Delete</Button>
-				</ButtonGroup>
+				<img src={props.image.url} alt="" className={classes.images}/>
+				{ props.image.isProfilePic ? <Typography>Profile picture</Typography> : <></> }
+					<ButtonGroup color="primary" fullWidth aria-label="outlined primary button group" className={classes.imagebtngr}>
+						<Button onClick={handleClickProfilePic} disabled={props.image.isProfilePic} >Profile Picture</Button>
+  						<Button onClick={handleClickDelete} disabled={props.image.isProfilePic} >Delete</Button>
+					</ButtonGroup>
 			</Paper>
 		</>
 	)
+}
+
+function useForceUpdate(){
+    const [value, setValue] = useState(0); // integer state
+    return () => setValue(value => ++value); // update the state to force render
 }
 
 export default Images

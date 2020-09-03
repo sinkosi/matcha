@@ -7,6 +7,7 @@ import Images from './UserProfileEdit/Images'
 import { Container, Grid, Paper } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import { UserContext } from '../UserContext'
+import Interests from './UserProfileEdit/Interests';
 
 const useStyles = makeStyles({
     root: {
@@ -66,10 +67,7 @@ const UserProfileEdit = (props) => {
                         <Password {...props} user={user}/>
                     </Grid>
                     <Grid item xs={12} align="center">
-                        <Paper elevation={2} className={classes.paper}>
-                            <Typography>Interests</Typography>
-                            {user.data.interests ? user.data.interests.map( (interest, index) => <p key={index}>{interest} </p>): "No interests 😥"}
-                        </Paper>
+                        <Interests {...props} user={user}/>
                     </Grid>
                     <Grid item xs={12} align="center">
                         <Images {...props} user={user} />
