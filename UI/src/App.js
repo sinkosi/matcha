@@ -38,8 +38,8 @@ function App(props) {
 
             <ProtectedRoute exact path="/completeprofile" component={CompleteProfile}  {...props}/>
             <ProtectedRoute component={Users}  exact path="/users" />
-            <ProtectedRoute component={UserProfile} exact path="/users/:userId" />
-            <ProtectedRoute component={UserProfileEdit} exact path="/profile" />
+            <ProtectedRoute component={UserProfile} exact path="/users/:userId" userData={userData}/>
+            <ProtectedRoute component={UserProfile} exact path="/profile" />
             <ProtectedRoute component={UserProfileEdit} exact path="/profile/edit" />
           </Switch>
         </BrowserRouter>

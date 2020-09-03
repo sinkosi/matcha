@@ -37,6 +37,12 @@ const User = require("../models/user.model");
 const ActivationCode = require("../models/activation.model")
 const email = require("../config/email.config");
 const Interests = require("../models/interests.model");
+const Images = require("../models/images.model")
+const Visits = require("../models/visits.model")
+const Likes = require("../models/likes.model")
+const Matches = require("../models/matches.model")
+const bcrypt = require('bcrypt');
+const { response } = require("express");
 
 
 //Create and Save a new User
@@ -109,7 +115,31 @@ exports.findOne = (req, res) => {
 					message: "Error retrieving User with id " + req.params.userId
 				});
 			}
-		} else res.send(data);			
+		} else {
+			Interests.findByUserId(req.params.userId, (err, interests) => {
+				if (err) console.log("error retrieving interests", err)
+				else{
+					let interestArray = [];
+
+					interests.forEach(interest => {
+						interestArray.push(interest.hashtag);
+					});
+					
+					data.interests = interestArray;
+					
+
+					Images.findByUserId(req.params.userId, (err, images) => {
+						if (err) console.log("error retrieving images", err);
+						else {
+							images.map(image => delete image.path);
+							data.images = images
+
+							res.send(data)
+						}
+					})
+				}
+			})
+		}
 	});
 };
 
@@ -228,7 +258,10 @@ exports.login = (req, res) => {
 					message: "500: Error retrieving User with username: " + req.body.login["value"] //TODO: Please finish the log in sequence here
 				});
 			}
-		} else res.send(data);
+		} else {
+			delete data.password;
+			res.send(data);
+		}
 	});
 };
 
@@ -394,19 +427,74 @@ exports.forgotPasswordNewPassword = (req, res) => {
 					res.status(404).send({message: "Wrong OPT. Please use the OPT from your email"});
 					return;
 				}
-				User.updateById(userId, {password:req.body.newPassword}, (err, data) => {
-					if (err){
-						console.log(err)
-						res.status(404).send({message: err || "failed to set new password"})
-						return
-					}
-					ActivationCode.removeByProfileId(userId, (err, data) => {});
-					console.log(data)
-					res.status(200).send({message:"password was updated successfully"})
-				})
+
+				bcrypt.hash(req.body.newPassword, 10, (err, hash) => {
+					if (err) {
+						console.log("Bcrypt failure", err);
+						result ({ kind: "bcrypt err"});
+						return;
+					} else {
+						User.updateById(userId, {password:hash}, (err, data) => {
+							if (err){
+								console.log(err)
+								res.status(404).send({message: err || "failed to set new password"})
+								return
+							}
+							ActivationCode.removeByProfileId(userId, (err, data) => {});
+							console.log(data)
+							res.status(200).send({message:"password was updated successfully"})
+						});
+					};
+				});
 			});
 		}
 	})
+}
+
+exports.interactions = (req, res) => {
+	let response = {}
+
+	console.log("userId: ", req.params.userId)
+	Visits.findByVisitorId(req.params.userId, (err, visits) => {
+		if (err) console.log(err)
+		else {
+			response.profilesVisited = visits;
+
+			Visits.findByProfileId(req.params.userId, (err, visitors) => {
+				if (err) res.status(501).send({message: "error fetching data"})
+
+				else{
+					response.visitors = visitors;
+
+					Likes.findByLikerId(req.params.userId, (err, profiles) => {
+						if (err) res.status(501).send({message: "error fetching data"})
+
+						else {
+							response.profilesLiked = profiles;
+
+							Likes.findByProfileId(req.params.userId, (err, likes) => {
+								if (err) cres.status(501).send({message: "error fetching data"})
+								else {
+									response.likes = likes
+
+									Matches.findByUserId(req.params.userId, (err, matches) => {
+										if (err) res.status(501).send({message: "error fetching data"})
+
+										else {
+											response.matches = matches;
+
+											res.status(200).send(response)
+										}
+									})
+								}
+							})
+						}
+					})
+				}
+			})
+		}
+	})
+	//res.send({profilesVisited:[{id:1, username:"mosima"}], visitors: [{id:1, username:"mosima"}], profilesLiked:[{id:1, username:"mosima"}], likes:[{id:1, username:"mosima"}], matches:[{id:1, username:"mosima"}]})
 }
 
 

@@ -42,7 +42,7 @@ Interests.add = (userId, interest, result) => {
 
 
 Interests.findByUserId = (userId, result) => {
-    sql.query("SELECT * FROM interests WHERE user_id = ?", [userId], 
+    sql.query("SELECT hashtag FROM interests WHERE user_id = ?", [userId], 
     (err, res) => {
         if (err) {
             console.log("error: ", err);
@@ -50,8 +50,8 @@ Interests.findByUserId = (userId, result) => {
             return;
         }
 
-        console.log(`Found interests for user with ID: ${userId}`,  res);
-        result(null, res[0]);
+        console.log(`Found interests for user with ID: ${userId}`, res);
+        result(null, res);
     });
 };
 

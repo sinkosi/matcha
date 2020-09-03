@@ -12,5 +12,10 @@ const getUser =  (f, userId) => {
     return r
 }
 
-// exports [activate]
+const getUserInteractions = (f, userId) => {
+    api.get(`users/${userId}/interactions`)
+    .then(f)
+    .catch(err => {console.log(err)})
+}
+export {getUserInteractions}
 export default getUser
