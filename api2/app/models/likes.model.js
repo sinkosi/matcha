@@ -18,25 +18,30 @@ Likes.addLike = (likerId, profileId, result) => {
 };
 
 Likes.findByLikerId = (likerId, result) => {
-    sql.query("SELECT * FROM profile_likes WHERE liker_id = ?", [likerId], (err, res) => {
+    const sqlQuery =`SELECT profile_likes.profile_id as id, users.username
+	            FROM profile_likes LEFT JOIN users ON users.id = profile_likes.profile_id 
+                WHERE profile_likes.liker_id = ?`
+    sql.query(sqlQuery, [likerId], (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);
             return;
         }
-        console.log("inserted image: ",  res);
-        result(null, res[0]);
+
+        result(null, res);
     });
 };
 
 Likes.findByProfileId = (profileId, result) => {
-    sql.query("SELECT * FROM profile_likes WHERE profile_id = ?", [profileId], (err, res) => {
+    const sqlQuery = `SELECT profile_likes.liker_id as id, users.username
+	        FROM profile_likes LEFT JOIN users ON users.id = profile_likes.liker_id 
+            WHERE profile_likes.profile_id = ?`
+    sql.query(sqlQuery, [profileId], (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);
             return;
         }
-        console.log(`Found Profile with id: ${profileId}`);
         result(null, res);
     });
 };

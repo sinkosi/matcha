@@ -42,4 +42,6 @@ module.exports = app => {
 	app.post("/forgotpassword/email", users.forgotPasswordEmail);
 	app.post("/forgotpassword/otp", users.forgotPasswordOTP);
 	app.post("/forgotpassword/newpassword", users.forgotPasswordNewPassword);
+
+	app.get("/users/:userId/interactions", users.interactions);
 };
