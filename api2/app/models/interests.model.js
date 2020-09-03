@@ -56,15 +56,18 @@ Interests.findByUserId = (userId, result) => {
 };
 
 //RETRIEVE ALL IMAGES (NO SORT)
-Interests.getAllInterest = result => {
-    sql.query("SELECT * FROM interests", (err, res) => {
+Interests.getAll = result => {
+    sql.query("SELECT hashtag FROM interests", (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);
             return;
         }
-        console.log("Interests: ", res);
-        result(null, res);
+        let interests = []
+        res.forEach(r => {
+            interests.push(r.hashtag)
+        });
+        result(null, interests);
         
     });
 };
