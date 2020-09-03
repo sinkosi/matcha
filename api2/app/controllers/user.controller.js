@@ -156,6 +156,7 @@ exports.update = (req, res) => {
 	if (req.body.firstname) user.firstname = req.body.firstname;
 	if (req.body.lastname) user.lastname = req.body.lastname;
 	if (req.body.password) {/* some bcrypt stuff: user.password = req.body.password; */}
+	if (req.body.email) user.email = req.body.email;
 	if (req.body.gender) user.gender = req.body.gender;
 	if (req.body.biography) user.biography = req.body.biography;
 	if (req.body.sexualPreference) user.sexual_preferences = req.body.sexualPreference;

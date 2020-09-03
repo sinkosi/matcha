@@ -11,11 +11,11 @@ module.exports = app => {
     app.post("/images/upload/:userId", (req, res)=>{ images.upload(req,res)})
 
 //     //Find Image by Image ID
-    app.get("images/:imageId", images.findOneImg);
+    app.get("/images/:imageId", images.findOneImg);
 
 //     //Find Image by User ID
-    app.get("users/images/:userId", images.findImgbyUserId);
+    app.get("/users/:userId/images", images.findByUserId);
 
 //     //Delete An Image
-    app.delete("images/:imageId", images.deleteOneImage);
+    app.delete("/images/:imageId", images.deleteOneImage);
 };
