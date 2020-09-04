@@ -78,13 +78,14 @@ User.findByEmail = (email, result) => {
 };
 
 //RETRIEVE ALL USER DATA
-User.getAll = result => {
+User.getAll = (loggedInUserId, result) => {
 	sqlQuery = `SELECT 
 			u.id, u.username, u.email, u.firstname, u.lastname, u.gender, 
 			u.biography, u.sexual_preferences, u.date_of_birth, u.activated, 
 			u.completed,  i.url as profile_pic
-		FROM users as u LEFT JOIN images as i ON u.profile_pic = i.id`;
-	sql.query(sqlQuery, (err, res) => {
+		FROM users as u LEFT JOIN images as i ON u.profile_pic = i.id
+		WHERE u.activated=1 AND u.completed=1 AND u.id!=?`;
+	sql.query(sqlQuery, [loggedInUserId], (err, res) => {
 		if (err) {
 			console.log("error: ", err);
 			result(null, err);
