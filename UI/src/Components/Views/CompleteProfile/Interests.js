@@ -13,103 +13,98 @@ import { UserContext } from '../../UserContext'
 
 
 const useStyles = makeStyles({
-    root: {
-        marginTop: '3rem',
-        padding: '2rem'
-        
-      },
-    checkboxFormControl: {
-    display: 'block'
-    
-    },
+	root: {
+		marginTop: '3rem',
+		padding: '2rem'
+		
+	  },
+	checkboxFormControl: {
+	display: 'block'
+	
+	},
   });
 
 export default function Interests(props)
 {
-    const classes = useStyles();
-    var [interests, setInterests] = React.useState([]);
-    var [interest, setInterest] = React.useState("#");
-    const { userData } = useContext(UserContext);
-    
-    
-    const handleAddInterest = (event) => {
-        setInterests(interests.concat(interest));
-        setInterest("#")
-    };
+	const classes = useStyles();
+	var [interests, setInterests] = React.useState([]);
+	var [interest, setInterest] = React.useState("#");
+	const { userData } = useContext(UserContext);
+	
+	
+	const handleAddInterest = (event) => {
+		setInterests(interests.concat(interest));
+		setInterest("#")
+	};
 
-    const handleInterestChange = (event) => setInterest(event.target.value);
+	const handleInterestChange = (event) => setInterest(event.target.value);
 
-    const handleDelete = (chipToDelete)  => {
-        console.log(chipToDelete.id)
-        console.log(interests)
+	const handleDelete = (chipToDelete)  => {
+		setInterests((interests) => interests.filter((i) => i !== chipToDelete));
+	  };
 
-        setInterests((interests) => interests.filter((i) => i !== chipToDelete));
-      };
+	const handleSubmitInterests = () => {
+		// const userId = cookieUserId()
+		const userId = userData.data.id
+		updateInterests(handleSuccess, handleError, userId, interests)
+	}
+	const handleSuccess = (respose) =>{
+		props.next()
+	}
+	const handleError = (error) => {
+	}
+	
+	return (
+		<Paper elevation={5} className={classes.root}>
+			<Typography variant={"h1"} align={"center"}>Interests</Typography> 
+			<Typography variant={"h5"} align={"center"}>
+				Please choose one or more interests.
+			</Typography> 
 
-    const handleSubmitInterests = () => {
-        // const userId = cookieUserId()
-        const userId = userData.data.id
-        updateInterests(handleSuccess, handleError, userId, interests)
-    }
-    const handleSuccess = (respose) =>{
-        console.log(respose)
-        props.next()
-    }
-    const handleError = (error) => {
-        console.log(error)
-    }
-    
-    return (
-        <Paper elevation={5} className={classes.root}>
-            <Typography variant={"h1"} align={"center"}>Interests</Typography> 
-            <Typography variant={"h5"} align={"center"}>
-                Please choose one or more interests.
-            </Typography> 
+			<div>
+				{interests.map((int) => 
+					
+					<Chip label={int} key={int} onDelete={handleDelete} color="primary" id={int}/>
 
-            <div>
-                {interests.map((int) => 
-                    
-                    <Chip label={int} key={int} onDelete={handleDelete} color="primary" id={int}/>
+				)}
+			</div>
+			<form method="POST" className={classes.form} noValidate>
+			
+			<Grid container>
+				<Grid item xs={12} sm={10}>
+					<TextField
+						variant="outlined"
+						// margin="normal"
+						value={interest}
+						fullWidth
+						id="interest"
+						label="#interest"
+						name="insterest"
+						onChange={handleInterestChange}
+						autoFocus
+					/>
+				</Grid>
+				<Grid item xs={12} sm={2}>
+					<Button
+						fullWidth
+						variant="contained"
+						color="primary"
+						size={"large"}
+						onClick={handleAddInterest}
+					>
+						Add
+						</Button>
 
-                )}
-            </div>
-            <form method="POST" className={classes.form} noValidate>
-            
-            <Grid container>
-                <Grid item xs={12} sm={10}>
-                    <TextField
-                        variant="outlined"
-                        // margin="normal"
-                        value={interest}
-                        fullWidth
-                        id="interest"
-                        label="#interest"
-                        name="insterest"
-                        onChange={handleInterestChange}
-                        autoFocus
-                    />
-                </Grid>
-                <Grid item xs={12} sm={2}>
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        size={"large"}
-                        onClick={handleAddInterest}
-                    >
-                        Add
-                        </Button>
-
-                </Grid>
-            </Grid>
-            </form>
-            
-            
-            
-               
-            
-         
-            <Button color={"primary"} size={"large"} variant={"contained"} onClick={handleSubmitInterests}>Next ></Button>
-        </Paper  >
-    );
+				</Grid>
+			</Grid>
+			</form>
+			
+			
+			
+			   
+			
+		 
+			<Button color={"primary"} size={"large"} variant={"contained"} onClick={handleSubmitInterests}>Next ></Button>
+		</Paper  >
+	);
 }

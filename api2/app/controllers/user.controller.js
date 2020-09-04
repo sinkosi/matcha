@@ -92,7 +92,11 @@ exports.create = (req, res) => {
 
 //Retrieve all Users from the database.
 exports.findAll = (req, res) => {
-	User.getAll((err, data) => {
+	if (!req.headers.loggedinuserid) {
+		res.status(401).send({message:"you must be logged in"})
+	}
+
+	User.getAll(req.headers.loggedinuserid, (err, data) => {
 		if (err)
 			res.status(500).send({
 				message:
@@ -104,6 +108,13 @@ exports.findAll = (req, res) => {
 
 //Retrieve a single User with a userId in the request
 exports.findOne = (req, res) => {
+	if (!req.headers.loggedinuserid) {
+		res.status(401).send({message: "must be logged in"})
+	}
+	if (req.headers.loggedinuserid != req.params.userId){
+		Visits.add(req.headers.loggedinuserid, req.params.userId, (err, result) => {})
+	}
+	let userId = req.params.userId
 	User.findById(req.params.userId, (err, data) => {
 		if (err) {
 			if (err.kind === "not_found") {
@@ -133,8 +144,19 @@ exports.findOne = (req, res) => {
 						else {
 							images.map(image => delete image.path);
 							data.images = images
+							if (req.headers.loggedinuserid == userId){
+								res.send(data)
+								return
+							}
 
-							res.send(data)
+							Likes.doesUserLikeProfile(req.headers.loggedinuserid, userId, (err, like) => {
+									if (err) console.log(err)
+									else {
+										data.isLiked = like;
+										res.send(data)
+										return 
+									}
+							})
 						}
 					})
 				}
@@ -151,7 +173,8 @@ exports.update = (req, res) => {
 			message: "Content can not be empty"
 		});
 	}
-	console.log(req.body)
+	console.log("this is to see how i can read the request headers........")
+	console.log(req.headers)
 	let user = {};
 	if (req.body.firstname) user.firstname = req.body.firstname;
 	if (req.body.lastname) user.lastname = req.body.lastname;
@@ -163,8 +186,13 @@ exports.update = (req, res) => {
 	if (req.body.profilePic) user.profile_pic = req.body.profilePic;
 	if (req.body.location) {/* some location stuff: user.location = req.body.location; */}
 	if (req.body.interests) { 
-		req.body.interests.forEach(interest => {
-			Interests.add(req.params.userId, interest, (err, res) => {});
+		Interests.deleteAllUserInsterests(req.params.userId, (err, result) => {
+			if (err) console.log(err)
+			else {
+				req.body.interests.forEach(interest => {
+					Interests.add(req.params.userId, interest, (err, res) => {});
+				})
+			}
 		})
 	}
 	if (req.body.dob) {/* some interesting stuff: user.firstname = req.body.firstname; */}
@@ -206,6 +234,7 @@ exports.update = (req, res) => {
 		);
 	}
 	else res.status(200).send({message:'empty body'});
+
 };
 
 //Delete a User with the specified userId in the request
@@ -459,7 +488,9 @@ exports.interactions = (req, res) => {
 	Visits.findByVisitorId(req.params.userId, (err, visits) => {
 		if (err) console.log(err)
 		else {
+			let unique = [...new Set(visits)]; 
 			response.profilesVisited = visits;
+			console.log("______________\n", unique)
 
 			Visits.findByProfileId(req.params.userId, (err, visitors) => {
 				if (err) res.status(501).send({message: "error fetching data"})

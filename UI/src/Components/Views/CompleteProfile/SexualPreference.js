@@ -13,58 +13,54 @@ import { updatePreference } from '../../../Services/profile'
 
 
 const useStyles = makeStyles({
-    root: {
-        marginTop: '3rem',
-        padding: '2rem'
-        
-      },
-    checkboxFormControl: {
-    display: 'block'
-    
-    },
+	root: {
+		marginTop: '3rem',
+		padding: '2rem'
+		
+	  },
+	checkboxFormControl: {
+	display: 'block'
+	
+	},
   });
 
 export default function SexualPreference(props)
 {
-    const classes = useStyles();
-    const [preference, setPreference] = React.useState('both');
-    const { userData } = useContext(UserContext);
+	const classes = useStyles();
+	const [preference, setPreference] = React.useState('both');
+	const { userData } = useContext(UserContext);
 
-    const handleChange = (event) => {
-      console.log(preference)
-      setPreference(event.target.value);
-    };
+	const handleChange = (event) => {
+	  setPreference(event.target.value);
+	};
 
-    const handleSubmitPreference = ()=>{
-      // const userId = cookieUserId()
-      const userId = userData.data.id
-      console.log({preference})
-      updatePreference(handleSuccess, handleError, userId, preference)
-    }
-    const handleSuccess = (respose) =>{
-      console.log(respose)
-      props.next()
-    }
-    const handleError = (error) => {
-      console.log(error)
-    }
-    return (
-        <Paper elevation={5} className={classes.root}>
-            <Typography variant={"h1"} align={"center"}>Preferences</Typography> 
-            <Typography variant={"h5"} align={"center"}>
-                I would like to meet and connect with:
-            </Typography> 
-            <form method="POST" className={classes.form} noValidate>
-            
-            <RadioGroup aria-label="preference" name="preference" value={preference} onChange={handleChange} >
-                <FormControlLabel value="both" control={<Radio />} label="Males and females" />
-                <FormControlLabel value="males" control={<Radio />} label="Males only" />
-                <FormControlLabel value="females" control={<Radio />} label="Females only" />
-            </RadioGroup>
-                
-        
-            </form>
-            <Button color={"primary"} size={"large"} variant={"contained"} onClick={handleSubmitPreference}>Next ></Button>
-        </Paper  >
-    );
+	const handleSubmitPreference = ()=>{
+	  // const userId = cookieUserId()
+	  const userId = userData.data.id
+	  updatePreference(handleSuccess, handleError, userId, preference)
+	}
+	const handleSuccess = (respose) =>{
+	  props.next()
+	}
+	const handleError = (error) => {
+	}
+	return (
+		<Paper elevation={5} className={classes.root}>
+			<Typography variant={"h1"} align={"center"}>Preferences</Typography> 
+			<Typography variant={"h5"} align={"center"}>
+				I would like to meet and connect with:
+			</Typography> 
+			<form method="POST" className={classes.form} noValidate>
+			
+			<RadioGroup aria-label="preference" name="preference" value={preference} onChange={handleChange} >
+				<FormControlLabel value="both" control={<Radio />} label="Males and females" />
+				<FormControlLabel value="males" control={<Radio />} label="Males only" />
+				<FormControlLabel value="females" control={<Radio />} label="Females only" />
+			</RadioGroup>
+				
+		
+			</form>
+			<Button color={"primary"} size={"large"} variant={"contained"} onClick={handleSubmitPreference}>Next ></Button>
+		</Paper  >
+	);
 }

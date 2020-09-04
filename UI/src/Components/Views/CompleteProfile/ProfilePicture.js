@@ -46,18 +46,15 @@ export default function ProfilePicture(props)
 				uploadImage(handleSuccess, handleError, userId, image )
 		}
 		const handleSuccess = (response) =>{
-				console.log({response})
 				// const userId = cookieUserId()
 				const userId = userData.data.id
-				updateProfilePic(handleCompleteProfile, err => console.log({err}) , userId, response.data.id)
+				updateProfilePic(handleCompleteProfile, err => {} , userId, response.data.id)
 	 
 		}
 		const handleError = (error) => {
-				console.log(error)
 		}
 
 		const handleCompleteProfile = (response) => {
-			console.log(response)
 				if (response.data.completed || true){
 					let userDataTemp = userData
 					userDataTemp.completed = true
@@ -72,7 +69,6 @@ export default function ProfilePicture(props)
 		const handleImageChange = (event) => {
 			let file = event.target.files[0]
 			let reader = new FileReader();
-			console.log(file);
 			reader.onloadend = function () {
 				var b64 = reader.result.replace(/^data:.+;base64,/, '');
 				setImage( {

@@ -78,17 +78,14 @@ const Password = (props) => {
 	  }
 	  const send_data = () => {
 		const formdata = {}
-		console.log(formdata)
 		updateUserProfile(handleSuccess, handleError, props.user.data.id,formdata)
 	  }
 	
 	  const handleSuccess = (response) => {
-		console.log({response})
  
 	  }
 	
 	  const handleError = (error) =>{
-		console.log({error})
 	  }
 	return (
 		<>
