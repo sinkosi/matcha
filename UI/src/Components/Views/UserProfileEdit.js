@@ -10,74 +10,73 @@ import { UserContext } from '../UserContext'
 import Interests from './UserProfileEdit/Interests';
 
 const useStyles = makeStyles({
-    root: {
+	root: {
 
-    },
-    image: {
-        maxWidth: "100%"
-      },
-    paper: {
-        width:'100%',
-        padding: '1rem',
-        height:'100%'
-    },
-    title: {
-        marginBottom:'1rem'
-    },
-    images: {
-        maxWidth:"100%",
-        padding: "1rem"
-    },
-    radio: {
-        marginLeft: "1rem",
-        marginBottom: "1rem"
-    },
-    bio: {
-        marginBottom: "1rem"
-    }
+	},
+	image: {
+		maxWidth: "100%"
+	  },
+	paper: {
+		width:'100%',
+		padding: '1rem',
+		height:'100%'
+	},
+	title: {
+		marginBottom:'1rem'
+	},
+	images: {
+		maxWidth:"100%",
+		padding: "1rem"
+	},
+	radio: {
+		marginLeft: "1rem",
+		marginBottom: "1rem"
+	},
+	bio: {
+		marginBottom: "1rem"
+	}
 });
 
 const UserProfileEdit = (props) => {
-    const classes = useStyles();
-    const [user, setUser] = useState({data: []})
-    const {userData} = useContext(UserContext)
-    let userRef = useRef()
-    const userId = userData.data.id 
-    userRef.current = user.data
+	const classes = useStyles();
+	const [user, setUser] = useState({data: []})
+	const {userData} = useContext(UserContext)
+	let userRef = useRef()
+	const userId = userData.data.id 
+	userRef.current = user.data
 
 
-    useEffect(() => {getUser(setUser, userId )}, [userId])
+	useEffect(() => {getUser(setUser, userId )}, [userId])
 
-    console.log({user})
-    return (
-        user.data.id ?  
-        <>
-            <Container maxWidth="lg" className={classes.root}>
-                <Typography align="center" variant="h3" component="h1" className={classes.title}>{user.data.firstname} {user.data.lastname}</Typography>
-                <Grid container spacing={3}>
-                    <Grid item md={6} align="center">
-                        <Paper elevation={2} className={classes.paper} wrap="nowrap">
-                            <img src={user.data.profile_pic} alt={user.data.firstname+"'s profile pic"} className={classes.image} />
-                        </Paper>
-                    </Grid>
-                    <Grid item md={6} >
-                        <BasicInfo {...props} user={user}/>
-                    </Grid>
-                    <Grid item md={6} >
-                        <Password {...props} user={user}/>
-                    </Grid>
-                    <Grid item xs={12} align="center">
-                        <Interests {...props} user={user}/>
-                    </Grid>
-                    <Grid item xs={12} align="center">
-                        <Images {...props} user={user} />
-                    </Grid>
+	return (
+		user.data.id ?  
+		<>
+			<Container maxWidth="lg" className={classes.root}>
+				<Typography align="center" variant="h3" component="h1" className={classes.title}>{user.data.firstname} {user.data.lastname}</Typography>
+				<Grid container spacing={3}>
+					<Grid item md={6} align="center">
+						<Paper elevation={2} className={classes.paper} wrap="nowrap">
+							<img src={user.data.profile_pic} alt={user.data.firstname+"'s profile pic"} className={classes.image} />
+						</Paper>
+					</Grid>
+					<Grid item md={6} >
+						<BasicInfo {...props} user={user}/>
+					</Grid>
+					<Grid item md={6} >
+						<Password {...props} user={user}/>
+					</Grid>
+					<Grid item xs={12} align="center">
+						<Interests {...props} user={user}/>
+					</Grid>
+					<Grid item xs={12} align="center">
+						<Images {...props} user={user} />
+					</Grid>
 
-                </Grid>
-            </Container>
-        </>
-        : <></>
-    )
+				</Grid>
+			</Container>
+		</>
+		: <></>
+	)
 }
 
 export default UserProfileEdit

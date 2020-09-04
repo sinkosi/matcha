@@ -40,11 +40,9 @@ export default function Biography(props)
         updateBiography(handleSuccess, handleError, userId, biography)
     }
     const handleSuccess = (respose) =>{
-        console.log(respose)
         props.next()
     }
     const handleError = (error) => {
-        console.log(error)
     }
     
     return (

@@ -43,6 +43,10 @@ const UserProfile = (props) => {
     let userRef = useRef()
     let history = useHistory()
     const userId = (props.path === "/profile" ? userData.data.id : props.location.pathname.split("/")[2])
+
+    if (props.path !== "/profile" && props.location.pathname.split("/")[2] === userData.data.id) {
+        history.push("/profile")
+    }
     userRef.current = user.data
 
     const handleClickEdit = (event) => {
@@ -51,7 +55,6 @@ const UserProfile = (props) => {
 
     useEffect(() => {getUser(setUser, userId )}, [userId])
 
-    console.log({user})
     return (
         <>
             <Container maxWidth="lg" className={classes.root}>
@@ -157,7 +160,6 @@ const Interactions = (props) => {
         getUserInteractions(setInteractions, props.userId)
     }, [interactionRef, props.userId])
 
-    console.log({interactions})
     const classes = useStyles()
     return (
         <>

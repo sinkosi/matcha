@@ -61,18 +61,17 @@ const Images = (props) => {
 	const forceUpdate = useForceUpdate();
 
 	useEffect(() => {
-		getUserImages(props.user.data.id, setImages, (err) => {console.log({err})})
+		getUserImages(props.user.data.id, setImages, (err) => {})
 	}, [props.user.data.id])
 
 
 	const update = () => {
-		getUserImages(props.user.data.id, setImages, (err) => {console.log({err})})
+		getUserImages(props.user.data.id, setImages, (err) => {})
 	}
 
 	const handleImageChange = (event) => {
 		let file = event.target.files[0]
 		let reader = new FileReader();
-		console.log(file);
 		
 		reader.onloadend = function () {
 			var b64 = reader.result.replace(/^data:.+;base64,/, '');
@@ -88,13 +87,12 @@ const Images = (props) => {
 	};
 	
 	useEffect(() => {
-		handleSendImage((res)=>{setImage(null); getUserImages(userId, setImages, (err) => {console.log({err})})}, ()=>{}, userId, image, images.data)
+		handleSendImage((res)=>{setImage(null); getUserImages(userId, setImages, (err) => {})}, ()=>{}, userId, image, images.data)
 		return () => {
 			setImage(null)
 		}
 	}, [userId, image, images.data])
 
-		console.log("rendering images...")
 	return (
 	<>
 		<Paper elevation={2} className={classes.paper}>
@@ -128,8 +126,8 @@ const Image = (props) => {
 	}
 
 	const handleClickDelete = (event) => {
-		deleteImage(props.image.id, (res) => console.log("deleted image "+props.image.id),
-		(err) => {console.log("error deleting image.")})
+		deleteImage(props.image.id, (res) => {},
+		(err) => {})
 		props.update()
 	}
 
@@ -148,7 +146,8 @@ const Image = (props) => {
 }
 
 function useForceUpdate(){
-    const [value, setValue] = useState(0); // integer state
+	const [value, setValue] = useState(0); // integer state
+	if (value > 0)
     return () => setValue(value => ++value); // update the state to force render
 }
 

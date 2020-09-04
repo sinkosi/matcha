@@ -17,7 +17,7 @@ const Interests = (props) => {
 	let suggestedInterests=[]
 
 	useEffect(() => {
-		getAllInterests(({data}) =>{suggestedInterests = data }, (err)=>{console.log(err)})
+		getAllInterests(({data}) =>{suggestedInterests = data }, (err)=>{})
 	}, )
 	return (
 	<>
@@ -36,7 +36,6 @@ const Interest = (props) => {
 	const classes = useStyle();
 
 	const handleDelete = (e) => {
-		console.log(`deleting interest ${props.index} with value of ${props.interest}`)
 		let arr = props.interestArray
 
 		arr = arrayRemove(arr, props.interest)

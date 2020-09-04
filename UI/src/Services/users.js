@@ -1,18 +1,26 @@
 import axios from 'axios'
+import { getCookie } from '../utils/cookies'
+
+let loginData = getCookie('loginData');
+let loggedInUserId = -1;
+if (loginData) {
+	loginData = JSON.parse(loginData);
+	loggedInUserId = loginData.data.id; 
+}
+let header = {'headers' : {loggedInUserId}}
+
 
 const api = axios.create({baseURL: 'http://localhost:5000'})
 
 
 const getUsers =  (f, token) => {
-    let header = {'headers' : {'token' : `bearer ${token}`}}
+	// let header = {'headers' : {'token' : `bearer ${token}`}}
 
-    var r = api.get('/users', header).then(f
-        ).catch(err => {
-            console.log({err})
-            r = err
-        })
-    return r
+	api.get('/users', header)
+	.then(f)
+	.catch(() => {})
 }
+
 
 // exports [activate]
 export default getUsers
