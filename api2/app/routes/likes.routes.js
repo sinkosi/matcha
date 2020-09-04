@@ -2,16 +2,17 @@ module.exports = app => {
 
     const likes = require("../controllers/likes.controller");
 
-    //Create a new like
-    app.post("likes/", likes.likesCreate);
+  
 
     //FIND A LIKE BY ITS LikerID
-    app.get("likes/:likerId", likes.findByLikerId);
+    app.get("/likes/:likerId", likes.findByLikerId);
 
     //FIND AN INTEREST BY ITS ID
-    app.get("likes/:profileId", likes.findByProfileId);
+    app.get("/likes/:profileId", likes.findByProfileId);
 
-    //Remove a Like
-    app.delete("likes/:likeId/:profileId", likes.DeleteLike);
+
+
+    app.post("/users/:userId/like", likes.add)
+    app.post("/users/:userId/unlike", likes.remove)
 
 }

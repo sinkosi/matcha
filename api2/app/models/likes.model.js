@@ -22,11 +22,10 @@ Likes.findByLikerId = (likerId, result) => {
 				WHERE profile_likes.liker_id = ?`
 	sql.query(sqlQuery, [likerId], (err, res) => {
 		if (err) {
-			console.log("error: ", err);
 			result(err, null);
 			return;
 		}
-
+		console.log(res)
 		result(null, res);
 	});
 };
@@ -51,7 +50,9 @@ Likes.removeLike = (likerId, profileId, result) => {
 			result(err, null);
 			return;
 		}
-		result(null, res);
+		else {
+			result(null, res);
+		}
 	});
 }
 

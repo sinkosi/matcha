@@ -111,6 +111,9 @@ exports.findOne = (req, res) => {
 	if (!req.headers.loggedinuserid) {
 		res.status(401).send({message: "must be logged in"})
 	}
+	if (req.headers.loggedinuserid != req.params.userId){
+		Visits.add(req.headers.loggedinuserid, req.params.userId, (err, result) => {})
+	}
 	let userId = req.params.userId
 	User.findById(req.params.userId, (err, data) => {
 		if (err) {
@@ -485,7 +488,9 @@ exports.interactions = (req, res) => {
 	Visits.findByVisitorId(req.params.userId, (err, visits) => {
 		if (err) console.log(err)
 		else {
+			let unique = [...new Set(visits)]; 
 			response.profilesVisited = visits;
+			console.log("______________\n", unique)
 
 			Visits.findByProfileId(req.params.userId, (err, visitors) => {
 				if (err) res.status(501).send({message: "error fetching data"})
