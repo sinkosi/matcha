@@ -1,7 +1,7 @@
 module.exports = {
 	HOST: "localhost",
 	USER: "root",
-	PASSWORD: "mosima",
+	PASSWORD: "password",
 	DB: "matcha"
 	
 };

@@ -121,7 +121,7 @@ exports.update = (req, res) => {
 			message: "Content can not be empty"
 		});
 	}
-	console.log(req.body)
+	//console.log(req.body)
 	let user = {};
 	if (req.body.firstname) user.firstname = req.body.firstname;
 	if (req.body.lastname) user.lastname = req.body.lastname;
@@ -139,11 +139,19 @@ exports.update = (req, res) => {
 	if (req.body.dob) {/* some interesting stuff: user.firstname = req.body.firstname; */}
 
 	console.log({user})
-	if (user.length > 0) {
+	console.log(user.length)
+	console.log(req.params.userId)
+	console.log(user[0])
+	console.log(req.body)
+	//if (user.length > 0) {
+	if (req.body) {
 		User.updateById(
+			
 			req.params.userId,
-			user,
+			//user,
+			req.body,
 			(err, data) => {
+				console.log('Run it')
 				if (err) {
 					if (err.kind === "not_found") {
 						res.status(404).send({
