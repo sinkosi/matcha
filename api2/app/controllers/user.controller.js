@@ -488,32 +488,31 @@ exports.interactions = (req, res) => {
 	Visits.findByVisitorId(req.params.userId, (err, visits) => {
 		if (err) console.log(err)
 		else {
-			let unique = [...new Set(visits)]; 
-			response.profilesVisited = visits;
-			console.log("______________\n", unique)
+			
+			response.profilesVisited = unique(visits);
 
 			Visits.findByProfileId(req.params.userId, (err, visitors) => {
 				if (err) res.status(501).send({message: "error fetching data"})
 
 				else{
-					response.visitors = visitors;
+					response.visitors = unique(visitors);
 
 					Likes.findByLikerId(req.params.userId, (err, profiles) => {
 						if (err) res.status(501).send({message: "error fetching data"})
 
 						else {
-							response.profilesLiked = profiles;
+							response.profilesLiked = unique(profiles);
 
 							Likes.findByProfileId(req.params.userId, (err, likes) => {
 								if (err) cres.status(501).send({message: "error fetching data"})
 								else {
-									response.likes = likes
+									response.likes = unique(likes)
 
 									Matches.findByUserId(req.params.userId, (err, matches) => {
 										if (err) res.status(501).send({message: "error fetching data"})
 
 										else {
-											response.matches = matches;
+											response.matches = unique(matches);
 
 											res.status(200).send(response)
 										}
@@ -539,3 +538,24 @@ function randomString(length) {
     }
     return result;
  }
+
+ function unique(arr){
+	let newArray = []
+
+	arr.forEach(element => {
+		if (index(element, newArray) == -1)
+			newArray.push(element)
+	});
+	return newArray
+
+	function index(x , array){
+		let i = 0;
+		while (i < array.length){
+			if (array[i].id == x.id){
+				return i;
+			}
+			i++;
+		}
+		return -1;
+	}
+}
