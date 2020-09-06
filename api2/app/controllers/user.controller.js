@@ -95,7 +95,7 @@ exports.findAll = (req, res) => {
 	if (!req.headers.loggedinuserid) {
 		res.status(401).send({message:"you must be logged in"})
 	}
-
+	console.log(req.query)
 	User.getAll(req.headers.loggedinuserid, (err, data) => {
 		if (err)
 			res.status(500).send({

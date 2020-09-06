@@ -12,6 +12,41 @@ api2/comments.js
 api2/comments.js
 api2/secret.js
 api2/app/config/db.config.js
+<<<<<<< HEAD
 api2/uploads/images/IMG_20190921_175157.jpg
 api2/uploads/images/1/joFU5qDEfOud4NzbKr8X.jpg
 api2/uploads/images/*
+=======
+
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+api2/uploads/images/*
+api2/uploads/images/IMG_20190921_175157.jpg
+api2/uploads/images/1/joFU5qDEfOud4NzbKr8X.jpg
+api2/uploads/images/1/Mhe3E8n9nymrYbdIm9hl.jpg
+api2/uploads/images/1/RUaiRcn7jU7Wj8qOm7P0.jpg
+api2/uploads/images/2/QpQrv2lbgpEyJOcGIoG8.jpg
+api2/uploads/images/4/rAJVT8dgS2XRdsAdAAh4.jpg
+UI/node_modules/
+api2/app/config/db.config.js
+>>>>>>> origin/master

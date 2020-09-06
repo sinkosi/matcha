@@ -13,10 +13,9 @@ let header = {'headers' : {loggedInUserId}}
 const api = axios.create({baseURL: 'http://localhost:5000'})
 
 
-const getUsers =  (f, token) => {
-	// let header = {'headers' : {'token' : `bearer ${token}`}}
+const getUsers =  (f, query) => {
 
-	api.get('/users', header)
+	api.get(`/users?${query}`, header)
 	.then(f)
 	.catch(() => {})
 }
