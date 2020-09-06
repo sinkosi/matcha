@@ -6,10 +6,6 @@ import { Paper, Chip, TextField, Button } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import AddIcon from '@material-ui/icons/Add';
 
-
-
-
-
 const useStyle = makeStyles({
 	chip: {
 		margin: "1rem"
