@@ -37,6 +37,12 @@ const User = require("../models/user.model");
 const ActivationCode = require("../models/activation.model")
 const email = require("../config/email.config");
 const Interests = require("../models/interests.model");
+const Images = require("../models/images.model")
+const Visits = require("../models/visits.model")
+const Likes = require("../models/likes.model")
+const Matches = require("../models/matches.model")
+const bcrypt = require('bcrypt');
+const { response } = require("express");
 
 
 //Create and Save a new User
@@ -67,7 +73,7 @@ exports.create = (req, res) => {
 		
 		console.log("creating activation code:");
 		let userId  = userdata.id
-		let code = randomString(14);
+		let code = tring(14);
 
 		const activation = new ActivationCode({userId, code})
 		ActivationCode.create(activation, (err, data) => {
@@ -86,7 +92,11 @@ exports.create = (req, res) => {
 
 //Retrieve all Users from the database.
 exports.findAll = (req, res) => {
-	User.getAll((err, data) => {
+	if (!req.headers.loggedinuserid) {
+		res.status(401).send({message:"you must be logged in"})
+	}
+
+	User.getAll(req.headers.loggedinuserid, (err, data) => {
 		if (err)
 			res.status(500).send({
 				message:
@@ -98,6 +108,13 @@ exports.findAll = (req, res) => {
 
 //Retrieve a single User with a userId in the request
 exports.findOne = (req, res) => {
+	if (!req.headers.loggedinuserid) {
+		res.status(401).send({message: "must be logged in"})
+	}
+	if (req.headers.loggedinuserid != req.params.userId){
+		Visits.add(req.headers.loggedinuserid, req.params.userId, (err, result) => {})
+	}
+	let userId = req.params.userId
 	User.findById(req.params.userId, (err, data) => {
 		if (err) {
 			if (err.kind === "not_found") {
@@ -109,7 +126,42 @@ exports.findOne = (req, res) => {
 					message: "Error retrieving User with id " + req.params.userId
 				});
 			}
-		} else res.send(data);			
+		} else {
+			Interests.findByUserId(req.params.userId, (err, interests) => {
+				if (err) console.log("error retrieving interests", err)
+				else{
+					let interestArray = [];
+
+					interests.forEach(interest => {
+						interestArray.push(interest.hashtag);
+					});
+					
+					data.interests = interestArray;
+					
+
+					Images.findByUserId(req.params.userId, (err, images) => {
+						if (err) console.log("error retrieving images", err);
+						else {
+							images.map(image => delete image.path);
+							data.images = images
+							if (req.headers.loggedinuserid == userId){
+								res.send(data)
+								return
+							}
+
+							Likes.doesUserLikeProfile(req.headers.loggedinuserid, userId, (err, like) => {
+									if (err) console.log(err)
+									else {
+										data.isLiked = like;
+										res.send(data)
+										return 
+									}
+							})
+						}
+					})
+				}
+			})
+		}
 	});
 };
 
@@ -121,19 +173,26 @@ exports.update = (req, res) => {
 			message: "Content can not be empty"
 		});
 	}
-	//console.log(req.body)
+	console.log("this is to see how i can read the request headers........")
+	console.log(req.headers)
 	let user = {};
 	if (req.body.firstname) user.firstname = req.body.firstname;
 	if (req.body.lastname) user.lastname = req.body.lastname;
 	if (req.body.password) {/* some bcrypt stuff: user.password = req.body.password; */}
+	if (req.body.email) user.email = req.body.email;
 	if (req.body.gender) user.gender = req.body.gender;
 	if (req.body.biography) user.biography = req.body.biography;
 	if (req.body.sexualPreference) user.sexual_preferences = req.body.sexualPreference;
 	if (req.body.profilePic) user.profile_pic = req.body.profilePic;
 	if (req.body.location) {/* some location stuff: user.location = req.body.location; */}
 	if (req.body.interests) { 
-		req.body.interests.forEach(interest => {
-			Interests.add(req.params.userId, interest, (err, res) => {});
+		Interests.deleteAllUserInsterests(req.params.userId, (err, result) => {
+			if (err) console.log(err)
+			else {
+				req.body.interests.forEach(interest => {
+					Interests.add(req.params.userId, interest, (err, res) => {});
+				})
+			}
 		})
 	}
 	if (req.body.dob) {/* some interesting stuff: user.firstname = req.body.firstname; */}
@@ -145,6 +204,8 @@ exports.update = (req, res) => {
 	console.log(req.body)
 	//if (user.length > 0) {
 	if (req.body) {
+	console.log({user}, Object.keys(user).length);
+	if (Object.keys(user).length > 0) {
 		User.updateById(
 			
 			req.params.userId,
@@ -157,16 +218,33 @@ exports.update = (req, res) => {
 						res.status(404).send({
 							message: `Not found User with id ${req.params.userId}.`
 						});
+						return;
 					} else {
 					res.status(500).send({
 						message: "Error updating User with id " + req.params.userId
 						});
+						return;
 					}
-				} else res.send(data);
+				}
+				else {
+					res.send(data);
+
+					User.findById(req.params.userId, (err, result) => {
+						if (err) console.log(err)
+
+						console.log(result)
+						if (result.sexual_preferences && result.profile_pic && result.biography){
+							User.updateById(req.params.userId, {completed: true}, (err, result) => {})
+						}
+					})
+					
+				} 
+				return;
 			}
 		);
 	}
 	else res.status(200).send({message:'empty body'});
+
 };
 
 //Delete a User with the specified userId in the request
@@ -220,7 +298,10 @@ exports.login = (req, res) => {
 					message: "500: Error retrieving User with username: " + req.body.login["value"] //TODO: Please finish the log in sequence here
 				});
 			}
-		} else res.send(data);
+		} else {
+			delete data.password;
+			res.send(data);
+		}
 	});
 };
 
@@ -386,19 +467,76 @@ exports.forgotPasswordNewPassword = (req, res) => {
 					res.status(404).send({message: "Wrong OPT. Please use the OPT from your email"});
 					return;
 				}
-				User.updateById(userId, {password:req.body.newPassword}, (err, data) => {
-					if (err){
-						console.log(err)
-						res.status(404).send({message: err || "failed to set new password"})
-						return
-					}
-					ActivationCode.removeByProfileId(userId, (err, data) => {});
-					console.log(data)
-					res.status(200).send({message:"password was updated successfully"})
-				})
+
+				bcrypt.hash(req.body.newPassword, 10, (err, hash) => {
+					if (err) {
+						console.log("Bcrypt failure", err);
+						result ({ kind: "bcrypt err"});
+						return;
+					} else {
+						User.updateById(userId, {password:hash}, (err, data) => {
+							if (err){
+								console.log(err)
+								res.status(404).send({message: err || "failed to set new password"})
+								return
+							}
+							ActivationCode.removeByProfileId(userId, (err, data) => {});
+							console.log(data)
+							res.status(200).send({message:"password was updated successfully"})
+						});
+					};
+				});
 			});
 		}
 	})
+}
+
+exports.interactions = (req, res) => {
+	let response = {}
+
+	console.log("userId: ", req.params.userId)
+	Visits.findByVisitorId(req.params.userId, (err, visits) => {
+		if (err) console.log(err)
+		else {
+			let unique = [...new Set(visits)]; 
+			response.profilesVisited = visits;
+			console.log("______________\n", unique)
+
+			Visits.findByProfileId(req.params.userId, (err, visitors) => {
+				if (err) res.status(501).send({message: "error fetching data"})
+
+				else{
+					response.visitors = visitors;
+
+					Likes.findByLikerId(req.params.userId, (err, profiles) => {
+						if (err) res.status(501).send({message: "error fetching data"})
+
+						else {
+							response.profilesLiked = profiles;
+
+							Likes.findByProfileId(req.params.userId, (err, likes) => {
+								if (err) cres.status(501).send({message: "error fetching data"})
+								else {
+									response.likes = likes
+
+									Matches.findByUserId(req.params.userId, (err, matches) => {
+										if (err) res.status(501).send({message: "error fetching data"})
+
+										else {
+											response.matches = matches;
+
+											res.status(200).send(response)
+										}
+									})
+								}
+							})
+						}
+					})
+				}
+			})
+		}
+	})
+	//res.send({profilesVisited:[{id:1, username:"mosima"}], visitors: [{id:1, username:"mosima"}], profilesLiked:[{id:1, username:"mosima"}], likes:[{id:1, username:"mosima"}], matches:[{id:1, username:"mosima"}]})
 }
 
 
@@ -409,5 +547,5 @@ function randomString(length) {
     for ( var i = 0; i < length; i++ ) {
        result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    return result;
- }
+    return result
+}

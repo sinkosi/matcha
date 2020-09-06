@@ -5,7 +5,6 @@ const Visits = function() {
     this.add = (visitorId, profileId, callback) => {
         sql.query("INSERT INTO profile_visits (profile_id, visitor_id) VALUES (?, ?)", [profileId, visitorId], (err, res) => {
             if (err) {
-                console.log("error: ", err);
                 callback(err, null);
                 return;
             }
@@ -16,9 +15,11 @@ const Visits = function() {
 
 
     this.findByVisitorId = (visitorId, callback) => {
-        sql.query("SELECT * FROM profile_visits WHERE visitor_id = ?", [visitorId], (err, res) => {
+        const sqlQuery = `SELECT profile_visits.profile_id as id, users.username
+                    FROM profile_visits LEFT JOIN users ON users.id = profile_visits.profile_id 
+                    WHERE profile_visits.visitor_id = ?`
+        sql.query(sqlQuery, [visitorId], (err, res) => {
             if (err) {
-                console.log("error: ", err);
                 callback(err, null);
                 return;
             }
@@ -29,9 +30,11 @@ const Visits = function() {
     };
 
     this.findByProfileId = (profileId, callback) => {
-        sql.query("SELECT * FROM profile_visits WHERE profile_id = ?", [profileId], (err, res) => {
+        const sqlQuery = `SELECT profile_visits.visitor_id as id, users.username
+                        FROM profile_visits LEFT JOIN users ON users.id = profile_visits.visitor_id 
+                        WHERE profile_visits.profile_id = ?`
+        sql.query(sqlQuery, [profileId], (err, res) => {
             if (err) {
-                console.log("error: ", err);
                 callback(err, null);
                 return;
             }
@@ -44,4 +47,4 @@ const Visits = function() {
 
 }
 
-module.exports = Visits;
+module.exports = new Visits();

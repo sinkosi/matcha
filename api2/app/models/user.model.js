@@ -26,7 +26,14 @@ User.create = (newUser, result) => {
 
 //FIND A USER BY ID
 User.findById = (userID, result) => {
-	sql.query(`SELECT * FROM users WHERE id = ${userID}`, (err, res) => {
+	sql.query(`SELECT 
+		u.id, u.username, u.email, u.firstname, u.lastname, u.gender, 
+    	u.biography, u.sexual_preferences, u.date_of_birth, u.activated, 
+    	u.completed,  i.url as profile_pic
+	FROM users as u 
+	LEFT JOIN images as i 
+	ON u.profile_pic = i.id
+	WHERE u.id = ${userID}`, (err, res) => {
 		if (err) {
 			console.log("error: ", err);
 			result(err, null);
@@ -45,7 +52,14 @@ User.findById = (userID, result) => {
 };
 
 User.findByEmail = (email, result) => {
-	sql.query(`SELECT * FROM users WHERE email='${email}'`, (err, res) => {
+	sqlQuery = `SELECT 
+			u.id, u.username, u.email, u.firstname, u.lastname, u.gender, 
+			u.biography, u.sexual_preferences, u.date_of_birth, u.activated, 
+			u.completed,  i.url as profile_pic
+		FROM users as u LEFT JOIN images as i ON u.profile_pic = i.id
+		WHERE u.email='${email}'`;
+
+	sql.query(sqlQuery, (err, res) => {
 		if (err) {
 			console.log("error: ", err);
 			result(err, null);
@@ -64,8 +78,14 @@ User.findByEmail = (email, result) => {
 };
 
 //RETRIEVE ALL USER DATA
-User.getAll = result => {
-	sql.query("SELECT * FROM users", (err, res) => {
+User.getAll = (loggedInUserId, result) => {
+	sqlQuery = `SELECT 
+			u.id, u.username, u.email, u.firstname, u.lastname, u.gender, 
+			u.biography, u.sexual_preferences, u.date_of_birth, u.activated, 
+			u.completed,  i.url as profile_pic
+		FROM users as u LEFT JOIN images as i ON u.profile_pic = i.id
+		WHERE u.activated=1 AND u.completed=1 AND u.id!=?`;
+	sql.query(sqlQuery, [loggedInUserId], (err, res) => {
 		if (err) {
 			console.log("error: ", err);
 			result(null, err);
@@ -149,7 +169,7 @@ User.updateByIdCode = (id, code, result) => {
 				return;
 			}
 			if (res.length) {
-				sql.query(`UPDATE matcha.users SET activated = 0, activated_date = NOW() WHERE id = ?`,
+				sql.query(`UPDATE matcha.users SET activated = 1, activated_date = NOW() WHERE id = ?`,
 				[id],
 				(err, res) => {
 					if (err) {
@@ -194,68 +214,18 @@ User.updateByIdCode = (id, code, result) => {
 
 /**
  * !=================================
- * !		Login (no encryption)	|
- * !=================================
- *
-// FIND A USER BY USERNAME
-User.findLogin = (username, password, result) => {
-	sql.query(`SELECT * FROM users WHERE LOWER(username) = LOWER(${sql.escape(username.value)});`, (err, res) => {
-		if (err) {
-		// ?This mean the user does not exist
-			console.log("error: ", err);
-			result(err, null);
-			return;
-		}
-		if (res.length && password.value === res[0].password ) {
-			console.log("found user: ", res[0].password);
-			result(null, res[0]);
-			return;
-		}
-		//User with that user username has not been found.
-		result({ kind: "not found" }, null);
-	});
-};
-
-/**
- * !=================================
- * !		Signup (no encryption)	|
- * !=================================
- *
-User.signup = (newUser, result) => {
-	sql.query(`SELECT * FROM users WHERE LOWER(username) = ${sql.escape(newUser.username)};`, (err, res) => {
-		if (err) {
-			console.log("Some error occured", err);
-			result(err, null);
-			return;
-		}
-		if (res.length) {
-			console.log("Username is already in use", err);
-			result ({ kind: "inUse"}, null);
-			return;
-		} else {
-			sql.query("INSERT INTO users SET ?", newUser, (err, res) => {
-			if (err) {
-				console.log("error: ", err);
-				result(err, null);
-				return;
-				}
-			})
-		}
-		console.log("created user: ", { id: res.insertID, ...newUser });
-		result(null, { id: res.insertID, ...newUser });
-	});
-};
-
-/**
- * !=================================
  * ?	Login (with encryption)		|
  * !=================================
  */
 // FIND A USER BY USERNAME
 User.findLogin = (username, password, result) => {
-	sql.query(`SELECT * FROM users 
-		WHERE (LOWER(username) = ? OR LOWER(email) = ?);`, [(username.value), (username.value)],
-	//sql.query(`SELECT * FROM users WHERE LOWER(username) = LOWER(${sql.escape(username.value)});`,
+	sqlQuery = `SELECT 
+			u.id, u.username, u.email, u.firstname, u.lastname, u.gender, 
+			u.biography, u.sexual_preferences, u.date_of_birth, u.activated, 
+			u.completed, u.password,  i.url as profile_pic
+		FROM users as u LEFT JOIN images as i ON u.profile_pic = i.id
+		WHERE (LOWER(username) = ? OR LOWER(email) = ?);`;
+	sql.query(sqlQuery, [(username.value), (username.value)],
 	(err, res) => {
 		if (err) {
 		// ?This mean the user does not exist

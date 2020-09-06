@@ -1,10 +1,9 @@
-import React, {useState, useEffect, useRef, useContext }  from 'react'
-import {UserContext} from '../UserContext'
+import React, {useState, useEffect, useRef }  from 'react'
 import { useHistory } from "react-router-dom";
 
 import { makeStyles } from '@material-ui/core/styles';
 import getUsers from '../../Services/users'
-import { Button, Container, Grid } from '@material-ui/core'
+import { Container, Grid } from '@material-ui/core'
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -37,8 +36,8 @@ const User = (props) => {
             <CardActionArea onClick={handleClick}>
                 <CardMedia
                     className={classes.media}
-                    image={props.user.image_url}
-                    title="Contemplative Reptile"
+                    image={props.user.profile_pic}
+                    title={props.user.firstname+"'s profile picture"}
                 />
                 <CardContent>
                     <Typography gutterBottom align="center" variant="h5" component="h2">{props.user.username}</Typography>
@@ -51,21 +50,17 @@ const User = (props) => {
 
 const Users = (props) => {
     const [users, setUsers] = useState({data: []})
-    const {userData} = useContext(UserContext)
 
-    let token = userData.token
+
     let usersRef = useRef(0)
     usersRef.current = users.data
-    const refresh = () => { getUsers(setUsers, token) }
-    const logusers = () => console.log(usersRef)
+
     useEffect(() => {getUsers(setUsers) }, [usersRef])
     return (
         <>
-            <Button onClick={refresh} >reload</Button>
-            <Button onClick={logusers} >log users</Button>
             <Container maxWidth="lg" align="center">
                 <Grid container spacing={2}> 
-                    { users.data.map(user => <Grid item align="center"  key={user.id}  xs={12} sm={6} md={4} lg={3} > <User user={user} /> </Grid> ) }
+                    { users.data ? users.data.map(user => <Grid item align="center"  key={user.id}  xs={12} sm={6} md={4} lg={3} > <User user={user} /> </Grid> ) : ""}
                 </Grid>
             </Container>
         </>

@@ -32,13 +32,16 @@ Matches.findById = (matchId, result) => {
 };
 
 Matches.findByUserId = (userId, result) => {
-    sql.query("SELECT * FROM matches WHERE user1_id = ? OR user2_id = ?", [userId, userId], (err, res) => {
+    let sqlQuery = `SELECT u.id, users.username FROM 
+            (SELECT user1_id as id FROM matches as m WHERE m.user2_id = ?
+                UNION
+            SELECT user2_id as id FROM matches as n WHERE n.user1_id = ? ) as u LEFT JOIN users on users.id = u.id`
+    sql.query(sqlQuery, [userId, userId], (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);
             return;
         }
-        console.log("found Match using id: ")
         result(null, res);
     });
 };

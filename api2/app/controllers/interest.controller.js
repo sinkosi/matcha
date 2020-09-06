@@ -1,4 +1,4 @@
-const Interest = require("../models/interests.model");
+const Interests = require("../models/interests.model");
 
 // CREATE A NEW INTEREST
 exports.interestCreate = (req, res) => {
@@ -13,7 +13,7 @@ exports.interestCreate = (req, res) => {
     })
 
     //Save interest to database
-    Interest.addOne(hashtag, userID, (err, data) => {
+    Interests.addOne(hashtag, userID, (err, data) => {
         if (err) {
             res.status(500).send({
                 message: err.message || "Some error occurred while adding image"
@@ -25,7 +25,7 @@ exports.interestCreate = (req, res) => {
 //FIND AN INTEREST BY ITS ID
 exports.findOneInterest = (req, res) => {
     let interestId = req.params.imageId;
-    Image.findById(interestId, (err, data) => {
+    Interests.findById(interestId, (err, data) => {
         if (err) {
             if (err.kind === "not found") {
                 res.status(404).send({
@@ -41,8 +41,8 @@ exports.findOneInterest = (req, res) => {
 };
 
 //RETRIEVE ALL INTERESTS (NO SORT)
-exports.findAllInterest = (req, res) => {
-    Image.getAllInterest((err, data) => {
+exports.findAllInterests = (req, res) => {
+    Interests.getAll((err, data) => {
         if (err) {
             res.status(500).send({
                 message: err.message || "No interests retrieved"

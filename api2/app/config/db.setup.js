@@ -127,6 +127,7 @@ con.query(sql, function (err, result) {
 var sql = `CREATE TABLE IF NOT EXISTS matcha.images (
     id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     url VARCHAR(255) NOT NULL,
+    path VARCHAR(255) NULL,
     user_id INT(11) NOT NULL,
     uploaded TIMESTAMP NOT NULL DEFAULT current_timestamp,
     CONSTRAINT fk_images_user_id FOREIGN KEY(user_id) REFERENCES users(id)

@@ -13,34 +13,34 @@ import OTP from './ForgotPassword/OTP';
 import NewPassword from './ForgotPassword/NewPassword'
 
 export default function ForgotPassword(props) {
-    const [formPage, setFormPage] = useState(0);
-    const [data, setData] = useState({'email': '', 'otp': '', 'newPassword': ''})
-    const classes = useStyles();
-    const browserHistory = useHistory()
-    if (props.loggedIn)
-    browserHistory.push('/')
-    const handleNext = () => { console.log({data}); setFormPage(formPage + 1);}
+		const [formPage, setFormPage] = useState(0);
+		const [data, setData] = useState({'email': '', 'otp': '', 'newPassword': ''})
+		const classes = useStyles();
+		const browserHistory = useHistory()
+		if (props.loggedIn)
+		browserHistory.push('/')
+		const handleNext = () => { setFormPage(formPage + 1);}
 
-    return (
-    <Grid container component="main" className={classes.root}>
-      <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
+		return (
+		<Grid container component="main" className={classes.root}>
+			<CssBaseline />
+			<Grid item xs={false} sm={4} md={7} className={classes.image} />
+			<Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+				<div className={classes.paper}>
+					<Avatar className={classes.avatar}>
+						<LockOutlinedIcon />
+					</Avatar>
 
-           {
-              formPage === 0 ? <Email next={handleNext} data={data} setData={setData}/>
-            : formPage === 1 ? <OTP next={handleNext} data={data} setData={setData}/>
-            : formPage === 2 ? <NewPassword data={data} setData={setData}/>
-            : <Fragment></Fragment>
-        }
+					 {
+							formPage === 0 ? <Email next={handleNext} data={data} setData={setData}/>
+						: formPage === 1 ? <OTP next={handleNext} data={data} setData={setData}/>
+						: formPage === 2 ? <NewPassword data={data} setData={setData}/>
+						: <Fragment></Fragment>
+				}
 
-          <Copyright />
-        </div>
-      </Grid>
-    </Grid>
-  );
+					<Copyright />
+				</div>
+			</Grid>
+		</Grid>
+	);
 }
