@@ -61,6 +61,7 @@ export default function SignIn(props) {
   }
 
   const handleLoginError = (error) => { 
+
 	if (error.response.status === 303){
 	  history.push("/accountnotactivated")
 	}

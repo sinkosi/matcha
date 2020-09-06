@@ -172,19 +172,77 @@ exports.update = (req, res) => {
 		res.status(400).send({
 			message: "Content can not be empty"
 		});
+		return;
 	}
-	console.log("this is to see how i can read the request headers........")
-	console.log(req.headers)
+
+	if (!req.headers.loggedinuserid){
+		res.status(501).send({message: "must be logged in"})
+		return;
+	}
 	let user = {};
 	if (req.body.firstname) user.firstname = req.body.firstname;
 	if (req.body.lastname) user.lastname = req.body.lastname;
-	if (req.body.password) {/* some bcrypt stuff: user.password = req.body.password; */}
 	if (req.body.email) user.email = req.body.email;
 	if (req.body.gender) user.gender = req.body.gender;
 	if (req.body.biography) user.biography = req.body.biography;
 	if (req.body.sexualPreference) user.sexual_preferences = req.body.sexualPreference;
 	if (req.body.profilePic) user.profile_pic = req.body.profilePic;
 	if (req.body.location) {/* some location stuff: user.location = req.body.location; */}
+	if (req.body.password) {
+		let data = req.body.password
+
+		User.findLogin(data.username, data.password, (err, result) => {
+			if (err) {
+				console.log(err)
+				if (err.kind === "not_found") {
+					console.log("sending a not found response message")
+					res.status(404).send({
+						message: `404: Username not found with name: ${data.username}.`
+					}); return;
+				} else if (err.kind == "bad"){
+					res.status(401).send({
+						message: `401: Bad Credentials, unable to authenticate`
+					})
+					return
+				}
+				else if (err.kind == "valid"){
+					res.status(303).send({
+						message: `303: See other, Please use email to authenticate account`
+					})
+					return
+				}
+				else if (err.kind == 'invalid') {
+					res.status(401)
+					res.send({
+						message: `401: Bad Credentials, unable to authenticate` })
+					return
+				} else {
+					res.status(500).send({
+						message: "500: Error retrieving User with username: " + data.username //TODO: Please finish the log in sequence here
+					});
+					return
+				}
+			} else {
+				bcrypt.hash(data.newPassword, 10, (err, hash) => {
+					if (err) {
+						console.log("Bcrypt failure", err);
+						res.status(500).send({message:"something went wrong. we apologize for the inconfinience"})
+						return;
+					} else {
+						User.updateById(result.id, {password:hash}, (err, data) => {
+							if (err){
+								console.log(err)
+								res.status(404).send({message: err || "failed to set new password"})
+								return
+							}
+							
+							res.status(201).send({message:"password was updated successfully"})
+						});
+					};
+				});
+			}
+		})
+	}
 	if (req.body.interests) { 
 		Interests.deleteAllUserInsterests(req.params.userId, (err, result) => {
 			if (err) console.log(err)
@@ -197,8 +255,7 @@ exports.update = (req, res) => {
 	}
 	if (req.body.dob) {/* some interesting stuff: user.firstname = req.body.firstname; */}
 
-	console.log({user}, Object.keys(user).length);
-	if (Object.keys(user).length > 0) {
+	if (Object.keys(user).length > 0 ) {
 		User.updateById(
 			req.params.userId,
 			user,
@@ -233,7 +290,7 @@ exports.update = (req, res) => {
 			}
 		);
 	}
-	else res.status(200).send({message:'empty body'});
+	else  if (!req.body.password )res.status(200).send({message:'empty body'});
 
 };
 
@@ -268,9 +325,11 @@ exports.deleteAll = (req, res) => {
 //LOGIN HANDLER
 
 exports.login = (req, res) => {
-	User.findLogin(req.body.login, req.body.password, (err, data) => {
+	User.findLogin(req.body.login.value, req.body.password.value, (err, data) => {
 		if (err) {
+			console.log(err)
 			if (err.kind === "not_found") {
+				console.log("sending a not found response message")
 				res.status(404).send({
 					message: `404: Username not found with name: ${req.body.login.value}.`
 				});
@@ -283,6 +342,10 @@ exports.login = (req, res) => {
 				res.status(303).send({
 					message: `303: See other, Please use email to authenticate account`
 				})
+			}
+			else if (err.kind == 'invalid') {
+				res.status(401).send({
+					message: `401: Bad Credentials, unable to authenticate` })
 			} else {
 				res.status(500).send({
 					message: "500: Error retrieving User with username: " + req.body.login["value"] //TODO: Please finish the log in sequence here

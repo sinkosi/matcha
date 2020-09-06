@@ -225,31 +225,38 @@ User.findLogin = (username, password, result) => {
 			u.completed, u.password,  i.url as profile_pic
 		FROM users as u LEFT JOIN images as i ON u.profile_pic = i.id
 		WHERE (LOWER(username) = ? OR LOWER(email) = ?);`;
-	sql.query(sqlQuery, [(username.value), (username.value)],
+	sql.query(sqlQuery, [(username), (username)],
 	(err, res) => {
 		if (err) {
-		// ?This mean the user does not exist
-			console.log("error: ", err);
-			result(err, null);
+		// ?This mean something wrong with the query or sql server connection
+			console.log("error: ", {err});
+			result({kind: "internal"}, null);
 			return;
+		} else {
+			//This means username or email does not exist
+			if (!res.length) {
+				console.log("username does not exist");
+				result({ kind: "not_found" }, null);
+				return;
+			}
+			if (res.length && !bcrypt.compareSync(password, res[0].password)) {
+				console.log("incorrect username password combination!");
+				result({ kind: "invalid" }, null);
+				return;
+			}
+			if (res.length && bcrypt.compareSync(password, res[0].password) && (res[0].activated === 0)) {
+				console.log("Account not yet authorised! Please check email!");
+				result({ kind: "valid" }, null);
+				return;
+			}
+			if (res.length && bcrypt.compareSync(password, res[0].password) && res[0].activated == 1) {
+				console.log("found user: ", res[0].username);
+				result(null, res[0]);
+				return;
+			}
 		}
-		if (!res.length) {
-			console.log("Incorrect credentials, Check Username and Password");
-			result({ kind: "bad" }, null);
-			return;
-		}
-		if (res.length && bcrypt.compareSync(password.value, res[0].password) && (res[0].activated === 0)) {
-			console.log("Account not yet authorised! Please check email!");
-			result({ kind: "valid" }, null);
-			return;
-		}
-		if (res.length && bcrypt.compareSync(password.value, res[0].password) && res[0].activated == 1) {
-			console.log("found user: ", res[0].username);
-			result(null, res[0]);
-			return;
-		}
-		//User with that user username has not been found.
-		result({ kind: "not found" }, null);
+		// //User with that user username has not been found.
+		// result({ kind: "not_found" }, null);
 	});
 };
 

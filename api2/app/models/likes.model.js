@@ -25,7 +25,6 @@ Likes.findByLikerId = (likerId, result) => {
 			result(err, null);
 			return;
 		}
-		console.log(res)
 		result(null, res);
 	});
 };

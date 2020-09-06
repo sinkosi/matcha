@@ -4,7 +4,6 @@ const sql = require("./db");
 const Matches = function(match) {
     this.firstUserId = match.firstUserId;
     this.secondUserId = match.secondUserId;
-    this.matchId = match.matchId;
 }
 
 Matches.add = (firstUserId, secondUserId, result) => {
@@ -58,4 +57,24 @@ Matches.removeOne = (matchId, result) => {
     });
 }
 
+Matches.exist = (firstUserId, secondUserId, result) => {
+    sqlQuery = `SELECT * FROM matches 
+        WHERE ( user1_id = '${firstUserId}' AND user2_id = '${secondUserId}') OR ( user1_id = '${secondUserId}' AND user2_id = '${firstUserId}') `
+    
+    sql.query(sqlQuery, (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+        }
+        else {
+            if (res.length)
+                result(null, res[0]);
+            else 
+                result(null, false);
+        return;
+            
+        }
+    })
+}
 module.exports = Matches;

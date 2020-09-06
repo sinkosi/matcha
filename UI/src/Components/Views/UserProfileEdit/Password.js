@@ -42,7 +42,6 @@ const Password = (props) => {
 	const [newPassword, setNewPassword] = useState({'value':'', 'error':false, 'errormsg':''})
 	const [confirmpassword, setconfirmpassword] = useState({'value':'', 'error':false, 'errormsg':''})
 
-
 	
 	const validatePassword = (event) => {
 
@@ -69,24 +68,31 @@ const Password = (props) => {
 	}
 	
 	const validateConfirmPassword = (event) => {
-		var msg = "Must be the same as password entered above"
-		if (event.target.value !== password.value){
+		var msg = "Must be the same as the new password entered above"
+		if (event.target.value !== newPassword.value){
 		  setconfirmpassword({'value': event.target.value, error: true, errormsg: msg})
 		} else {
 		  setconfirmpassword({'value': event.target.value, error: false, errormsg: ""})
 		}
-	  }
-	  const send_data = () => {
-		const formdata = {}
+	}
+	const send_data = () => {
+		const formdata = {password: {password:password.value, newPassword: newPassword.value, username: props.user.data.username}}
 		updateUserProfile(handleSuccess, handleError, props.user.data.id,formdata)
-	  }
+	}
 	
-	  const handleSuccess = (response) => {
- 
-	  }
+	const handleSuccess = (response) => {
+		setpassword({'value':'', 'error':false, 'errormsg':''})
+		setNewPassword({'value':'', 'error':false, 'errormsg':''})
+		setconfirmpassword({'value':'', 'error':false, 'errormsg':''})
+	}
 	
-	  const handleError = (error) =>{
-	  }
+	const handleError = (error) =>{
+		if (error.response.data.message === "401: Bad Credentials, unable to authenticate"){
+			let ps = {value:password.value, error:true, errormsg:"Incorrect password. Please use the correct passord"}
+
+			setpassword(ps)
+		}
+	}
 	return (
 		<>
 		<Paper elevation={2} className={classes.paper}>
