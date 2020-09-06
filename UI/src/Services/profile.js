@@ -40,7 +40,7 @@ const updateInterests =  (success, error, userId, interests) => {
 }
 
 const updateProfilePic =  (success, error, userId, imageId) => {
-	const data = {'profilePic': imageId}
+	const data = {'profile_pic': imageId}
 
 	api.put('/users/'+userId, data, header)
 	.then(success)
