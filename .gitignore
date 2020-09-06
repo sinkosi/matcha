@@ -12,11 +12,6 @@ api2/comments.js
 api2/comments.js
 api2/secret.js
 api2/app/config/db.config.js
-<<<<<<< HEAD
-api2/uploads/images/IMG_20190921_175157.jpg
-api2/uploads/images/1/joFU5qDEfOud4NzbKr8X.jpg
-api2/uploads/images/*
-=======
 
 
 # dependencies
@@ -49,4 +44,3 @@ api2/uploads/images/2/QpQrv2lbgpEyJOcGIoG8.jpg
 api2/uploads/images/4/rAJVT8dgS2XRdsAdAAh4.jpg
 UI/node_modules/
 api2/app/config/db.config.js
->>>>>>> origin/master

@@ -1,5 +1,5 @@
 const axios = require('axios');
-const db = require('./db.config');
+const db = require('./app/config/db.config');
 const faker = require('faker');
 const Seeder = require('mysql-db-seed').Seeder;
 
@@ -8,7 +8,7 @@ seed();
 
 
 function seed(){
-    const numberOfProfiles = 30;
+    const numberOfProfiles = 3;
 
     const api = axios.create({baseURL: 'https://randomuser.me'})
 
