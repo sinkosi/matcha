@@ -303,7 +303,7 @@ exports.update = (req, res) => {
 		);
 	}
 	else  if (!req.body.password )res.status(200).send({message:'empty body'});
-
+}
 };
 
 //Delete a User with the specified userId in the request
@@ -611,30 +611,5 @@ function randomString(length) {
     for ( var i = 0; i < length; i++ ) {
        result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-<<<<<<< HEAD
     return result
-=======
-    return result;
- }
-
- function unique(arr){
-	let newArray = []
-
-	arr.forEach(element => {
-		if (index(element, newArray) == -1)
-			newArray.push(element)
-	});
-	return newArray
-
-	function index(x , array){
-		let i = 0;
-		while (i < array.length){
-			if (array[i].id == x.id){
-				return i;
-			}
-			i++;
-		}
-		return -1;
-	}
->>>>>>> origin/master
 }
