@@ -197,6 +197,7 @@ exports.update = (req, res) => {
 	}
 	if (req.body.dob) {/* some interesting stuff: user.firstname = req.body.firstname; */}
 
+<<<<<<< HEAD
 	console.log({user})
 	console.log(user.length)
 	console.log(req.params.userId)
@@ -204,6 +205,8 @@ exports.update = (req, res) => {
 	console.log(req.body)
 	//if (user.length > 0) {
 	if (req.body) {
+=======
+>>>>>>> origin/master
 	console.log({user}, Object.keys(user).length);
 	if (Object.keys(user).length > 0) {
 		User.updateById(
