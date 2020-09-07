@@ -96,7 +96,8 @@ exports.findAll = (req, res) => {
 		res.status(401).send({message:"you must be logged in"})
 	}
 	console.log(req.query)
-	User.getAll(req.headers.loggedinuserid, (err, data) => {
+	let filter = generateSQLFilterString(req.query)
+	User.getAll(req.headers.loggedinuserid, filter, (err, data) => {
 		if (err)
 			res.status(500).send({
 				message:
@@ -104,6 +105,7 @@ exports.findAll = (req, res) => {
 			});
 		else res.send(data);
 	});
+	console.log(req)
 };
 
 //Retrieve a single User with a userId in the request
@@ -482,7 +484,7 @@ exports.forgotPasswordEmail = (req, res) => {
 			res.status(200).send({message: "otp sent"})
 		}
 	})
-	console.log(req.body);
+	// console.log(req.body);
 }
 
 exports.forgotPasswordOTP = (req, res) => {
@@ -501,9 +503,7 @@ exports.forgotPasswordOTP = (req, res) => {
 					return
 				}
 				
-				console.log({data});
-				console.log(data.code);
-				console.log(req.body.otp);
+		
 				if (data.code != req.body.otp){
 					res.status(404).send({message: "Wrong OPT. Please use the OPT from your email"});
 					return;
@@ -516,7 +516,7 @@ exports.forgotPasswordOTP = (req, res) => {
 }
 
 exports.forgotPasswordNewPassword = (req, res) => {
-	console.log(req.body);
+
 	User.findByEmail(req.body.email, (err, data) => {
 		if (err)
 			res.status(404).send({message: 'something went wrong'})
@@ -611,5 +611,70 @@ function randomString(length) {
     for ( var i = 0; i < length; i++ ) {
        result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    return result
+    return result;
+ }
+
+ function unique(arr){
+	let newArray = []
+
+	arr.forEach(element => {
+		if (index(element, newArray) == -1)
+			newArray.push(element)
+	});
+	return newArray
+
+	function index(x , array){
+		let i = 0;
+		while (i < array.length){
+			if (array[i].id == x.id){
+				return i;
+			}
+			i++;
+		}
+		return -1;
+	}
+}
+
+function generateSQLFilterString({gender, city, popularity, sort, order}){
+	let str = " AND"
+	 
+	///gender
+	str += " ("
+	if (gender.indexOf('bisexual') > -1) str += " gender='bisexual'"
+	if (gender.indexOf('bisexual') > -1 && (gender.indexOf('males') > -1 ) ) str += " OR"
+	if (gender.indexOf('males') > -1) str += " gender='male'"
+	if ( (gender.indexOf('bisexual') > -1 || gender.indexOf('males') > -1 ) && gender.indexOf('females') > -1) str += " OR"
+	if (gender.indexOf('females') > -1) str += " gender='female'"
+	str += " )"
+
+	//city
+	str += " AND ("
+	if (city.indexOf('Johannesburg') > -1) str += " city='Johannesburg'"
+	if ( (city.indexOf('Johannesburg') > -1 ) && (city.indexOf('Pretoria') > -1 ) ) str += " OR"
+	if (city.indexOf('Pretoria') > -1) str += " city='Pretoria'"
+	if ( (city.indexOf('Johannesburg') > -1 || city.indexOf('Pretoria') > -1 ) && (city.indexOf('Germiston') > -1 ) ) str += " OR"
+	if (city.indexOf('Germiston') > -1) str += " city='Germiston'"
+	if ( (city.indexOf('Johannesburg') > -1 || city.indexOf('Pretoria') > -1 || city.indexOf('Germiston') > -1) && (city.indexOf('Others') > -1) ) str += " OR"
+	if (city.indexOf('Others') > -1) str += " ( city!='Johannesburg' and city!='Pretoria' and city!='Germiston' )"
+	str += " )"
+
+	//populatry
+	str += " AND ("
+	if (popularity.indexOf('lt3') > -1) str += " COALESCE((mat.matches + vs.visits + lk.likes), 0) < 3"
+	if ( ( popularity.indexOf('lt3') > -1 ) && ( popularity.indexOf('lt5') > -1 ) ) str += " OR"
+	if (popularity.indexOf('lt5') > -1) str += " ( (mat.matches + vs.visits + lk.likes) >= 3 AND (mat.matches + vs.visits + lk.likes) < 5 ) "
+	if ( ( popularity.indexOf('lt3') > -1 || popularity.indexOf('lt5') > -1 ) && ( popularity.indexOf('mt5') > -1 ) ) str += " OR"
+	if (popularity.indexOf('mt5') > -1) str += " (mat.matches + vs.visits + lk.likes) >= 5"
+	str += " )"
+
+
+	str += " ORDER BY"
+	if (sort === "popularity") str+= " popularity"
+	else if (sort === "distance") str+= " distance"
+	else if (sort === "distance") str+= " distance"
+	else if (sort === "age") str+= " age"
+	else if (sort === "tags") str+= " tags"
+	order === "descending" ? str += " DESC" : str += " ASC"
+	console.log(str)
+	return str
 }

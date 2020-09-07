@@ -17,6 +17,7 @@ import useStyles from '../Styles/formStyle';
 import Copyright from '../Copyright';
 import postLogin from '../../Services/login'
 import {setCookie, setCookieRememberMe} from '../../utils/cookies'
+import getLocationData from '../../Services/location'
 
 export default function SignIn(props) {
   const {userData, setUserData} = useContext(UserContext)
@@ -85,7 +86,7 @@ export default function SignIn(props) {
 	}
 	
 	setUserData(loginData);
-	
+	getLocationData()
 	response.data.completed ? history.push("/") : history.push("/completeprofile") 
   }
 

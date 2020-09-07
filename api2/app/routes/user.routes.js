@@ -10,7 +10,8 @@ These routes are:
 
 module.exports = app => {
 	const users = require("../controllers/user.controller");
-
+	const location = require("../controllers/location.controller")
+	
 	//Create a new User
 	app.post("/users", users.create);
 
@@ -44,4 +45,6 @@ module.exports = app => {
 	app.post("/forgotpassword/newpassword", users.forgotPasswordNewPassword);
 
 	app.get("/users/:userId/interactions", users.interactions);
+
+	app.post("/location", location.add);
 };

@@ -77,7 +77,7 @@ exports.remove = (req, res) => {
 		res.status(401).send({message:"must be logged in"})
 		return
 	}
-	console.log(req.headers)
+
 	let likerId = req.headers.loggedinuserid;
 	let profileId = req.params.userId;
 	Likes.removeLike(likerId, profileId, (err, data) => {

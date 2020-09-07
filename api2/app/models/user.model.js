@@ -27,13 +27,19 @@ User.create = (newUser, result) => {
 //FIND A USER BY ID
 User.findById = (userID, result) => {
 	sql.query(`SELECT 
-		u.id, u.username, u.email, u.firstname, u.lastname, u.gender, 
-    	u.biography, u.sexual_preferences, u.date_of_birth, u.activated, 
-    	u.completed,  i.url as profile_pic
-	FROM users as u 
-	LEFT JOIN images as i 
-	ON u.profile_pic = i.id
-	WHERE u.id = ${userID}`, (err, res) => {
+					users.id as id, users.username, users.email, users.firstname, users.lastname, users.gender, 
+					users.biography, users.sexual_preferences, users.date_of_birth, users.activated, 
+					users.completed,  images.url as profile_pic, COALESCE(location.city, "Unknown") as city, COALESCE(mat.matches, 0) AS matches, COALESCE(vs.visits, 0) AS visits, COALESCE(lk.likes, 0) as likes, (COALESCE(mat.matches, 0) + COALESCE(vs.visits, 0) + COALESCE(lk.likes, 0)) as popularity
+				FROM users
+					LEFT JOIN images ON users.profile_pic = images.id
+					LEFT JOIN location ON users.location = location.id
+					LEFT JOIN (
+								SELECT user1_id as id, COUNT(user1_id) as matches 
+								FROM (SELECT user1_id, user2_id FROM matches UNION SELECT user2_id as user1_id, user1_id as user2_id FROM matches) AS x GROUP BY user1_id
+							) AS mat ON users.id = mat.id
+					LEFT JOIN ( SELECT profile_id as id, (COUNT(DISTINCT(profile_id)) / 10) as visits FROM profile_visits GROUP BY profile_id ) AS vs ON users.id = vs.id
+					LEFT JOIN ( SELECT profile_id as id, (COUNT(DISTINCT(profile_id)) / 2) as likes FROM profile_likes GROUP BY profile_id ) AS lk ON users.id = lk.id
+				WHERE users.id=?`,[userID], (err, res) => {
 		if (err) {
 			console.log("error: ", err);
 			result(err, null);
@@ -78,13 +84,21 @@ User.findByEmail = (email, result) => {
 };
 
 //RETRIEVE ALL USER DATA
-User.getAll = (loggedInUserId, result) => {
+User.getAll = (loggedInUserId, filter, result) => {
 	sqlQuery = `SELECT 
-			u.id, u.username, u.email, u.firstname, u.lastname, u.gender, 
-			u.biography, u.sexual_preferences, u.date_of_birth, u.activated, 
-			u.completed,  i.url as profile_pic
-		FROM users as u LEFT JOIN images as i ON u.profile_pic = i.id
-		WHERE u.activated=1 AND u.completed=1 AND u.id!=?`;
+					users.id as id, users.username, users.email, users.firstname, users.lastname, users.gender, 
+					users.biography, users.sexual_preferences, users.date_of_birth, users.activated, 
+					users.completed,  images.url as profile_pic, COALESCE(location.city, "Unknown") as city, COALESCE(mat.matches, 0) as matches, COALESCE(vs.visits, 0) as visits, COALESCE(lk.likes, 0) as likes, ( COALESCE(mat.matches, 0) + COALESCE(vs.visits,0) + COALESCE(lk.likes, 0)) as popularity
+				FROM users
+					LEFT JOIN images ON users.profile_pic = images.id
+					LEFT JOIN location ON users.location = location.id
+					LEFT JOIN (
+								SELECT user1_id as id, COUNT(user1_id) as matches 
+								FROM (SELECT user1_id, user2_id FROM matches UNION SELECT user2_id as user1_id, user1_id as user2_id FROM matches) AS x GROUP BY user1_id
+							) AS mat ON users.id = mat.id
+					LEFT JOIN ( SELECT profile_id as id, (COUNT(DISTINCT(profile_id)) / 10) as visits FROM profile_visits GROUP BY profile_id ) AS vs ON users.id = vs.id
+					LEFT JOIN ( SELECT profile_id as id, (COUNT(DISTINCT(profile_id)) / 2) as likes FROM profile_likes GROUP BY profile_id ) AS lk ON users.id = lk.id
+				WHERE users.id!=? ${filter}`;
 	sql.query(sqlQuery, [loggedInUserId], (err, res) => {
 		if (err) {
 			console.log("error: ", err);

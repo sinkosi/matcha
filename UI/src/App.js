@@ -7,6 +7,7 @@ import SignUp from './Components/Views/SignUp';
 import ForgotPassword from './Components/Views/ForgotPassword'
 import CompleteProfile from './Components/Views/CompleteProfile'
 import Users from './Components/Views/Users'
+import UsersByTags from './Components/Views/UsersByTags'
 import UserProfile from './Components/Views/UserProfile'
 import UserProfileEdit from './Components/Views/UserProfileEdit'
 import ActivateUser from './Components/ActivateUser'
@@ -38,6 +39,7 @@ function App(props) {
 
             <ProtectedRoute exact path="/completeprofile" component={CompleteProfile}  {...props}/>
             <ProtectedRoute component={Users}  exact path="/users" />
+            <ProtectedRoute component={UsersByTags}  exact path="/users/interests" />
             <ProtectedRoute component={UserProfile} exact path="/users/:userId" userData={userData}/>
             <ProtectedRoute component={UserProfile} exact path="/profile" />
             <ProtectedRoute component={UserProfileEdit} exact path="/profile/edit" />

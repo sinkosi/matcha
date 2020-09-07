@@ -1,15 +1,16 @@
-import React, {useState, useEffect, useRef }  from 'react'
+import React, {useState, useEffect, useRef, useContext }  from 'react'
 import { useHistory } from "react-router-dom";
 
 import { makeStyles } from '@material-ui/core/styles';
 import getUsers from '../../Services/users'
-import { Container, Grid, Button, Paper, RadioGroup, FormControl, Radio, FormControlLabel, FormLabel, FormGroup, Checkbox, ClickAwayListener } from '@material-ui/core'
+import { Container, Grid, Button, Paper, RadioGroup, FormControl, Radio, FormControlLabel, FormLabel, FormGroup, Checkbox, ClickAwayListener, Chip } from '@material-ui/core'
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import FilterListIcon from '@material-ui/icons/FilterList'
+import { UserContext } from '../UserContext'
 
 
 const useUserStyles = makeStyles({
@@ -25,6 +26,10 @@ const useUserStyles = makeStyles({
 	filterMenuBackground: {
 		width: "100%",
 		padding: "1rem"
+	},
+	popularityChip:{
+		position: "absolute",
+		left: "0"	
 	}
 });
 
@@ -39,6 +44,7 @@ const User = (props) => {
 	return (
 		<Card className={classes.root} raised>
 			<CardActionArea onClick={handleClick}>
+				<Chip label={props.user.popularity} className={classes.popularityChip} />
 				<CardMedia
 					className={classes.media}
 					image={props.user.profile_pic}
@@ -58,7 +64,7 @@ const Users = (props) => {
 	const [query, setQuery] = useState("")
 	const [loading, setLoading] = useState(1)
 	const [hideFilterMenu, setHideFilterMenu] = useState(true);
-
+	const {userData} = useContext(UserContext)
 
 	let usersRef = useRef(0)
 	usersRef.current = users.data
@@ -85,13 +91,13 @@ const Users = (props) => {
 		if (!hideFilterMenu)
 			handleMenuClick()
 	}
-	console.log({props})
+
 	return (
 		<>
 			<ClickAwayListener onClickAway={handleMenuClickAway}>
 				<div>
 					<Button onClick={handleMenuClick}><FilterListIcon />Filter</Button>
-					<FilterMenu {...props} setQuery={setQuery} hidden={hideFilterMenu} />
+					<FilterMenu {...props} setQuery={setQuery} hidden={hideFilterMenu} user={userData.data}/>
 				</div>
 			</ClickAwayListener>
 	
@@ -110,10 +116,11 @@ const FilterMenu = (props) => {
 	const classes = useUserStyles()
 	const [order, setOrder] = useState("ascending")
 	const [sort, setSort] = useState("popularity")
-	const [filterGender, setFilterGender] = React.useState({ males: false, females: false,	bisexual: false });
+	const [filterGender, setFilterGender] = React.useState({ males: (props.user.sexual_preferences === "males"), females: (props.user.sexual_preferences === "females"),	bisexual: (props.user.sexual_preferences === "both") });
 	const [filterCity, setFilterCity] = React.useState({ Johannesburg: false, Pretoria: false, Germiston:false, Tembisa: false, Others: false });
 	const [filterPopularity, setFilterPopularity] = React.useState({lessThan3:false, lessThan5:false, moreThan5:false});
 	const x = 0;
+	const user = props.user
 	
 	const handleOrderChange = (event) => {
 		console.log(event.target.value)
@@ -141,49 +148,49 @@ const FilterMenu = (props) => {
 		let g = ""
 		if (filterGender.males || filterGender.females || filterGender.bisexual){
 			if (filterGender.males)
-				g += "gender=males"
+				g += "gender[]=males"
 			if (g.length && (filterGender.females || filterGender.bisexual))
 				g += "&"
 			if (filterGender.females)
-				g += "gender=females"
+				g += "gender[]=females"
 			if (g.length && filterGender.bisexual)
 				g += "&"
 			if (filterGender.bisexual)
-				g += "gender=bisexual"
+				g += "gender[]=bisexual"
 		} else {
 			g = "gender=males&gender=females&gender=bisexual"
 		}
 		let c = ""
 		if (filterCity.Johannesburg || filterCity.Pretoria || filterCity.Germiston || filterCity.Others){
 			if (filterCity.Johannesburg)
-				c += "city=Johannesburg"
+				c += "city[]=Johannesburg"
 			if (c.length && (filterCity.Pretoria || filterCity.Germiston || filterCity.Others))
 				c += "&"
 			if (filterCity.Pretoria)
-				c += "city=Pretoria"
+				c += "city[]=Pretoria"
 			if (c.length && (filterCity.Germiston || filterCity.Others))
 				c += "&"
 			if (filterCity.Germiston)
-				c += "city=Germiston"
+				c += "city[]=Germiston"
 			if (c.length && filterCity.Others)
 				c += "&"
 			if (filterCity.Others)
-				c += "city=Others"
+				c += "city[]=Others"
 		} else {
 			c = "city=Johannesburg&city=Pretoria&city=Germiston&city=Others"
 		}
 		let p = ""
 		if (filterPopularity.lessThan3 || filterPopularity.lessThan5 || filterPopularity.moreThan5){
 			if (filterPopularity.lessThan3)
-				p += "popularity=lt3"
+				p += "popularity[]=lt3"
 			if (p.length && (filterPopularity.lessThan5 || filterPopularity.moreThan5))
 				p += "&"
 			if (filterPopularity.lessThan5)
-				p += "popularity=lt5"
+				p += "popularity[]=lt5"
 			if (p.length && filterPopularity.moreThan5)
 				p += "&"
 			if (filterPopularity.moreThan5)
-				p += "popularity=mt5"
+				p += "popularity[]=mt5"
 		} else {
 			p = "popularity=lt3&popularity=lt5&popularity=mt5"
 		}
@@ -212,7 +219,7 @@ const FilterMenu = (props) => {
 		}
 	}, [x, g])
 
-	
+	console.log(user)
 	return (
 		<>
 			<Paper className={classes.filterMenuBackground} hidden={props.hidden}>
@@ -258,7 +265,6 @@ const FilterMenu = (props) => {
 							</RadioGroup>
 						</FormControl>
 					</Grid>
-					<Button color="primary" variant="outlined" onClick={generateQuerySting}>Filter</Button>
 				</Grid>
 			</Paper>
 		</>

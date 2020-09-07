@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef, useContext }  from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import getUser from '../../Services/user'
 import { getUserInteractions, sendLike, sendUnlike } from '../../Services/user'
-import { Container, Grid, Paper, Fab } from '@material-ui/core'
+import { Container, Grid, Paper, Fab, Tooltip } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography';
 import { UserContext } from '../UserContext'
 import { useHistory } from 'react-router-dom';
@@ -69,7 +69,14 @@ const UserProfile = (props) => {
 	return (
 		<>
 			<Container maxWidth="lg" className={classes.root}>
-				<Typography align="center" variant="h3" component="h1" className={classes.title}>{user.data.firstname} {user.data.lastname}</Typography>
+				<Typography align="center" variant="h3" component="h1" className={classes.title}>
+					{user.data.firstname} {user.data.lastname}
+					<Tooltip title="{}">
+						<Typography>
+							[{user.data.popularity}]
+						</Typography>
+					</Tooltip>
+				</Typography>
 				<Grid container spacing={3}>
 					<Grid item md={6} align="center">
 						<Paper elevation={2} className={classes.paper} wrap="nowrap">
