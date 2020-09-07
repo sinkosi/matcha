@@ -179,10 +179,12 @@ const UserProfile = (props) => {
 							<Fab variant="extended" size="large" color="secondary" aria-label="edit profile" className={classes.fabLike} onClick={handleUnlike} >Unlike</Fab>
 							: <Fab variant="extended" size="large" color="secondary" aria-label="edit profile" className={classes.fabLike} onClick={handleLike} >Like</Fab>
 						}
-						{	user.data.isBlocked ?
+						{/* {	user.data.isBlocked ?
 							<Fab variant="extended" size="large" color="secondary" aria-label="unblock user" className={classes.fabBlock} onClick={handleUnblock} >Unblock</Fab>
 							: <Fab variant="extended" size="large" color="secondary" aria-label="block user" className={classes.fabBlock} onClick={handleBlock} >Block</Fab>
-						}
+						} */}
+						<Fab variant="extended" size="large" color="secondary" aria-label="unblock user" className={classes.fabBlock} onClick={handleUnblock} >Unblock</Fab>
+						<Fab variant="extended" size="large" color="secondary" aria-label="block user" className={classes.fabBlock} onClick={handleBlock} >Block</Fab>
 				</div>
 			}
 		</>
