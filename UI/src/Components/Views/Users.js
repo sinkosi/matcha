@@ -219,7 +219,7 @@ const FilterMenu = (props) => {
 		}
 	}, [x, g])
 
-	console.log(user)
+
 	return (
 		<>
 			<Paper className={classes.filterMenuBackground} hidden={props.hidden}>
