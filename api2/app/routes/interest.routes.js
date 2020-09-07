@@ -4,6 +4,8 @@ module.exports = app => {
     
     //Retrieve all interests
     app.get("/interests", interest.findAllInterests)
+
+    
     
     //Create new interest
     app.post("/interest", interest.interestCreate);
