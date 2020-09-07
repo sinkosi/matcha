@@ -40,13 +40,18 @@ const useStyles = makeStyles({
 const UserProfileEdit = (props) => {
 	const classes = useStyles();
 	const [user, setUser] = useState({data: []})
-	const {userData} = useContext(UserContext)
+	const {userData, setUserData} = useContext(UserContext)
 	let userRef = useRef()
 	const userId = userData.data.id 
 	userRef.current = user.data
 
 
-	useEffect(() => {getUser(setUser, userId )}, [userId])
+	useEffect(() => {
+		getUser( (res) => {
+			setUser(res)
+			setUserData({...userData, data:res.data})
+		}, userId )
+	}, [userId, userData, setUserData ])
 
 	return (
 		user.data.id ?  

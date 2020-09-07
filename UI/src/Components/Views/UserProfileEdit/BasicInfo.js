@@ -182,7 +182,7 @@ const BasicInfo = (props) => {
 					<FormControl label="Gender" variant="outlined" fullWidth required>
 							<label htmlFor="gender"> <Typography variant="h6">Gender</Typography></label>
 							<RadioGroup id="gender" aria-label="gender" name="gender" value={gender} onChange={validateGender} className={classes.radio}>
-									<FormControlLabel value="bisexual" control={<Radio />} label="Bisexual" disabled />
+									<FormControlLabel value="bisexual" control={<Radio />} label="Bisexual" />
 									<FormControlLabel value="female" control={<Radio />} label="Female" />
 									<FormControlLabel value="male" control={<Radio />} label="Male" />
 							</RadioGroup>
