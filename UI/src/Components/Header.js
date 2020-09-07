@@ -81,7 +81,7 @@ export default function Header(props) {
 								</IconButton>
 								<Paper id="menu" className={classes.menu} hidden={hideMenu}>
 									<Button ClassName={classes.menuItem} fullWidth onClick={handleSuggestions}> Users</Button>
-									<Button ClassName={classes.menuItem} fullWidth> Search</Button>
+									{/* <Button ClassName={classes.menuItem} fullWidth> Search</Button> */}
 									<Button ClassName={classes.menuItem} fullWidth onClick={handleProfile}> Profile</Button>
 								</Paper>
 							</div>

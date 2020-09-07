@@ -90,11 +90,11 @@ const UserProfile = (props) => {
 			<Container maxWidth="lg" className={classes.root}>
 				<Typography align="center" variant="h3" component="h1" className={classes.title}>
 					{user.data.firstname} {user.data.lastname}
-					<Tooltip title="{}">
+				
 						<Typography>
 							[{user.data.popularity}]
 						</Typography>
-					</Tooltip>
+					
 				</Typography>
 				<Grid container spacing={3}>
 					<Grid item md={6} align="center">
@@ -183,8 +183,8 @@ const UserProfile = (props) => {
 							<Fab variant="extended" size="large" color="secondary" aria-label="unblock user" className={classes.fabBlock} onClick={handleUnblock} >Unblock</Fab>
 							: <Fab variant="extended" size="large" color="secondary" aria-label="block user" className={classes.fabBlock} onClick={handleBlock} >Block</Fab>
 						} */}
-						<Fab variant="extended" size="large" color="secondary" aria-label="unblock user" className={classes.fabBlock} onClick={handleUnblock} >Unblock</Fab>
-						<Fab variant="extended" size="large" color="secondary" aria-label="block user" className={classes.fabBlock} onClick={handleBlock} >Block</Fab>
+						{/* <Fab variant="extended" size="large" color="secondary" aria-label="unblock user" className={classes.fabBlock} onClick={handleUnblock} >Unblock</Fab>
+						<Fab variant="extended" size="large" color="secondary" aria-label="block user" className={classes.fabBlock} onClick={handleBlock} >Block</Fab> */}
 				</div>
 			}
 		</>

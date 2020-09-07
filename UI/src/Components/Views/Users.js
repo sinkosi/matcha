@@ -250,9 +250,9 @@ const FilterMenu = (props) => {
 							<FormLabel component="legend" color="primary">Sort</FormLabel>
 							<RadioGroup id="gender" aria-label="gender" name="gender" value={sort} onChange={handleSortChange} className={classes.radio}>
 								<FormControlLabel value="popularity" control={<Radio />} label="Popularity" />
-								<FormControlLabel value="distance" control={<Radio />} label="Distance" />
-								<FormControlLabel value="age" control={<Radio />} label="Age" />
-								<FormControlLabel value="tags" control={<Radio />} label="Common Interest tags" />
+								<FormControlLabel value="distance" control={<Radio />} label="Distance" disabled/>
+								<FormControlLabel value="age" control={<Radio />} label="Age" disabled/>
+								<FormControlLabel value="tags" control={<Radio />} label="Common Interest tags" disabled/>
 							</RadioGroup>
 						</FormControl>
 					</Grid>
