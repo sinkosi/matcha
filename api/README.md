@@ -8,11 +8,11 @@
 1. Run `cd` until you are in the same folder as `package.json`
 2. Run `npm install`, this will allow the npm to install all dependencies
 	required to make the application run.
-NB: Ensure that __port 3000__ is free and that no service is currently using it
+NB: Ensure that __port 5000__ is free and that no service is currently using it
 
 3. Run `node start.js` at least once! This will create the database
 4. Run npm start. If this has run successfully, the console will print:
-	> Matcha has started running/listening on port 3000!
+	> Matcha has started running/listening on port 5000!
 
 ## MYSQL SETUP AND TEST
 
