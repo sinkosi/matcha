@@ -50,7 +50,7 @@ export default function Gender(props)
 						<form method="POST" className={classes.form} noValidate>
 						
 						<RadioGroup aria-label="gender" name="gender" value={gender} onChange={handleChange} >
-								<FormControlLabel value="bisexual" control={<Radio />} label="Bisexual" disabled />
+								<FormControlLabel value="bisexual" control={<Radio />} label="Bisexual" />
 								<FormControlLabel value="female" control={<Radio />} label="Female" />
 								<FormControlLabel value="male" control={<Radio />} label="Male" />
 						</RadioGroup>

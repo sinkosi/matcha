@@ -272,7 +272,7 @@ exports.update = (req, res) => {
 			//user,
 			req.body,
 			(err, data) => {
-				console.log('Run it')
+				//console.log('Run it')
 				if (err) {
 					if (err.kind === "not_found") {
 						res.status(404).send({

@@ -102,7 +102,7 @@ const BasicInfo = (props) => {
 
 		
 			const send_data = () => {
-				const formdata = {'username':username.value, 'firstname':firstname.value, 'lastname':lastname.value, 'email':email.value, gender, sexualPreference:preference, biography}
+				const formdata = {'username':username.value, 'firstname':firstname.value, 'lastname':lastname.value, 'email':email.value, gender, sexual_preference:preference, biography}
 
 				updateUserProfile(handleSuccess, handleError, props.user.data.id,formdata)
 			}
