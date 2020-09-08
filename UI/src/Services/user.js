@@ -37,5 +37,18 @@ const sendUnlike = (f, g, userId) => {
 	.catch(g)
 }
 
-export {getUserInteractions, sendLike, sendUnlike}
+const sendBlock = (f, g, userId) => {
+	let sendBlockApiRoute = "" //the route to send a block request
+	api.post(sendBlockApiRoute, {}, header)
+	.then(f)
+	.catch(g)
+}
+
+const sendUnblock = (f, g, userId) => {
+	let sendUnblockApiRoute = "" //the api route to send a unblock request
+	api.post(sendUnblockApiRoute, {}, header)
+	.then(f)
+	.catch(g)
+}
+export {getUserInteractions, sendLike, sendUnlike, sendBlock, sendUnblock, getUser}
 export default getUser

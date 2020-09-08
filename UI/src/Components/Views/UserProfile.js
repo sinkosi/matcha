@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef, useContext }  from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import getUser from '../../Services/user'
-import { getUserInteractions, sendLike, sendUnlike } from '../../Services/user'
+import { getUserInteractions, sendLike, sendUnlike, sendBlock, sendUnblock } from '../../Services/user'
 import { Container, Grid, Paper, Fab, Tooltip } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography';
 import { UserContext } from '../UserContext'
@@ -29,10 +29,16 @@ const useStyles = makeStyles((theme)=>({
 	margin: {
 		margin: theme.spacing(1),
 	},
-	fab: {
+	fabLike: {
+		margin:"0.5rem"
+	},
+	fabBlock: {
+		margin: "0.5rem"
+	},
+	fabs: {
 		position: 'fixed',
-  right: '1rem',
-  bottom: '1rem'
+		right: '1rem',
+		bottom: '1rem'
 	}
 }));
 
@@ -64,6 +70,19 @@ const UserProfile = (props) => {
 		userId)
 	}
 
+	const handleBlock = (event) => {
+		sendBlock( (result) => {getUser(setUser, userId )},
+		(err) => {},
+		userId)
+	}
+	const handleUnblock = (event) => {
+		sendUnblock( (result) => {getUser(setUser, userId )},
+		(err) => {},
+		userId)
+	}
+
+	
+
 	useEffect(() => {getUser(setUser, userId )}, [userId])
 
 	return (
@@ -71,11 +90,11 @@ const UserProfile = (props) => {
 			<Container maxWidth="lg" className={classes.root}>
 				<Typography align="center" variant="h3" component="h1" className={classes.title}>
 					{user.data.firstname} {user.data.lastname}
-					<Tooltip title="{}">
+				
 						<Typography>
 							[{user.data.popularity}]
 						</Typography>
-					</Tooltip>
+					
 				</Typography>
 				<Grid container spacing={3}>
 					<Grid item md={6} align="center">
@@ -153,9 +172,20 @@ const UserProfile = (props) => {
 				</Grid>
 				{props.path === "/profile" ? <Interactions {...props} userId={userId}></Interactions> : "" }
 			</Container>
-			{ props.path === "/profile" ? <Fab variant="extended" size="large" color="secondary" aria-label="edit profile" className={classes.fab} onClick={handleClickEdit} >Edit profile</Fab>
-			: user.data.isLiked ? <Fab variant="extended" size="large" color="secondary" aria-label="edit profile" className={classes.fab} onClick={handleUnlike} >Unlike</Fab>
-			: <Fab variant="extended" size="large" color="secondary" aria-label="edit profile" className={classes.fab} onClick={handleLike} >Like</Fab>
+			{ props.path === "/profile" ? 
+				<Fab variant="extended" size="large" color="secondary" aria-label="edit profile" className={classes.fab} onClick={handleClickEdit} >Edit profile</Fab>
+				: <div className={classes.fabs}>
+						{ user.data.isLiked ? 
+							<Fab variant="extended" size="large" color="secondary" aria-label="edit profile" className={classes.fabLike} onClick={handleUnlike} >Unlike</Fab>
+							: <Fab variant="extended" size="large" color="secondary" aria-label="edit profile" className={classes.fabLike} onClick={handleLike} >Like</Fab>
+						}
+						{/* {	user.data.isBlocked ?
+							<Fab variant="extended" size="large" color="secondary" aria-label="unblock user" className={classes.fabBlock} onClick={handleUnblock} >Unblock</Fab>
+							: <Fab variant="extended" size="large" color="secondary" aria-label="block user" className={classes.fabBlock} onClick={handleBlock} >Block</Fab>
+						} */}
+						{/* <Fab variant="extended" size="large" color="secondary" aria-label="unblock user" className={classes.fabBlock} onClick={handleUnblock} >Unblock</Fab>
+						<Fab variant="extended" size="large" color="secondary" aria-label="block user" className={classes.fabBlock} onClick={handleBlock} >Block</Fab> */}
+				</div>
 			}
 		</>
 	)

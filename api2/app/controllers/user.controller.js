@@ -197,7 +197,6 @@ exports.update = (req, res) => {
 			if (err) {
 				console.log(err)
 				if (err.kind === "not_found") {
-					console.log("sending a not found response message")
 					res.status(404).send({
 						message: `404: Username not found with name: ${data.username}.`
 					}); return;
@@ -293,7 +292,6 @@ exports.update = (req, res) => {
 					User.findById(req.params.userId, (err, result) => {
 						if (err) console.log(err)
 
-						console.log(result)
 						if (result.sexual_preferences && result.profile_pic && result.biography){
 							User.updateById(req.params.userId, {completed: true}, (err, result) => {})
 						}
@@ -343,7 +341,6 @@ exports.login = (req, res) => {
 		if (err) {
 			console.log(err)
 			if (err.kind === "not_found") {
-				console.log("sending a not found response message")
 				res.status(404).send({
 					message: `404: Username not found with name: ${req.body.login.value}.`
 				});
@@ -476,7 +473,6 @@ exports.forgotPasswordEmail = (req, res) => {
 		else {
 			let userId = data.id;
 
-			console.log({userId});
 			let opt = new ActivationCode({userId, code});
 			ActivationCode.create(opt, (err, data) => {});
 
@@ -488,14 +484,13 @@ exports.forgotPasswordEmail = (req, res) => {
 }
 
 exports.forgotPasswordOTP = (req, res) => {
-	console.log(req.body);
+
 	User.findByEmail(req.body.email, (err, data) => {
 		if (err)
 			res.status(404).send({message: 'something went wrong'})
 		else {
 			let userId = data.id;
 
-			console.log({userId});
 
 			ActivationCode.findByProfileId(userId, (err, data) => {
 				if (err){

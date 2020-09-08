@@ -47,7 +47,7 @@ User.findById = (userID, result) => {
 		}
 
 		if (res.length) {
-			console.log("found user: ", res[0]);
+			// console.log("found user: ", res[0]);
 			result(null, res[0]);
 			return;
 		}
@@ -73,7 +73,7 @@ User.findByEmail = (email, result) => {
 		}
 
 		if (res.length) {
-			console.log("found user: ", res[0]);
+			// console.log("found user: ", res[0]);
 			result(null, res[0]);
 			return;
 		}
@@ -127,7 +127,7 @@ User.updateById = (id, user, result) => {
 				return;
 			}
 
-			console.log("updated user: ", { id: id, ...user });
+			// console.log("updated user: ", { id: id, ...user });
 			result(null, { id: id, ...user });
 		}
 	);
@@ -217,7 +217,7 @@ User.updateByIdCode = (id, code, result) => {
 							}
 						)
 					}
-				console.log(`updated user: ${id}`)//, { id: id, ...user });
+				// console.log(`updated user: ${id}`)//, { id: id, ...user });
 				result(null, { id: id});
 				return;
 				}
@@ -264,8 +264,12 @@ User.findLogin = (username, password, result) => {
 				return;
 			}
 			if (res.length && bcrypt.compareSync(password, res[0].password) && res[0].activated == 1) {
+<<<<<<< HEAD
 				console.log("found user: ", res[0].username);
 				console.log("found user: ", res[0]);
+=======
+				// console.log("found user: ", res[0].username);
+>>>>>>> origin/master
 				result(null, res[0]);
 				return;
 			}
@@ -314,7 +318,7 @@ User.signup = (newUser, result) => {
 							result(err, null);
 							return;
 						}		
-						console.log("created user: ", { id: res.insertId, ...newUser });
+						// console.log("created user: ", { id: res.insertId, ...newUser });
 						result(null, { id: res.insertId, ...newUser });
 					});
 				};
