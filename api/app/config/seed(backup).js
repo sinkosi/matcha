@@ -1,5 +1,5 @@
 const axios = require('axios');
-const db = require('./app/config/db.config');
+const db = require('./db.config');
 const faker = require('faker');
 const Seeder = require('mysql-db-seed').Seeder;
 

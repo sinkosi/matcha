@@ -1,14 +1,14 @@
 # Matcha
  This project is about creating a dating website.
 
- # Introduction
+ ## Introduction
  The purpose of this project is to create an app allowing two potential lovers to meet, from the registration to the final encounter.
  A user will then be able to register, connect, fill his/her profile, search and look into the profile of other users, like them, chat with those that “liked” back.
 
- # Objectives
+ ## Objectives
  This web project is challenging you to create a dating app.
 
-# Mandatory
+ ## Mandatory
 Your website should have a decent page layout (meaning at least a header, a main section and a footer), be able to display correctly on mobile devices and have an adapted layout on small resolutions.
 All your forms should have correct validations and the whole site should be secured.
 This point is MANDATORY and shall be verified when your application would be evaluated. To have an idea, here are some stuff that is NOT considered as SECURE:
@@ -28,7 +28,7 @@ reinitialisation mail, if he forget his password.
 * The user should be able to disconnect in one click at any time on any page.
 * Once connected, an user should modify his username, mail address or password.
 
-# HOW TO USE
+## HOW TO USE
 * Use your favourite apache or Nginx server to host the server.
 * Ensure your mail server is active, this application sends confirmation emails to 
     - activate accounts
@@ -37,3 +37,21 @@ reinitialisation mail, if he forget his password.
     - notify of comments & likes
 
 # FINAL MARK /100
+
+- [x] Simple Launch of Server
+- [x] User Account Creation
+- [x] User Account Confirmation Requirement
+- [x] Complete Profile
+- [x] Matching Algorithm
+- [x] Profile Search
+- [x] Search By Filter
+- [x] Sorting While Filtering
+- [x] Geolocation
+- [x] Popularity & Rating System
+- [ ] Notifications
+- [x] See who viewed your profile
+- [x] View another user's profile
+- [x] Last Seen
+- [x] Block Account
+- [ ] Chat
+- [ ] BONUS
