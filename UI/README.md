@@ -1,3 +1,7 @@
+# Matcha
+
+## Front-End
+
 This is the readme with instruction on how to setup and get started with the frontend
 
 first make sure you have nodejs and npm installed
