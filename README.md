@@ -1,5 +1,6 @@
 # Matcha
  This project is about creating a dating website.
+ ![Matcha Login Page](docs/Screenshot.png)
 
  ## Introduction
  The purpose of this project is to create an app allowing two potential lovers to meet, from the registration to the final encounter.
@@ -29,12 +30,24 @@ reinitialisation mail, if he forget his password.
 * Once connected, an user should modify his username, mail address or password.
 
 ## HOW TO USE
+
 * Use your favourite apache or Nginx server to host the server.
 * Ensure your mail server is active, this application sends confirmation emails to 
     - activate accounts
     - reset passwords
     - update details
     - notify of comments & likes
+### Running Back-End
+
+Details on How to get the get the [NodeJS on the Backend](api/README.md) to start running 
+including MySQL Database is included inside the 'api' folder.
+
+### Running Front-End
+
+The front-end and the backend must be running concurrently in separate instances. You must keep port 3000
+and port 3000 free.
+
+If you wish to get the [Front-End](UI/README.md) running, check the document in the UI Folder.
 
 # FINAL MARK /100
 
@@ -54,4 +67,7 @@ reinitialisation mail, if he forget his password.
 - [x] Last Seen
 - [x] Block Account
 - [ ] Chat
+- [x] Browser Compatibility
+- [x] Mobile Phone Adaptation
+- [x] Security (Passwords / CSRF / SQL Injection)
 - [ ] BONUS
