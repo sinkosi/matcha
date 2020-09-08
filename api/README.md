@@ -2,6 +2,9 @@
  This project is about creating a dating website.
 
 # HOW TO USE
+
+## Node Setup
+
 1. Run `cd` until you are in the same folder as `package.json`
 2. Run `npm install`, this will allow the npm to install all dependencies
 	required to make the application run.
@@ -11,7 +14,8 @@ NB: Ensure that __port 3000__ is free and that no service is currently using it
 4. Run npm start. If this has run successfully, the console will print:
 	> Matcha has started running/listening on port 3000!
 
-- MYSQL SETUP AND TEST
+## MYSQL SETUP AND TEST
+
 1. Run `sudo apt-get install mysql-server mysql-client`
 2. Run `sudo -u root -p` enter your sudo password if it requests the sudo password
 	or leave it blank if it is the MySql password, assuming you have not previously
