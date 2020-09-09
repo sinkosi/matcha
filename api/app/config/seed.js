@@ -83,12 +83,26 @@ con.query(sql, function (err, result) {
   console.log("Creating location 4");
 });
 
+/**
+ * ? UPDATE USER
+ */
+var sql = `UPDATE matcha.users
+SET location = 1, profile_pic = 1
+WHERE id = 1;
+;`
+
+con.query(sql, function (err, result) {
+  if (err) throw err;
+  console.log("Updating default user");
+});
+
+
 //Close the connection!
 con.end(function(err) {
     if (err) {
         return console.log('error: ' + err.message);
     }
-    console.log("Connection has been Closed");
+    console.log("Connection has been Closed\n\nBEGIN SEEDING");
 })
 ;
 
@@ -114,7 +128,7 @@ const seed = new Seeder(
             password: faker.internet.password,
             biography: "I am just a fake account",
             //profile_pic: 1,
-            //location: faker.random.number(min:1, max: 4),
+            //location: 1,//faker.random.number(min:1, max: 4),
             gender: faker.random.arrayElement(["bisexual", "male", "female"]),
             sexual_preferences: "both",
             activated: 1,

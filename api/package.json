@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "seed": "node ./app/config/db.setup.js && node ./app/config/seed.js"
+    "seed": "node ./app/config/db.setup.js && node ./app/config/seed.js && node ./app/config/build_profile.js"
   },
   "keywords": [
     "Sinkosi",
