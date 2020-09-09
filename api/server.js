@@ -3,7 +3,7 @@
 
 // modules ======================================
 const express = require('express');
-const io = require('socket.io');//(server, { origins: '*:*'});
+const socket = require('socket.io');//(server, { origins: '*:*'});
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
@@ -37,6 +37,7 @@ app.get('/', (req, res) => {
 	});
 });
 
+// ! STATIC FILES
 app.use('/static',express.static('uploads'))
 
 /*Defining The Route
@@ -52,15 +53,23 @@ require("./app/routes/user.routes")(app);
 require("./app/routes/images.routes")(app);
 require("./app/routes/interest.routes")(app);
 require("./app/routes/likes.routes")(app);
+//require("./app/routes/chat.routes")(app);
+
+/*startup app at http://localhost:3000
+the text below should be visible if the server is running but if it is not then error messages
+will be printed.
+The port for listening for requests is set here
+*/
+const server = app.listen(port, function() {
+	console.log(`Matcha has started running/listening on port ${port}!`);
+	console.log(`http://localhost:${port}`);
+});
 
 /**
  * ! SOCKET IO
  */
-app.io = io;
-//startup app at http://localhost:3000
-//the text below should be visible if the server is running but if it is not then error messages
-//will be printed.
-// The port for listening for requests is set here
-app.listen(port, () => {
-	console.log(`Matcha has started running/listening on port ${port}!`);
+const io = socket(server);
+
+io.on("connection", function (socket) {
+	console.log("Socket is operational");
 });
