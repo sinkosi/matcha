@@ -48,7 +48,7 @@ export default function Header(props) {
 	const handleSuggestions = () => { browserHistory.push('/users') }
 	const handleSearch = () => { browserHistory.push('/users' ) }
 	const handleProfile = () => { browserHistory.push('/profile') }
-	// const handleChats = () => { browserHistory.push('/chat') }
+	const handleChats = () => { browserHistory.push('/chat') }
 	// const handleNotifications = () => { browserHistory.push('/notifications') }
 	
 	const handleMenuClick = (event) => {
@@ -70,6 +70,7 @@ export default function Header(props) {
 					<Hidden xsDown>
 						<Button color="inherit" onClick={handleSuggestions}>Users</Button>
 						<Button color="inherit" onClick={handleSearch}>Search</Button>
+						<Button color="inherit" onClick={handleChats}>Chat</Button>
 						<Button color="inherit" onClick={handleProfile}>Profile</Button>
 					</Hidden>
 						<Button color="inherit" onClick={handleLogout}>Logout</Button>

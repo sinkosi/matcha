@@ -24,7 +24,7 @@ const updateGender =  (success, error, userId, gender) => {
 }
 
 const updatePreference =  (success, error, userId, preference) => {
-	const data = {'sexualPreference': preference}
+	const data = {'sexual_preference': preference}
 
 	api.put('/users/'+userId, data, header)
 	.then(success)
@@ -40,7 +40,7 @@ const updateInterests =  (success, error, userId, interests) => {
 }
 
 const updateProfilePic =  (success, error, userId, imageId) => {
-	const data = {'profilePic': imageId}
+	const data = {'profile_pic': imageId}
 
 	api.put('/users/'+userId, data, header)
 	.then(success)

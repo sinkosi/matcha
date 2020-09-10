@@ -8,7 +8,7 @@ seed();
 
 
 function seed(){
-    const numberOfProfiles = 30;
+    const numberOfProfiles = 3;
 
     const api = axios.create({baseURL: 'https://randomuser.me'})
 

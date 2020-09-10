@@ -135,12 +135,13 @@ const UserProfile = (props) => {
 								<Grid item xs={6}>
 									<Typography>{user.data.sexual_preferences}</Typography>
 								</Grid>
+								{/*
 								<Grid item xs={6}>
 									<Typography>Email: </Typography>
 								</Grid>
 								<Grid item xs={6}>
 									<Typography>{user.data.email}</Typography>
-								</Grid>
+								</Grid>*/}
 								<Grid item xs={6}>
 									<Typography>Biography: </Typography>
 								</Grid>
@@ -184,7 +185,8 @@ const UserProfile = (props) => {
 							: <Fab variant="extended" size="large" color="secondary" aria-label="block user" className={classes.fabBlock} onClick={handleBlock} >Block</Fab>
 						}
 						{/* <Fab variant="extended" size="large" color="secondary" aria-label="unblock user" className={classes.fabBlock} onClick={handleUnblock} >Unblock</Fab>
-						<Fab variant="extended" size="large" color="secondary" aria-label="block user" className={classes.fabBlock} onClick={handleBlock} >Block</Fab> */}
+						<Fab variant="extended" size="large" color="secondary" aria-label="block user" className={classes.fabBlock} onClick={handleBlock} >Block</Fab>
+						*/}
 				</div>
 			}
 		</>

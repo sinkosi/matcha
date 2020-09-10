@@ -250,6 +250,23 @@ con.query(sql, function (err, result) {
 });
 
 /*=======================================================================
+||                   CREATE 'BLOCKED' TABLE                            ||
+========================================================================*/
+
+var sql = `CREATE TABLE IF NOT EXISTS matcha.blocked (
+  id INT(11)  NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  user_id INT(11)  NOT NULL ,
+  userblocked_id INT(11)  NOT NULL,
+  CONSTRAINT fk_matches_user_id FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT fk_matches_userblocked_id FOREIGN KEY (userblocked_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
+
+con.query(sql, function (err, result) {
+if (err) throw err;
+console.log("Creating Table 'blocked'");
+});
+
+/*=======================================================================
 ||                           FOREIGN KEY MANAGER                        ||
 ========================================================================*/
 var sql = "SET FOREIGN_KEY_CHECKS = 1";

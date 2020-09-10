@@ -256,11 +256,23 @@ exports.update = (req, res) => {
 	}
 	if (req.body.dob) {/* some interesting stuff: user.firstname = req.body.firstname; */}
 
-	if (Object.keys(user).length > 0 ) {
+	console.log({user})
+	console.log(user.length)
+	console.log(req.params.userId)
+	console.log(user[0])
+	console.log(req.body)
+	//if (user.length > 0) {
+	if (req.body) {
+
+	console.log({user}, Object.keys(user).length);
+	if (Object.keys(user).length > 0) {
 		User.updateById(
+			
 			req.params.userId,
-			user,
+			//user,
+			req.body,
 			(err, data) => {
+				//console.log('Run it')
 				if (err) {
 					if (err.kind === "not_found") {
 						res.status(404).send({
@@ -291,7 +303,7 @@ exports.update = (req, res) => {
 		);
 	}
 	else  if (!req.body.password )res.status(200).send({message:'empty body'});
-
+}
 };
 
 //Delete a User with the specified userId in the request

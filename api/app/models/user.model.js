@@ -264,7 +264,8 @@ User.findLogin = (username, password, result) => {
 				return;
 			}
 			if (res.length && bcrypt.compareSync(password, res[0].password) && res[0].activated == 1) {
-				// console.log("found user: ", res[0].username);
+				console.log("found user: ", res[0].username);
+				console.log("found user: ", res[0]);
 				result(null, res[0]);
 				return;
 			}
