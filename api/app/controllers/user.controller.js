@@ -590,7 +590,23 @@ exports.interactions = (req, res) => {
 										else {
 											response.matches = unique(matches);
 
-											res.status(200).send(response)
+											Blocked.findByBlockedId(req.params.userId, (err, blockers) => {
+												
+												if (err) res.status(501).send({message: "error fetching data"})
+												else {
+													response.blockers = unique(blockers)
+
+													Blocked.findByBlockerId(req.params.userId, (err, blocked) => {
+														if (err) res.status(501).send({message: "error fetching data"})
+
+														else {
+															response.blocked = unique(blocked)
+
+															res.status(200).send(response)
+														}
+													})
+												}
+											})
 										}
 									})
 								}

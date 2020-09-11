@@ -174,7 +174,7 @@ const UserProfile = (props) => {
 				{props.path === "/profile" ? <Interactions {...props} userId={userId}></Interactions> : "" }
 			</Container>
 			{ props.path === "/profile" ? 
-				<Fab variant="extended" size="large" color="secondary" aria-label="edit profile" className={classes.fab} onClick={handleClickEdit} >Edit profile</Fab>
+				<Fab variant="extended" size="large" color="secondary" aria-label="edit profile" className={classes.fabs} onClick={handleClickEdit} >Edit profile</Fab>
 				: <div className={classes.fabs}>
 						{ user.data.isLiked ? 
 							<Fab variant="extended" size="large" color="secondary" aria-label="edit profile" className={classes.fabLike} onClick={handleUnlike} >Unlike</Fab>
@@ -252,6 +252,30 @@ const Interactions = (props) => {
 								? interactions.data.likes.map( (profile) => 
 									<Typography key={profile.id}>{profile.username}</Typography> )
 								: <Typography> "No one liked your profile yet <span role='img' aria-label="">😥</span>" </Typography>}
+
+					</Paper>
+				</Grid>
+
+				<Grid item xs={12} sm={6} md={4} lg={3} xl={2}  align="center">
+					<Paper elevation={2} className={classes.paper}>
+						<Typography variant="h6">People who blocked you</Typography>
+						
+							{interactions.data
+								? interactions.data.blockers.map( (profile) => 
+									<Typography key={profile.id}>{profile.username}</Typography> )
+								: <Typography> "No one blocked you <span role='img' aria-label="">😁</span>" </Typography>}
+
+					</Paper>
+				</Grid>
+
+				<Grid item xs={12} sm={6} md={4} lg={3} xl={2}  align="center">
+					<Paper elevation={2} className={classes.paper}>
+						<Typography variant="h6">People you blocked</Typography>
+						
+							{interactions.data
+								? interactions.data.blocked.map( (profile) => 
+									<Typography key={profile.id}>{profile.username}</Typography> )
+								: <Typography> "No one blocked you <span role='img' aria-label="">😁</span>" </Typography>}
 
 					</Paper>
 				</Grid>
