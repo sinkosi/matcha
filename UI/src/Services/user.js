@@ -38,14 +38,14 @@ const sendUnlike = (f, g, userId) => {
 }
 
 const sendBlock = (f, g, userId) => {
-	let sendBlockApiRoute = "" //the route to send a block request
+	let sendBlockApiRoute = `/users/${userId}/block`//the route to send a block request
 	api.post(sendBlockApiRoute, {}, header)
 	.then(f)
 	.catch(g)
 }
 
 const sendUnblock = (f, g, userId) => {
-	let sendUnblockApiRoute = "" //the api route to send a unblock request
+	let sendUnblockApiRoute = `/users/${userId}/unblock` //the api route to send a unblock request
 	api.post(sendUnblockApiRoute, {}, header)
 	.then(f)
 	.catch(g)
