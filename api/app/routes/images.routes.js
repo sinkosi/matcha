@@ -8,7 +8,7 @@ module.exports = app => {
 //     //Create new Image
     // app.post("/images", images.imgCreate);
 
-    app.post("/images/upload/:userId", (req, res)=>{ images.upload(req,res)})
+    app.post("/images/upload/:userId", images.upload)
 
 //     //Find Image by Image ID
     app.get("/images/:imageId", images.findOneImg);

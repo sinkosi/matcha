@@ -53,6 +53,8 @@ require("./app/routes/user.routes")(app);
 require("./app/routes/images.routes")(app);
 require("./app/routes/interest.routes")(app);
 require("./app/routes/likes.routes")(app);
+require("./app/routes/blocked.routes")(app);
+
 //require("./app/routes/chat.routes")(app);
 
 /*startup app at http://localhost:3000

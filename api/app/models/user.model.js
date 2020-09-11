@@ -29,7 +29,9 @@ User.findById = (userID, result) => {
 	sql.query(`SELECT 
 					users.id as id, users.username, users.email, users.firstname, users.lastname, users.gender, 
 					users.biography, users.sexual_preferences, users.date_of_birth, users.activated, 
-					users.completed,  images.url as profile_pic, COALESCE(location.city, "Unknown") as city, COALESCE(mat.matches, 0) AS matches, COALESCE(vs.visits, 0) AS visits, COALESCE(lk.likes, 0) as likes, (COALESCE(mat.matches, 0) + COALESCE(vs.visits, 0) + COALESCE(lk.likes, 0)) as popularity
+					users.completed,  images.url as profile_pic, COALESCE(location.city, "Unknown") as city,
+					COALESCE(mat.matches, 0) AS matches, COALESCE(vs.visits, 0) AS visits, COALESCE(lk.likes, 0) as likes,
+					(COALESCE(mat.matches, 0) + COALESCE(vs.visits, 0) + COALESCE(lk.likes, 0)) as popularity
 				FROM users
 					LEFT JOIN images ON users.profile_pic = images.id
 					LEFT JOIN location ON users.location = location.id
@@ -88,8 +90,12 @@ User.getAll = (loggedInUserId, filter, result) => {
 	sqlQuery = `SELECT 
 					users.id as id, users.username, users.email, users.firstname, users.lastname, users.gender, 
 					users.biography, users.sexual_preferences, users.date_of_birth, users.activated, 
-					users.completed,  images.url as profile_pic, COALESCE(location.city, "Unknown") as city, COALESCE(mat.matches, 0) as matches, COALESCE(vs.visits, 0) as visits, COALESCE(lk.likes, 0) as likes, ( COALESCE(mat.matches, 0) + COALESCE(vs.visits,0) + COALESCE(lk.likes, 0)) as popularity
+					users.completed,  images.url as profile_pic, COALESCE(location.city, "Unknown") as city,
+					COALESCE(mat.matches, 0) as matches, COALESCE(vs.visits, 0) as visits, COALESCE(lk.likes, 0) as likes,
+					( COALESCE(mat.matches, 0) + COALESCE(vs.visits,0) + COALESCE(lk.likes, 0)) as popularity,
+					blocked.blocker_id
 				FROM users
+					LEFT JOIN blocked ON users.id = blocked.blocker_id
 					LEFT JOIN images ON users.profile_pic = images.id
 					LEFT JOIN location ON users.location = location.id
 					LEFT JOIN (
@@ -98,7 +104,7 @@ User.getAll = (loggedInUserId, filter, result) => {
 							) AS mat ON users.id = mat.id
 					LEFT JOIN ( SELECT profile_id as id, (COUNT(DISTINCT(profile_id)) / 10) as visits FROM profile_visits GROUP BY profile_id ) AS vs ON users.id = vs.id
 					LEFT JOIN ( SELECT profile_id as id, (COUNT(DISTINCT(profile_id)) / 2) as likes FROM profile_likes GROUP BY profile_id ) AS lk ON users.id = lk.id
-				WHERE users.id!=? ${filter}`;
+				WHERE users.id!=? AND COALESCE(blocked.blocker_id, 0)=0 ${filter}`;
 	sql.query(sqlQuery, [loggedInUserId], (err, res) => {
 		if (err) {
 			console.log("error: ", err);

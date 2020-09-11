@@ -43,6 +43,7 @@ const Likes = require("../models/likes.model")
 const Matches = require("../models/matches.model")
 const bcrypt = require('bcrypt');
 const { response } = require("express");
+const Blocked = require("../models/blocked.model");
 
 
 //Create and Save a new User
@@ -155,7 +156,13 @@ exports.findOne = (req, res) => {
 									if (err) console.log(err)
 									else {
 										data.isLiked = like;
-										res.send(data)
+										Blocked.didUserBlockUser(req.headers.loggedinuserid, userId, (err, block) => {
+											if (err) console.log( err )
+											else {
+												data.isBlocked = block
+												res.send(data)
+											}
+										})
 										return 
 									}
 							})
@@ -257,9 +264,8 @@ exports.update = (req, res) => {
 	if (req.body.dob) {/* some interesting stuff: user.firstname = req.body.firstname; */}
 
 	console.log({user})
-	console.log(user.length)
+	
 	console.log(req.params.userId)
-	console.log(user[0])
 	console.log(req.body)
 	//if (user.length > 0) {
 	if (req.body) {
@@ -270,7 +276,7 @@ exports.update = (req, res) => {
 			
 			req.params.userId,
 			//user,
-			req.body,
+			user,
 			(err, data) => {
 				//console.log('Run it')
 				if (err) {
