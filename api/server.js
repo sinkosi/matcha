@@ -67,11 +67,13 @@ const server = app.listen(port, function() {
 	console.log(`http://localhost:${port}`);
 });
 
-/**
- * ! SOCKET IO
- */
-const io = socket(server);
+// /**
+//  * ! SOCKET IO
+//  */
+// const io = socket(server);
 
-io.on("connection", function (socket) {
-	console.log("Socket is operational");
-});
+// io.on("connection", function (socket) {
+// 	console.log("Socket is operational");
+// });
+
+require("./app/socketServer")(server)

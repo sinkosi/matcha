@@ -1,8 +1,8 @@
-import React, {useState, useEffect, useRef, useContext }  from 'react'
+import React, {useState, useEffect }  from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import { getAllInterests } from '../../../Services/interests'
 import { updateInterests } from '../../../Services/profile'
-import { Paper, Chip, TextField, Button } from '@material-ui/core'
+import { Paper, Chip, Button } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import AddIcon from '@material-ui/icons/Add';
 
@@ -78,13 +78,13 @@ const Interest = (props) => {
 const InterestAdder = (props) => {
 	const classes = useStyle();
 
-	const handleDelete = (e) => {
-		let arr = props.interestArray
+	// const handleDelete = (e) => {
+	// 	let arr = props.interestArray
 
-		arr = arrayRemove(arr, props.interest)
-		props.setInterestArray(arr)
-		props.forceUpdate()
-	}
+	// 	arr = arrayRemove(arr, props.interest)
+	// 	props.setInterestArray(arr)
+	// 	props.forceUpdate()
+	// }
 
 	const handleAdd = () => {
 		let arr = props.interestArray
@@ -102,7 +102,7 @@ const InterestAdder = (props) => {
 }
 
 function useForceUpdate(){
-    const [value, setValue] = useState(0); // integer state
+    const [, setValue] = useState(0); // integer state
     return () => setValue(value => ++value); // update the state to force render
 }
 

@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef, useContext }  from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import getUser from '../../Services/user'
 import { getUserInteractions, sendLike, sendUnlike, sendBlock, sendUnblock } from '../../Services/user'
-import { Container, Grid, Paper, Fab, Tooltip } from '@material-ui/core'
+import { Container, Grid, Paper, Fab } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography';
 import { UserContext } from '../UserContext'
 import { useHistory } from 'react-router-dom';

@@ -18,7 +18,7 @@ if (loginData) {
 
 ReactDOM.render(
   <React.StrictMode>
-    <App userData={userData} />,
+    <App userData={userData} />
   </React.StrictMode>,
   document.getElementById('root')
 );
