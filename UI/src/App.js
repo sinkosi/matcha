@@ -22,7 +22,7 @@ import { MessagesContext } from './Components/MessagesContext'
 function App(props) {
   // const handleLoggedInStatus = () => {getCookie('token') ? setLoggedIn(true) : setLoggedIn(false)}
   const [userData, setUserData] = useState(props.userData)
-  const [messages, setMessages] = useState({"5":[{message:"hi", to:1, from:2, id:1},{message:"hello", to:2, from:1, id:2},{message:"how are you doing?", to:1, from:2, id:3},{message:"I am good thanx. how are you doing yourself?", to:2, from:1, id:4},{message:"Not bad", to:1, from:2, id:5}]})
+  const [messages, setMessages] = useState({})
 
   return (
     <Fragment>
