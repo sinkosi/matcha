@@ -74,10 +74,12 @@ var sql = `CREATE TABLE IF NOT EXISTS matcha.users (
   location int(20)   NULL,
   activated INT(1) DEFAULT 0 NOT NULL,
   completed INT(1) DEFAULT 0 NOT NULL,
+  online INT(1) DEFAULT 0 NOT NULL,
   registered TIMESTAMP  DEFAULT current_timestamp NOT NULL,
   modified TIMESTAMP  DEFAULT current_timestamp NOT NULL,
   activated_date TIMESTAMP NULL,
   completed_date TIMESTAMP NULL,
+  last_seen TIMESTAMP NULL,
   CONSTRAINT fk_users_profile_pic FOREIGN KEY (profile_pic) REFERENCES images(id),
   CONSTRAINT fk_users_location FOREIGN KEY (location) REFERENCES location(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
