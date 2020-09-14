@@ -2,7 +2,7 @@ const mysql = require('mysql');
 const db = require('./db.config');
 const faker = require('faker');
 const Seeder = require('mysql-db-seed').Seeder;
-const host = require('../../server').host;
+const host = require('../../server');
 
 //console.log(host.localhost);
 var con = mysql.createConnection({
@@ -29,7 +29,7 @@ con.query(sql, function (err, result) {
  * !DEFAULT IMAGE
  */
 var sql = `INSERT INTO matcha.images (url, path, user_id, uploaded)
-  VALUES('http://${host}/static/default.png', './uploads/default.png', 1, NOW()
+  VALUES('/static/default.png', './uploads/default.png', 1, NOW()
 );`
 //VALUES('http://${host.localhost}/static/default.png', './uploads/default.png', 1, NOW()
 
@@ -121,7 +121,7 @@ const seed = new Seeder(
 
 (async () => {
     await seed.seed(
-        10,
+        500,
         "users",
         {
             username: faker.internet.userName,

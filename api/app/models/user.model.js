@@ -1,5 +1,6 @@
 const sql = require("./db");
 const bcrypt = require('bcrypt');
+const host = require("../../server");
 
 //Constructor
 const User = function(user) {
@@ -50,6 +51,9 @@ User.findById = (userID, result) => {
 
 		if (res.length) {
 			// console.log("found user: ", res[0]);
+			
+			res[0].profile_pic = 'http://'+host.host+res[0].profile_pic;
+			console.log("User_model(54) Is this correct: ", res[0].profile_pic);
 			result(null, res[0]);
 			return;
 		}
@@ -111,8 +115,10 @@ User.getAll = (loggedInUserId, filter, result) => {
 			result(null, err);
 			return;
 		}
-
-		// console.log("users: ", res);
+		for (i = 0; i < res.length; i++) {
+			res[i].profile_pic = 'http://'+host.host+res[i].profile_pic;
+		}
+		//console.log("users: ", res);
 		result(null, res);
 	});
 };
@@ -271,7 +277,8 @@ User.findLogin = (username, password, result) => {
 			}
 			if (res.length && bcrypt.compareSync(password, res[0].password) && res[0].activated == 1) {
 				console.log("found user: ", res[0].username);
-				console.log("found user: ", res[0]);
+				res[0].profile_pic = 'http://'+host.host+res[0].profile_pic;
+				//console.log("found user: ", res[0]);
 				result(null, res[0]);
 				return;
 			}

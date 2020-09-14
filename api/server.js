@@ -64,7 +64,7 @@ will be printed.
 The port for listening for requests is set here
 */
 var myhost = "localhost";
-//var myhost = `192.168.8.102`;
+//var myhost = `192.168.0.119`;
 const server = app.listen(port, (localhost) => {
 	console.log(`Matcha has started running/listening on port ${port}!`);
 	console.log(`http://${myhost}:${port}`);
@@ -80,5 +80,5 @@ const server = app.listen(port, (localhost) => {
 // });
 
 require("./app/socketServer")(server)
-exports.host = myhost + ':' + port;
+exports.host = `${myhost}:${port}`;
 //exports.portal = port;
