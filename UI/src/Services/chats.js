@@ -12,11 +12,11 @@ const getAllInterests =  (f, g) => {
 
 
 
-const getUsers =  (f, query) => {
+const getMatches =  (f) => {
 
-	api.get(`/users/interests?${query}`, getCookieHeader())
+	api.get(`/matches`, getCookieHeader())
 	.then(f)
-	.catch(() => {})
+	.catch((err) => {console.log(err)})
 }
 
-export {getAllInterests, getUsers}
+export {getAllInterests, getMatches}

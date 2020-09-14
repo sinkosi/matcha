@@ -1,3 +1,4 @@
+const Matches = require("../models/matches.model");
 const Match = require("../models/matches.model");
 
 //Create a new match
@@ -22,6 +23,24 @@ exports.matchCreate = (req, res) => {
     })
 }
 
+exports.get = (req, res) => {
+    if (!req.headers.loggedinuserid){
+		res.status(401).send("Must be loggedIn")
+		return
+    }
+    
+    Matches.findByUserId(req.headers.loggedinuserid, (err, results) => {
+        if (err) {
+            console.log(err)
+            res.status(501).send({message:"error fetching matches"})
+            return
+        }
+        else {
+            console.log("responding with a list of matches: ", results)
+            res.send(results)
+        }
+    })
+}
 //Find match by ID
 //Matches.findById(matchId,
 

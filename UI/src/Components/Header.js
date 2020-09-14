@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { deleteCookie } from '../utils/cookies'
 import { useHistory } from 'react-router-dom';
-import { Hidden, Menu, MenuItem, Paper, ClickAwayListener } from '@material-ui/core';
+import { Hidden, Paper, ClickAwayListener } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -81,9 +81,9 @@ export default function Header(props) {
 									<MenuIcon />
 								</IconButton>
 								<Paper id="menu" className={classes.menu} hidden={hideMenu}>
-									<Button ClassName={classes.menuItem} fullWidth onClick={handleSuggestions}> Users</Button>
+									<Button className={classes.menuItem} fullWidth onClick={handleSuggestions}> Users</Button>
 									{/* <Button ClassName={classes.menuItem} fullWidth> Search</Button> */}
-									<Button ClassName={classes.menuItem} fullWidth onClick={handleProfile}> Profile</Button>
+									<Button className={classes.menuItem} fullWidth onClick={handleProfile}> Profile</Button>
 								</Paper>
 							</div>
 						</ClickAwayListener>

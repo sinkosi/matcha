@@ -13,7 +13,7 @@ exports.add = (req, res) => {
 	blockerId = req.headers.loggedinuserid,
 	blockedId = req.params.userId
 	
-	console.log("__________________________block user")
+	
 	Blocked.add(blockerId, blockedId, (err, result) => {
 		if (err) {
 			console.log(err)
@@ -78,7 +78,7 @@ exports.remove = (req, res) => {
 	blockerId = req.headers.loggedinuserid,
 	blockedId = req.params.userId
 
-	console.log("_______________________unblock user")
+
 	Blocked.remove(blockerId, blockedId, (err, result) => {
 		if (err){
 			console.log(err)

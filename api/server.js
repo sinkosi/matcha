@@ -54,6 +54,7 @@ require("./app/routes/images.routes")(app);
 require("./app/routes/interest.routes")(app);
 require("./app/routes/likes.routes")(app);
 require("./app/routes/blocked.routes")(app);
+require("./app/routes/matches.routes")(app);
 
 //require("./app/routes/chat.routes")(app);
 
@@ -67,11 +68,13 @@ const server = app.listen(port, function() {
 	console.log(`http://localhost:${port}`);
 });
 
-/**
- * ! SOCKET IO
- */
-const io = socket(server);
+// /**
+//  * ! SOCKET IO
+//  */
+// const io = socket(server);
 
-io.on("connection", function (socket) {
-	console.log("Socket is operational");
-});
+// io.on("connection", function (socket) {
+// 	console.log("Socket is operational");
+// });
+
+require("./app/socketServer")(server)

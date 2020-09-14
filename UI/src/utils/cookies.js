@@ -47,4 +47,14 @@ const cookieUserId = () => {
     return
 }
 
-export {setCookie, setCookieRememberMe, deleteCookie, getCookie, cookieUserId}
+const getCookieHeader = () => {
+	let loginData = getCookie('loginData');
+	console.log("_______________________________________________\nlogin data coockie: ", loginData)
+	if (loginData) {
+		loginData = JSON.parse(loginData);
+		let header = {'headers' : {loggedInUserId: loginData.data.id}}
+		return header;
+    }
+}
+
+export {setCookie, setCookieRememberMe, deleteCookie, getCookie, cookieUserId, getCookieHeader}
