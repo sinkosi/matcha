@@ -40,7 +40,7 @@ module.exports = server => {
 
 		socket.on("message", (message) => {
 			console.log(message)
-			message.re = "yes"
+
 			sendMessage(message, message.to)
 		})
 		
@@ -48,7 +48,7 @@ module.exports = server => {
 
 	const sendMessage = (message, to) => {
 		if (online_users[to]){
-			console.log("testing echo")
+
 			chats.to(online_users[to]).emit("message", message)
 		}
 	}
