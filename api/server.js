@@ -63,8 +63,8 @@ the text below should be visible if the server is running but if it is not then 
 will be printed.
 The port for listening for requests is set here
 */
-//var myhost = "localhost";
-var myhost = `192.168.8.102`;
+var myhost = "localhost";
+//var myhost = `192.168.8.102`;
 const server = app.listen(port, (localhost) => {
 	console.log(`Matcha has started running/listening on port ${port}!`);
 	console.log(`http://${myhost}:${port}`);
