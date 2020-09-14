@@ -80,5 +80,5 @@ const server = app.listen(port, (localhost) => {
 // });
 
 require("./app/socketServer")(server)
-exports.localhost = myhost+':'+port;
+exports.host = myhost + ':' + port;
 //exports.portal = port;

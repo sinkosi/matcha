@@ -1,8 +1,9 @@
 
 const Image = require("../models/images.model");
 const fs = require("fs");
+const host = require('../../server').host;
 
-
+console.log(host)
 
 //FIND AN IMAGE BY ITS ID
 exports.findOneImg = (req, res) => {
@@ -31,7 +32,7 @@ exports.upload = (req, res) => {
 	
 	let name = randomString(20)+'.'+fileExtention;
 	let path = imgdir+'/'+name;
-	let url = 'http://localhost:5000/static/images/'+userId+'/'+name;
+	let url = `http://${host}/static/images/${userId}/${name}`;
 	console.log({path}, {url})
 	fs.writeFile(path, req.body.data, {encoding:'base64'}, (err, data) => {
 		if (err) {

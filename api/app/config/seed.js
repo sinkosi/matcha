@@ -2,7 +2,7 @@ const mysql = require('mysql');
 const db = require('./db.config');
 const faker = require('faker');
 const Seeder = require('mysql-db-seed').Seeder;
-const host = require('../../server').localhost;
+const host = require('../../server').host;
 
 //console.log(host.localhost);
 var con = mysql.createConnection({
