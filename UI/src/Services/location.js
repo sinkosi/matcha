@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getCookie } from '../utils/cookies'
+import { getCookieHeader } from '../utils/cookies'
 
 
 
@@ -11,17 +11,11 @@ const geoipfy = axios.create({baseURL: 'https://ip-geolocation.whoisxmlapi.com/a
 
 
 const getLocationData = (f) => {
-	let loginData = getCookie('loginData');
-	let loggedInUserId = -1;
-	if (loginData) {
-		loginData = JSON.parse(loginData);
-		loggedInUserId = loginData.data.id; 
-	}
-	let header = {'headers' : {loggedInUserId}}
+	
 	geoipfy.get("/v1?apiKey=at_5ryScDWbLJH30kMU978Wwcuo6yFLD")
 	.then((resp)=> {
 		console.log(resp.data)
-		api.post("/location",resp.data, header)
+		api.post("/location",resp.data, getCookieHeader())
 		.then((res) => console.log("location sent to server..."))
 		.catch(() => console.log("error saving your current location"))
 	})

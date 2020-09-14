@@ -91,7 +91,7 @@ const Users = (props) => {
 		if (!hideFilterMenu)
 			handleMenuClick()
 	}
-
+	console.log({userData})
 	return (
 		<>
 			<ClickAwayListener onClickAway={handleMenuClickAway}>

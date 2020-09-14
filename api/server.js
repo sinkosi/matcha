@@ -54,6 +54,7 @@ require("./app/routes/images.routes")(app);
 require("./app/routes/interest.routes")(app);
 require("./app/routes/likes.routes")(app);
 require("./app/routes/blocked.routes")(app);
+require("./app/routes/matches.routes")(app);
 
 //require("./app/routes/chat.routes")(app);
 
