@@ -51,9 +51,7 @@ User.findById = (userID, result) => {
 
 		if (res.length) {
 			// console.log("found user: ", res[0]);
-			
 			res[0].profile_pic = 'http://'+host.host+res[0].profile_pic;
-			console.log("User_model(54) Is this correct: ", res[0].profile_pic);
 			result(null, res[0]);
 			return;
 		}

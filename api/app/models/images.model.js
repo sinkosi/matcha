@@ -51,7 +51,7 @@ Image.findByUserId = (userId, result) => {
 		for (i = 0; i < res.length; i++) {
 			res[i].url = 'http://'+host.host+res[i].url;
 		}
-		console.log("Images have been retrieved: ", res);
+		//console.log("Images have been retrieved: ", res);
 		result(null, res);
 		
 	});
@@ -64,7 +64,7 @@ Image.userProfilePic = (userId, result) => {
 			result(err, null);
 		
 		}
-		console.log("The res[0].profile_pic: ", res[0].profile_pic);
+		//console.log("The res[0].profile_pic: ", res[0].profile_pic);
 		result(null, res[0].profile_pic);
 	})
 }

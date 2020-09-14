@@ -19,7 +19,7 @@ const useStyle = makeStyles({
 })
 
 const Interests = (props) => {
-	const forceUpdate = useForceUpdate()
+	//const forceUpdate = useForceUpdate()
 	const [interestArray, setInterestArray] = useState(props.user.data.interests)
 	const [suggestedInterests, setSuggestedInterests] = useState([])
 	const x = 1;
@@ -100,12 +100,12 @@ const InterestAdder = (props) => {
 		</>
 	)
 }
-
+/*
 function useForceUpdate(){
     const [, setValue] = useState(0); // integer state
     return () => setValue(value => ++value); // update the state to force render
 }
-
+*/
 const arrayRemove = (array, element) => {
 	const index = array.indexOf(element)
 

@@ -139,7 +139,7 @@ const UserProfile = (props) => {
 									<Typography>Location: </Typography>
 								</Grid>
 								<Grid item xs={6}>
-									<Typography>{user.data.location}</Typography>
+									<Typography>{user.data.city}</Typography>
 								</Grid>
 								{/*
 								<Grid item xs={6}>
