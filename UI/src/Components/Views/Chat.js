@@ -1,8 +1,10 @@
 import { Button, Grid, makeStyles, TextField, Typography } from "@material-ui/core";
 import React, { useState, useEffect, useContext } from "react";
-import socketIOClient from "socket.io-client";
+// import socketIOClient from "socket.io-client";
+import { getMatches } from "../../Services/chats";
+import { MessagesContext } from "../MessagesContext";
 import { UserContext } from '../UserContext'
-const ENDPOINT = "http://127.0.0.1:5000/chats";
+// const ENDPOINT = "http://127.0.0.1:5000/chats";
 
 // let messages = []
 
@@ -50,7 +52,8 @@ const useStyle = makeStyles({
 	},
 	messagesWindow: {
 		// backgroundColor: "orange",
-		padding: "0.5rem"
+		padding: "0.5rem",
+		overflow: "auto"
 	},
 	alignRight:{
 		textAlign:"right"
@@ -79,42 +82,47 @@ const useStyle = makeStyles({
 })
 function Chat(props) {
 	const classes = useStyle()
-	const [messages, setMessages] = useState([]);
+	const [activeChat, setActiveChat] = useState(0)
+	const [activeUsername, setActiveUsername] = useState("Select user to start chating")
+	const {messages, setMessages} = useContext(MessagesContext);
+	const [message, setMessage] = useState("");
 	const {userData} = useContext(UserContext);
 	
 	const appendMessage = (message) => {
-		setMessages(messages.concat([message]))
+		console.log("append was called once")
+		let msg = {...messages}
+		// console.log("old messages: ", msg)
+		if (message.from !== userData.data.id){	msg[message.from]? msg[message.from].push(message): msg[message.from] = [message] }
+		else {	msg[message.to]? msg[message.to].push(message): msg[message.to] = [message] }
+		// console.log("new messages: ", msg)
+
+		setMessages(msg)
 	}
 
-	useEffect(() => {
-		const soc = socketIOClient(ENDPOINT, {query:{userId: userData.data.id}});
-		soc.on("error", data => {
-			console.log(data);
-		});
-		
-		soc.on("message", (message) => {
-			console.log(message)
+		userData.chatSocket.off("message").on("message", (message) => {
+			console.log("chatSocket says", message)
 			appendMessage(message)
 		})
-	}, [userData.data.id, appendMessage]);
 
+	const sendMessage = () => {
+		userData.chatSocket.emit("message", {message, from:userData.data.id, to:activeChat})
+		appendMessage({message, from:userData.data.id, to:activeChat})
+	}
 
 	return (
 		<>
-			{/* It's <time dateTime={response}>{response}</time> */}
-			{/* { messages.map(message => <div>{message.message}</div>) } */}
 			<div className={classes.container} >
-				<Users />
+				<Users activeChat={activeChat} setActiveChat={setActiveChat} setActiveUsername={setActiveUsername} />
 
-					<div className={classes.userName} ><Typography variant="h4" >Mosibudi</Typography></div>
-					<Messages />
+					<div className={classes.userName} ><Typography variant="h4" >{activeUsername}</Typography></div>
+					<Messages messages={messages[activeChat]} userId={userData.data.id} />
 					<div className={classes.newMessageWindow} >
 						<Grid container>
-							<Grid item sx sm>
-								<TextField fullWidth variant="outlined" size="small" />
+							<Grid item xs sm>
+								<TextField fullWidth variant="outlined" size="small" value={message} onChange={(event) => setMessage(event.target.value)}/>
 							</Grid>
 							<Grid item> 
-								<Button variant="contained" size="large" color="primary" >send</Button> 
+								<Button variant="contained" size="large" color="primary" onClick={sendMessage} >send</Button> 
 							</Grid>
 						</Grid>
 					</div>
@@ -124,13 +132,20 @@ function Chat(props) {
 	);
 }
 
-const Users = (prop) => {
-	const [users, setUsers] = useState({data:[{id:2, username:"mosima"}, {id:3, username:"mosibudi"}]})
+const Users = (props) => {
+	const [users, setUsers] = useState({data:[]})
 	const classes = useStyle()
-	const activeChat = 3
+	const activeChat = props.activeChat
 	const handleClickUser = (userId) => {
 		console.log("clicked user ", userId)
+		props.setActiveChat(userId)
+		props.setActiveUsername(selectUsername(users.data, userId))
 	}
+
+	useEffect(() => {
+		getMatches(setUsers)
+
+	},[])
 	return (
 		<div className={classes.sideBar}>
 					{users.data.map( (user) => 
@@ -143,19 +158,28 @@ const Users = (prop) => {
 
 const Messages = (props) => {
 	const classes = useStyle()
-	const userId = 1;
-	const messages = [{message:"hi", to:1, from:2, id:1},{message:"hello", to:2, from:1, id:2},{message:"how are you doing?", to:1, from:2, id:3},{message:"I am good thanx. how are you doing yourself?", to:2, from:1, id:4},{message:"Not bad", to:1, from:2, id:5}]
+	const userId = props.userId;
+	const messages = props.messages
 	return (
+		
 		<div className={classes.messagesWindow} >
-			{messages.map( (message) =>
-				<div  key={message.id} className={message.from === userId? classes.alignRight : classes.alignLeft} >
-					<div className={classes.message}>
-						<Typography>{message.message}</Typography>
-					</div>
-				</div>
-
-			)}
+			{ messages ?
+				messages.map( (message, key) =>
+					<div  key={key} className={message.from === userId? classes.alignRight : classes.alignLeft} >
+						<div className={classes.message}>
+							<Typography>{message.message}</Typography>
+						</div>
+					</div>	)
+			  :	<Typography align="center" variant="h5" >Be the first to send a message</Typography>
+			}
 		</div>
 	)
+}
+
+function selectUsername(users, userId){
+	for (const user of users) {
+		if (user.id === userId)
+			return user.username
+	}
 }
 export default Chat;

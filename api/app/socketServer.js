@@ -48,6 +48,7 @@ module.exports = server => {
 
 	const sendMessage = (message, to) => {
 		if (online_users[to]){
+			console.log("testing echo")
 			chats.to(online_users[to]).emit("message", message)
 		}
 	}

@@ -1,13 +1,7 @@
 import axios from 'axios'
-import { getCookie } from '../utils/cookies'
+import { getCookieHeader } from '../utils/cookies'
 
-let loginData = getCookie('loginData');
-let loggedInUserId = -1;
-if (loginData) {
-	loginData = JSON.parse(loginData);
-	loggedInUserId = loginData.data.id; 
-}
-let header = {'headers' : {loggedInUserId}}
+
 
 
 const api = axios.create({baseURL: 'http://localhost:5000'})
@@ -15,7 +9,7 @@ const api = axios.create({baseURL: 'http://localhost:5000'})
 
 const getUsers =  (f, query) => {
 
-	api.get(`/users?${query}`, header)
+	api.get(`/users?${query}`, getCookieHeader())
 	.then(f)
 	.catch(() => {})
 }
