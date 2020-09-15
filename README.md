@@ -77,5 +77,3 @@ If you wish to get the [Front-End](UI/README.md) running, check the document in 
 ![Mosima Mamaleke](api/uploads/default.png) ![Sibonelo Nkosi](api/uploads/default.png)
 
 [Mosima Mamaleke](www.gihub.com/mmamalek)           [Sibonelo Nkosi](www.github.com/sinkosi)
-
-[LinkedIn](www.linkedin.com/)                           [LinkedIn](www.linkedin.com/)
