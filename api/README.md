@@ -10,9 +10,17 @@
 	required to make the application run.
 NB: Ensure that __port 5000__ is free and that no service is currently using it
 
+##### !Shortcut - Notice!
+###### `npm run build`
+
 3. Run `node start.js` at least once! This will create the database
 4. Run npm start. If this has run successfully, the console will print:
 	> Matcha has started running/listening on port 5000!
+
+
+##### SEEDED MySQL Database
+
+![Screenshot of SELECT Statement on seeded database](../docs/sql.png)
 
 ## MYSQL SETUP AND TEST
 

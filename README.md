@@ -37,15 +37,15 @@ reinitialisation mail, if he forget his password.
     - reset passwords
     - update details
     - notify of comments & likes
-### Running Back-End
+### [Running Back-End](api/README.md)
 
 Details on How to get the get the [NodeJS on the Backend](api/README.md) to start running 
 including MySQL Database is included inside the 'api' folder.
 
-### Running Front-End
+### [Running Front-End](UI/README.md)
 
 The front-end and the backend must be running concurrently in separate instances. You must keep port 3000
-and port 3000 free.
+and port 5000 free.
 
 If you wish to get the [Front-End](UI/README.md) running, check the document in the UI Folder.
 
@@ -66,8 +66,16 @@ If you wish to get the [Front-End](UI/README.md) running, check the document in 
 - [x] View another user's profile
 - [x] Last Seen
 - [x] Block Account
-- [ ] Chat
+- [x] Chat
 - [x] Browser Compatibility
 - [x] Mobile Phone Adaptation
 - [x] Security (Passwords / CSRF / SQL Injection)
 - [ ] BONUS
+
+## CONTRIBUTORS
+
+![Mosima Mamaleke](api/uploads/default.png) ![Sibonelo Nkosi](api/uploads/default.png)
+
+[Mosima Mamaleke](www.gihub.com/mmamalek)           [Sibonelo Nkosi](www.github.com/sinkosi)
+
+[LinkedIn](www.linkedin.com/)                           [LinkedIn](www.linkedin.com/)

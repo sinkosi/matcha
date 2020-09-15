@@ -6,11 +6,19 @@ This is the readme with instruction on how to setup and get started with the fro
 
 first make sure you have nodejs and npm installed
 
-run npm install
-npm build
-npm start
+###### run npm install
+###### npm build
+###### npm start
+
+#### NB: To setup the DNS for how the application communicates with the backend, please check
+[UI/src/Components/utils/host.js](src/utils/host.js)
+#### and set it up inside that file. It must match address in api/server.js
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+### Matcha Mobile Deployment
+
+![Matcha Deployed on Android and Web](../docs/react.jpg)
 
 ## Available Scripts
 
@@ -30,6 +38,8 @@ Launches the test runner in the interactive watch mode.<br />
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
+
+Runs the app in production mode. If port 5000 is open, it will run on port 5000.
 
 Builds the app for production to the `build` folder.<br />
 It correctly bundles React in production mode and optimizes the build for the best performance.
