@@ -3,8 +3,7 @@ const Users = require("../models/user.model");
 const { response } = require("express");
 
 exports.add = (req, res) => {
-	console.log("_________body________\n", req.body)
-	console.log("_____headers______\n", req.headers)
+
 
 	if (!req.headers.loggedinuserid){
 		res.status(401).send("Must be loggedIn")

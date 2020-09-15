@@ -95,8 +95,9 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
 	if (!req.headers.loggedinuserid) {
 		res.status(401).send({message:"you must be logged in"})
+		return
 	}
-	console.log(req.query)
+
 	let filter = generateSQLFilterString(req.query)
 	User.getAll(req.headers.loggedinuserid, filter, (err, data) => {
 		if (err)
@@ -106,7 +107,7 @@ exports.findAll = (req, res) => {
 			});
 		else res.send(data);
 	});
-	console.log(req)
+
 };
 
 //Retrieve a single User with a userId in the request
@@ -123,11 +124,11 @@ exports.findOne = (req, res) => {
 			if (err.kind === "not_found") {
 				res.status(404).send({
 					message: `Not found User with id ${req.params.userId}.`
-				});
+				}); return;
 			} else {
 				res.status(500).send({
 					message: "Error retrieving User with id " + req.params.userId
-				});
+				}); return;
 			}
 		} else {
 			Interests.findByUserId(req.params.userId, (err, interests) => {
@@ -590,7 +591,23 @@ exports.interactions = (req, res) => {
 										else {
 											response.matches = unique(matches);
 
-											res.status(200).send(response)
+											Blocked.findByBlockedId(req.params.userId, (err, blockers) => {
+												
+												if (err) res.status(501).send({message: "error fetching data"})
+												else {
+													response.blockers = unique(blockers)
+
+													Blocked.findByBlockerId(req.params.userId, (err, blocked) => {
+														if (err) res.status(501).send({message: "error fetching data"})
+
+														else {
+															response.blocked = unique(blocked)
+
+															res.status(200).send(response)
+														}
+													})
+												}
+											})
 										}
 									})
 								}
@@ -676,6 +693,6 @@ function generateSQLFilterString({gender, city, popularity, sort, order}){
 	else if (sort === "age") str+= " age"
 	else if (sort === "tags") str+= " tags"
 	order === "descending" ? str += " DESC" : str += " ASC"
-	console.log(str)
+
 	return str
 }

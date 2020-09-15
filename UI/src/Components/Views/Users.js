@@ -91,7 +91,7 @@ const Users = (props) => {
 		if (!hideFilterMenu)
 			handleMenuClick()
 	}
-
+	console.log({userData})
 	return (
 		<>
 			<ClickAwayListener onClickAway={handleMenuClickAway}>
@@ -120,7 +120,6 @@ const FilterMenu = (props) => {
 	const [filterCity, setFilterCity] = React.useState({ Johannesburg: false, Pretoria: false, Germiston:false, Tembisa: false, Others: false });
 	const [filterPopularity, setFilterPopularity] = React.useState({lessThan3:false, lessThan5:false, moreThan5:false});
 	const x = 0;
-	const user = props.user
 	
 	const handleOrderChange = (event) => {
 		console.log(event.target.value)
