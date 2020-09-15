@@ -12,6 +12,7 @@ api/uploads/images/*
 # UI FOLDER
 
 UI/node_modules/
+UI/build
 
 # PYTHON FOLDER
 
