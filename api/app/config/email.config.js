@@ -1,6 +1,8 @@
 // const config = require('../../secret.js');
 
 const mailer = require('nodemailer');
+const host = require("../../server");
+//const port = 5000;
 
 const config = {
     emailUsername: 'mmamalek@student.wethinkcode.co.za',
@@ -41,7 +43,7 @@ const Email = function(){
         msg = `
         Welcome to matcha. Please click the link below to activate your account:
         
-        http://localhost:3000/activate/${userId}/${activationCode}`
+        http://${host.url}:${host.front_port}/activate/${userId}/${activationCode}`
 
 
 

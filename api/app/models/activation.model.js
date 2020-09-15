@@ -45,7 +45,7 @@ ActivationCode.removeByProfileId = (profileId, result) => {
 			return;
 		}
 
-		console.log("found activation code: ", res );
+		console.log("Delete activation code: ", res );
 		result(null, res);
 	});
 };
