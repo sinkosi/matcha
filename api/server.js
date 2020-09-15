@@ -20,7 +20,7 @@ app.use(cors(corsOptions));
 
 //set the port: This is where that whole localhost:3000 thing gets done and should be changed if
 // you have a port conflict etc. If it works then you will see the text below.
-const port = 5000;
+const port = 4500;
 
 // parse requests of content-type: application/json:
 app.use(bodyParser.json({limit: '50mb', type: 'application/json'}));
@@ -63,9 +63,11 @@ the text below should be visible if the server is running but if it is not then 
 will be printed.
 The port for listening for requests is set here
 */
-const server = app.listen(port, function() {
+var myhost = "localhost";
+//var myhost = `192.168.8.102`;
+const server = app.listen(port, (localhost) => {
 	console.log(`Matcha has started running/listening on port ${port}!`);
-	console.log(`http://localhost:${port}`);
+	console.log(`http://${myhost}:${port}`);
 });
 
 // /**
@@ -78,3 +80,6 @@ const server = app.listen(port, function() {
 // });
 
 require("./app/socketServer")(server)
+exports.host = `${myhost}:${port}`;
+exports.url = `${myhost}`;
+exports.front_port = 5000;

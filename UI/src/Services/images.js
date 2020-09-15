@@ -1,6 +1,8 @@
 import axios from 'axios'
+import { backend_url } from '../utils/host'
 
-const api = axios.create({baseURL: 'http://localhost:5000'})
+const api = axios.create({baseURL: backend_url})
+//const api = axios.create({baseURL: 'http://localhost:5000'})
 
 const getUserImages =  (userId, f, g) => {
 	api.get('/users/'+userId+'/images' )

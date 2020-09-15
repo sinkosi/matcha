@@ -1,5 +1,8 @@
 import axios from 'axios'
-const api = axios.create({baseURL: 'http://localhost:5000'})
+import { backend_url } from '../utils/host'
+
+const api = axios.create({baseURL: backend_url})
+//const api = axios.create({baseURL: 'http://localhost:5000'})
 
 const sendEmail =  (success, error, email) => {
     const data = {'step1': {email}}

@@ -135,6 +135,12 @@ const UserProfile = (props) => {
 								<Grid item xs={6}>
 									<Typography>{user.data.sexual_preferences}</Typography>
 								</Grid>
+								<Grid item xs={6}>
+									<Typography>Location: </Typography>
+								</Grid>
+								<Grid item xs={6}>
+									<Typography>{user.data.city}</Typography>
+								</Grid>
 								{/*
 								<Grid item xs={6}>
 									<Typography>Email: </Typography>

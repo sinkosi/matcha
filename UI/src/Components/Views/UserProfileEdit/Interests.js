@@ -19,7 +19,7 @@ const useStyle = makeStyles({
 })
 
 const Interests = (props) => {
-	const forceUpdate = useForceUpdate()
+	//const forceUpdate = useForceUpdate()
 	const [interestArray, setInterestArray] = useState(props.user.data.interests)
 	const [suggestedInterests, setSuggestedInterests] = useState([])
 	const x = 1;
@@ -36,12 +36,12 @@ const Interests = (props) => {
 	<>
 		<Paper elevation={2} className={classes.paper}>
 			<Typography>Your Interests</Typography>
-			{interestArray ? interestArray.map( (interest, index) => <Interest key={index} index={index} interest={interest} interestArray={interestArray} setInterestArray={setInterestArray} forceUpdate={forceUpdate}/> ): "No interests 😥"}
+			{interestArray ? interestArray.map( (interest, index) => <Interest key={index} index={index} interest={interest} interestArray={interestArray} setInterestArray={setInterestArray} /*forceUpdate={forceUpdate}*//> ): "No interests 😥"}
 
 			
 				<Typography>Suggestions</Typography>
 					{ suggestedInterests.map( (interest, index) => 
-						interestArray.indexOf(interest) < 0 ? <InterestAdder key={index} index={index} interest={interest} interestArray={interestArray} setInterestArray={setInterestArray} forceUpdate={forceUpdate}/> : <></> ) }
+						interestArray.indexOf(interest) < 0 ? <InterestAdder key={index} index={index} interest={interest} interestArray={interestArray} setInterestArray={setInterestArray} /*forceUpdate={forceUpdate}*//> : <></> ) }
 			
 			
 			{/* <TextField variant="outlined" value={interest.value} error={interest.error} label="#interest" name="interest" onChange={validateInterestInput} autoFocus fullWidth/> */}
@@ -100,12 +100,12 @@ const InterestAdder = (props) => {
 		</>
 	)
 }
-
+/*
 function useForceUpdate(){
     const [, setValue] = useState(0); // integer state
     return () => setValue(value => ++value); // update the state to force render
 }
-
+*/
 const arrayRemove = (array, element) => {
 	const index = array.indexOf(element)
 

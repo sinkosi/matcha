@@ -2,7 +2,9 @@ const mysql = require('mysql');
 const db = require('./db.config');
 const faker = require('faker');
 const Seeder = require('mysql-db-seed').Seeder;
+const host = require('../../server');
 
+//console.log(host.localhost);
 var con = mysql.createConnection({
     host: db.HOST,
     user: db.USER,
@@ -27,8 +29,9 @@ con.query(sql, function (err, result) {
  * !DEFAULT IMAGE
  */
 var sql = `INSERT INTO matcha.images (url, path, user_id, uploaded)
-  VALUES('http://localhost:5000/static/default.png', './uploads/default.png', 1, NOW()
+  VALUES('/static/default.png', './uploads/default.png', 1, NOW()
 );`
+//VALUES('http://${host.localhost}/static/default.png', './uploads/default.png', 1, NOW()
 
 con.query(sql, function (err, result) {
   if (err) throw err;

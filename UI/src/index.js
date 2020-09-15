@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { getCookie } from './utils/cookies'
 import socketIOClient from "socket.io-client";
-
+import { backend_url } from './utils/host'
 
 let cookieToken = getCookie('token')
 let loginData = getCookie('loginData');
@@ -17,7 +17,8 @@ if (loginData) {
 	loginData = JSON.parse(loginData);
 	userData = loginData;
 	if (userData.loggedIn){
-		const soc = socketIOClient("http://127.0.0.1:5000/chats", {query:{userId: loginData.data.id}});
+		//const soc = socketIOClient("http://127.0.0.1:5000/chats", {query:{userId: loginData.data.id}});
+		const soc = socketIOClient(backend_url+"/chats", {query:{userId: loginData.data.id}});
 		soc.on("error", data => {
 			console.log(data);
 		});

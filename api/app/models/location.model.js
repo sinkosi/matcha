@@ -9,7 +9,7 @@ Location.addOne = (location, result) => {
 			return
 		}
 		else {
-			console.log(res)
+			//console.log(res)
 			result(null, res.insertId)
 		}
 	})

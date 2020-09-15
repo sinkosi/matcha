@@ -1,4 +1,5 @@
 const sql = require("./db");
+const host = require("../../server");
 
 //Constructor
 const Image = function(image) {
@@ -31,8 +32,9 @@ Image.findById = (imageId, result) => {
 			result(err, null);
 			return;
 		}
-
-		console.log("inserted image: ",  res);
+		/*console.log("Profile pic maybe?", res);
+		console.log("inserted image: ",  res);*/
+		res[0].url = 'http://'+host.host+res[0].url
 		result(null, res[0]);
 		
 	});
@@ -46,7 +48,10 @@ Image.findByUserId = (userId, result) => {
 			result(err, null);
 		
 		}
-		console.log("Images have been retrieved: ", res);
+		for (i = 0; i < res.length; i++) {
+			res[i].url = 'http://'+host.host+res[i].url;
+		}
+		//console.log("Images have been retrieved: ", res);
 		result(null, res);
 		
 	});
@@ -59,6 +64,7 @@ Image.userProfilePic = (userId, result) => {
 			result(err, null);
 		
 		}
+		//console.log("The res[0].profile_pic: ", res[0].profile_pic);
 		result(null, res[0].profile_pic);
 	})
 }
