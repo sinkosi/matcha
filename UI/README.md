@@ -11,7 +11,7 @@ first make sure you have nodejs and npm installed
 ###### npm start
 
 #### NB: To setup the DNS for how the application communicates with the backend, please check
-[UI/src/Components/utils/host.js](src/utils/host.js)
+[host.js](src/utils/host.js)
 #### and set it up inside that file. It must match address in api/server.js
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

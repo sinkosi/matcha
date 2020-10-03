@@ -74,8 +74,17 @@ If you wish to get the [Front-End](UI/README.md) running, check the document in 
 
 ## CONTRIBUTORS
 
+<details> 
+  <summary>Mosima Mamaleka</summary>
+
+[Mosima Mamaleka](www.gihub.com/mmamalek)
+</details>
 <!-- ![Mosima Mamaleke](api/uploads/default.png){:height="50%" width="50%"} ![Sibonelo Nkosi](api/uploads/default.png){:height="50%" width="50%"} -->
 
-[Mosima Mamaleke](www.gihub.com/mmamalek)
+<details>
+    <summary>Sibonelo Nkosi</summary>
 
 [Sibonelo Nkosi](www.github.com/sinkosi)
+
+LinkedIn: http://linkedin.com/
+</details>
