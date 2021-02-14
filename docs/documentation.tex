@@ -1,0 +1,120 @@
+\input{0.Extras/settings.tex}
+\makeindex
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	HEADERS
+%----------------------------------------------------------------------------------------
+
+\renewcommand{\sectionmark}[1]{\markright{\spacedlowsmallcaps{#1}}} % The header for all pages (oneside) or for even pages (twoside)
+%\renewcommand{\subsectionmark}[1]{\markright{\thesubsection~#1}} % Uncomment when using the twoside option - this modifies the header on odd pages
+\lehead{\mbox{\llap{\small\thepage\kern1em\color{halfgray} \vline}\color{halfgray}\hspace{0.5em}\rightmark\hfil}} % The header style
+
+\pagestyle{scrheadings} % Enable the headers specified in this block
+
+\input{0.title/title.tex}
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS & LISTS OF FIGURES AND TABLES
+%----------------------------------------------------------------------------------------
+\newpage
+%\maketitle % Print the title/author/date block
+
+\setcounter{tocdepth}{2} % Set the depth of the table of contents to show sections and subsections only
+
+\tableofcontents % Print the table of contents
+
+\newpage
+
+%\listoffigures % Print the list of figures
+
+%\listoftables % Print the list of tables
+
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\newpage
+\section{Summary}
+
+\input{1.summary/summary.tex}
+
+%----------------------------------------------------------------------------------------
+%	AUTHOR AFFILIATIONS
+%----------------------------------------------------------------------------------------
+
+% \let\thefootnote\relax\footnotetext{\textsuperscript{*} \textit{Information provided is correct for current users configuration i.e Windows Home 10:2004, results
+% may differ for other configurations }}
+% \let\thefootnote\relax\footnotetext{\textsuperscript{**} \textit{Snap install is not available for all Linux Distros, this is expected to work on Ubuntu and Debian flavours}}
+
+%----------------------------------------------------------------------------------------
+
+%\newpage % Start the article content on the second page, remove this if you have a longer abstract that goes onto the second page
+
+
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+
+\section{Instructions}
+%A statement requiring citation \cite{Figueredo:2009dg}.
+
+\input{2.Instructions/instructions.tex}
+
+\newpage
+%----------------------------------------------------------------------------------------
+%	Getting Started
+%----------------------------------------------------------------------------------------
+
+\section{Getting Started}
+
+\input{3.getting_started/started.tex}
+\input{3.getting_started/method.tex}
+\newpage
+%----------------------------------------------------------------------------------------
+%	RESULTS AND DISCUSSION
+%----------------------------------------------------------------------------------------
+
+\section{Results and Discussion}
+
+\input{3.results/result.tex}
+\newpage
+
+%----------------------------------------------------------------------------------------
+%	Sibo Testing
+%----------------------------------------------------------------------------------------
+
+\section{Code Snippet As a Figure}
+
+Reference to Figure~\vref{fig:snippet}. % The \vref command specifies the location of the reference
+
+\input{4.code_snip/code.tex}
+\newpage
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+\section{Bibliography}
+
+\renewcommand{\refname}{\spacedlowsmallcaps{References}} % For modifying the bibliography heading
+
+\bibliographystyle{unsrt}
+
+\bibliography{0.Extras/sample.bib} % The file containing the bibliography
+%\bibliography{sample2.bib}
+
+%----------------------------------------------------------------------------------------
+
+%\end{document}
+
+
+\section{Student Honesty Declaration}
+
+\input{5.cheat/cheat.tex}
+
+
+%---------------------------------------------------------------------------------------
+%\printindex
+
+\end{document}
