@@ -43,3 +43,7 @@ yarn-error.log*
 #DOCS FOLDER
 docs/*
 #!docs/*.pdf
+
+package-lock.json
+.gitignore
+api/package-lock.json
