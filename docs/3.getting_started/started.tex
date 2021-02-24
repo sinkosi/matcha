@@ -3,11 +3,61 @@
 The first step to getting starting with this project is to clone the 
 repository from its 'git'.
 
+Ensure that you have NodeJS available on your system. You will
+need it to host both the Front-End and the Back-End of the application.
+
+Ensure your mail server is active, this application sends confirmation
+emails to:
+\begin{itemize}
+    \item activate accounts
+    \item reset passwords
+    \item update details
+    \item notify of comments \& likes
+    \item notify on a Match
+\end{itemize}
+
 \subsection{Backend}
 
 The backend can be located by going to the 'api' folder inside the
-repository cloned in 
+repository you cloned. You will need MySQL to be installed
+independently so as to run a Relational Database.
+
+After changing directory until you are in the same folder as 'package.json'. You will run'npm install',
+this will allow the npm to install all dependancies required to run the applicaton.
+
+\textbf{NB:} Ensure that port 4500 is free and that no service is currently using it, a new port
+can be defined in 'api/server.js'
+
+Run 'node start.js' at least once. This will create the Database environment
+and begin seeding it with users.
+
+Run 'npm start' and if this has run successfully, the console
+will print:
+    >Matcha has started running/listening on port:4500!
 
 \subsection{Frontend}
 
-React is trash
+This section is about fine-tuning the front-end and how to set it up and get it running.
+First ensure that you have NodeJs and NPM installed.
+
+Navigate to the UI folder and run 'npm install'.
+
+Inside the same directory you can run:
+'npm start'. This runs the application in development mode.
+
+Open 'http://localhost:3000' to view the running application in the browser.
+
+The page will reload if you make edits to the client side code. It is recommended not to
+run it in development mode when the business is using it. This may cause harm to clients.
+
+We recommended run the application in production mode.
+
+\subsubsection*{Production Mode}
+
+In the UI folder, ensure port 5000 is open. This is vital in order to build the project.
+The project can be built for production mode. This correctly bundles React and optimises for
+the best performance.
+
+The build is minified and the filenmaes include the hashes.
+
+Your app is ready to be deployed!

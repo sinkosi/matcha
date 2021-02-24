@@ -4,15 +4,4 @@
 \contentsline {subsection}{\numberline {3.1}{Clone Repository}}{3}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}{Backend}}{3}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}{Frontend}}{3}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}{Paragraphs}}{3}{subsection.3.4}%
-\contentsline {paragraph}{{Paragraph Description}}{3}{subsection.3.4}%
-\contentsline {paragraph}{{Different Paragraph Description}}{4}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}{Math}}{4}{subsection.3.5}%
-\contentsline {section}{\numberline {4}{Results and Discussion}}{6}{section.4}%
-\contentsline {subsection}{\numberline {4.1}{Subsection}}{6}{subsection.4.1}%
-\contentsline {subsubsection}{\numberline {4.1.1}{Subsubsection}}{6}{subsubsection.4.1.1}%
-\contentsline {subsubsection}{\numberline {4.1.2}{Table}}{7}{subsubsection.4.1.2}%
-\contentsline {subsection}{\numberline {4.2}{Figure Composed of Subfigures}}{8}{subsection.4.2}%
-\contentsline {section}{\numberline {5}{Code Snippet As a Figure}}{9}{section.5}%
-\contentsline {section}{\numberline {6}{Bibliography}}{10}{section.6}%
-\contentsline {section}{\numberline {7}{Student Honesty Declaration}}{10}{section.7}%
+\contentsline {section}{\numberline {4}{Student Honesty Declaration}}{4}{section.4}%
